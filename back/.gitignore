@@ -39,6 +39,7 @@ out/
 
 #
 *.yaml
+*.yml
 
 #
 *.env
