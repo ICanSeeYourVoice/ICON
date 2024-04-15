@@ -1,0 +1,31 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/S10P31C202
+
+#      server
+#      uri: mongodb+srv://S10P31C202:x10ZBtH3BJ@ssafy.ngivl.mongodb.net/S10P31C202?authSource=admin
+
+  datasource:
+
+    # local
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/s10p31c202?serverTimezone=UTC&characterEncoding=UTF-8
+    username: ssafy
+    password: ssafy
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+    # server
+  #    url: jdbc:mysql://stg-yswa-kr-practice-db-master.mariadb.database.azure.com:3306/S10P31C202?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
+  #    username: S10P31C202@stg-yswa-kr-practice-db-master.mariadb.database.azure.com
+  #    password: rRhqkgp390
+  #    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+
+
+server:
+  ssl:
+    enabled: false
