@@ -5,5 +5,5 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class UserRes {
+public class MemberRes {
 }

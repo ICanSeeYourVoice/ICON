@@ -5,10 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 
 @Getter
 @Slf4j
-public class UserException extends RuntimeException {
-	private final UserErrorCode errorCode;
+public class MemberException extends RuntimeException {
+	private final MemberErrorCode errorCode;
 
-	public UserException(UserErrorCode e) {
+	public MemberException(MemberErrorCode e) {
 		super(e.getMessage());
 		this.errorCode = e;
 	}

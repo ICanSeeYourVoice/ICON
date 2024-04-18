@@ -7,9 +7,9 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum UserErrorCode {
+public enum MemberErrorCode {
 
-	USER_NOT_FOUND("사용자를 찾을 수 없습니다.", HttpStatus.BAD_REQUEST);
+	MEMBER_NOT_FOUND("사용자를 찾을 수 없습니다.", HttpStatus.BAD_REQUEST);
 
 	private final String message;
 	private final HttpStatus httpStatus;

@@ -5,5 +5,5 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class UserReq {
+public class MemberReq {
 }
