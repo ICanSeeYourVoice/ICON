@@ -45,3 +45,6 @@ out/
 *.env
 *.p12
 *.pem
+
+#
+certification.json
