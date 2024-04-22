@@ -1,0 +1,39 @@
+server:
+  port: 8000
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      routes:
+        - id: common-service
+          uri: lb://COMMON-SERVICE
+          predicates:
+            - Path=/common-service/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/common-service/(?<segment>.*), /$\{segment}
+        - id: alarm-service
+          uri: lb://ALARM-SERVICE
+          predicates:
+            - Path=/alarm-service/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/common-service/(?<segment>.*), /$\{segment}
+        - id: analyze-service
+          uri: lb://ANALYZE-SERVICE
+          predicates:
+            - Path=/analyze-service/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/common-service/(?<segment>.*), /$\{segment}
