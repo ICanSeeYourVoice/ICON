@@ -10,6 +10,7 @@ COPY . ./
 RUN npm install
 RUN npm install yarn
 RUN yarn 
+RUN yarn build
 CMD ["yarn", "run", "dev"]
 
 # RUN yarn run dev
