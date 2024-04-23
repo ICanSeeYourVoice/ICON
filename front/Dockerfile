@@ -10,8 +10,8 @@ COPY . ./
 RUN npm install yarn
 RUN yarn build
 RUN yarn global add serve
-RUN mkdir ./dist
-COPY ./dist ./dist
+RUN mkdir ./build
+COPY ./build ./build
 
 ENTRYPOINT ["serve", "-s", "build"]
 # CMD ["yarn", "run", "dev"]
