@@ -1,0 +1,102 @@
+pipeline {
+    environment {
+        dockerImage = ''
+    }
+
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                script {
+                    // 코드 체크아웃
+                    checkout scm
+                }
+            }
+        }
+
+        stage('secret.yml delete') {
+            steps {
+                script{
+                    sh 'rm -f ./back/src/main/resources/application.yml'
+                }
+            }
+        }
+
+        stage('secret.yml download') {
+        	steps {
+            	withCredentials([file(credentialsId: 'secret-alarm', 
+            	variable: 'applicationFile')]) {
+                	script {
+                    	sh 'cp -f $applicationFile 
+                    	./back/src/main/resources/application.yml'
+                    }
+        		}
+        	}
+        }
+
+        stage('Build Common-Server .JAR') {
+            steps {
+                script {
+                    // 변경된 브랜치와 머지 대상 브랜치 출력
+                    // 현재 빌드 중인 브랜치명 확인
+                    def currentBranch = env.BRANCH_NAME
+                    echo "Merge Target Branch: \${CHANGE_TARGET}"
+                    echo "Current Branch: \${currentBranch}"
+
+                    echo "back end - alarm 입니다."
+                    // gradlew 빌드
+                    //rwx
+                    sh 'chmod +x ./back/gradlew'
+                    sh '''
+                        cd ./back
+                        ./gradlew clean build
+                    '''
+                }
+            }
+        }
+
+
+
+        stage('Build Common Image') {
+            steps {
+                script {
+                    dockerImage = docker.build("backend-alarm",
+                     "-f back/Dockerfile ./back")
+                }
+            }
+        }
+
+        stage("Kill exist container") {
+            steps {
+                script {
+                    def existingContainers 
+                    = sh(script: "docker ps -aq -f name=backend-alarm",
+                     returnStdout: true).trim()
+                    if (existingContainers) {
+                        sh "docker rm -f ${existingContainers}"
+                    }
+//                     sh "docker system prune -af"
+                }
+            }
+        }
+
+        stage("run container") {
+            steps {
+                script {
+                    sh 'docker rm -f backend-alarm'
+                    sh "docker run -d --restart=always -p 8761:8761 
+                    --name backend-alarm backend-alarm"
+                }
+            }
+        }
+
+        stage('Clean Common Image') {
+            steps {
+                script {
+                    sh "docker system prune -af"
+                }
+            }
+        }
+    }
+}
