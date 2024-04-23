@@ -8,7 +8,8 @@ ENV PATH ./node_modules/.bin:$PATH
 
 COPY . ./ 
 RUN npm install
-RUN npm install yarn 
+RUN npm install yarn
+RUN yarn 
 RUN yarn run dev
 
 FROM nginx:latest 
