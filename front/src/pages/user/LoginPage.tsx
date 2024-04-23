@@ -20,27 +20,23 @@ const LoginPage = () => {
   };
 
   return (
-    <>
-      <div className="flex flex-col items-center w-screen pt-[3rem] pb-[10rem] gap-[1rem] ">
-        <img src={Logo} alt="Logo" className="mb-[1rem]" />
-        <CommonInput
-          placeholder="회원 ID"
-          value={inputValue}
-          onChange={handleInputChange}
-        />
-        <CommonInput
-          placeholder="회원 ID"
-          value={inputValue}
-          onChange={handleInputChange}
-        />
-        <div className="flex gap-[0.5rem] text-[11px] justify-end w-[15.25rem]">
-          <div onClick={handleJoinClick}>회원가입</div>
-          <div>|</div>
-          <div onClick={handleButtonClick}>비밀번호 찾기</div>
-        </div>
-        <PostButton label="로그인" onClick={handleButtonClick} />
+    <div className="flex flex-col items-center w-screen pt-[7rem] pb-[10rem] gap-[1rem] ">
+      <img src={Logo} alt="Logo" className="mb-[1rem]" />
+      <CommonInput
+        placeholder="회원 ID"
+        value={inputValue}
+        onChange={handleInputChange}
+      />
+      <CommonInput
+        placeholder="회원 ID"
+        value={inputValue}
+        onChange={handleInputChange}
+      />
+      <div className="flex gap-[0.5rem] text-[11px] justify-end w-[15.25rem]">
+        <div onClick={handleJoinClick}>회원가입</div>
       </div>
-    </>
+      <PostButton label="로그인" onClick={handleButtonClick} />
+    </div>
   );
 };
 
