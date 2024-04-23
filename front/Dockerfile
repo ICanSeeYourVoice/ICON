@@ -6,8 +6,9 @@ COPY package-lock.json .
 
 ENV PATH ./node_modules/.bin:$PATH 
 
-RUN yarn
 COPY . .
+RUN yarn build
 
+FROM nginx
 EXPOSE 5173 
-CMD ["yarn", "start"]
+COPY --from=builder ./build /usr/share/nginx/html
