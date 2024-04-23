@@ -12,23 +12,7 @@ pipeline {
                 }
             }
         }
-        
-        stage('secret.yml delete') {
-            steps {
-                script{
-                    sh 'rm -f ./back/src/main/resources/application.yml'
-                }
-            }
-        }
-        stage('secret.yml download') {
-        	steps {
-            	withCredentials([file(credentialsId: 'secret-discovery', variable: 'applicationFile')]) {
-                	script {
-                    	sh 'cp -f $applicationFile ./back/src/main/resources/application.yml'
-                    }
-        		}
-        	}
-        }
+
         stage('Build Discovery-Server .JAR') {
             steps {
                 script {
@@ -40,9 +24,9 @@ pipeline {
                     echo "back end 입니다."
                     // gradlew 빌드
                     //rwx
-                    sh 'chmod +x ./back/gradlew'
+                    sh 'chmod +x ./back/service-discovery/gradlew'
                     sh '''
-                        cd ./back
+                        cd ./back/service-discovery/
                         ./gradlew clean build
                     '''
                 }
@@ -51,7 +35,7 @@ pipeline {
         stage('Build Discovery Image') {
             steps {
                 script {
-                    dockerImage = docker.build("backend-discovery", "-f back/service-discovery/Dockerfile ./back")
+                    dockerImage = docker.build("backend-discovery", "-f back/service-discovery/Dockerfile ./back/service-discovery")
                 }
             }
         }
@@ -79,6 +63,24 @@ pipeline {
                 script {
                     sh "docker system prune -af"
                 }
+            }
+        }
+
+        stage("Garbage Collect TESTSERV") {
+            steps {
+                sshPublisher(
+                    continueOnError: true, failOnError: false,
+                    publishers: [
+                        sshPublisherDesc(
+                            configName: "EC2_1",
+                            verbose: true,
+                            transfers: [
+                                sshTransfer(execCommand: "sudo docker kill \$(docker ps | grep Discovery_Server | tr ' ' '\t' | cut -f1)"),
+                                sshTransfer(execCommand: "sudo docker system prune -af")
+                            ]
+                        )
+                    ]
+                )
             }
         }
     }
