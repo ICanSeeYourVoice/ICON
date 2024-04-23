@@ -15,13 +15,6 @@ CMD ["yarn", "run", "dev"]
 
 # RUN yarn run dev
 
-FROM nginx:latest 
-RUN rm -rf /etc/nginx/conf.d 
-COPY conf /etc/nginx
-COPY --from=builder ./dist /usr/share/nginx/html 
-
 EXPOSE 5173 
 
-STOPSIGNAL SIGTERM
-
-CMD ["nginx", "-g", "daemon off;"]
+STOPSIGNAL SIGTERM 
