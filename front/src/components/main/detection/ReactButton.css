@@ -53,7 +53,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 17.75rem;
   width: 100%;
   position: relative;
 }
@@ -78,15 +78,4 @@
 
 #circle3 {
   animation-name: changeSize3;
-}
-
-#circle4 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(123, 183, 247, 1);
-  width: 7.5rem;
-  height: 7.5rem;
-  border-radius: 50%;
-  position: absolute;
 }
