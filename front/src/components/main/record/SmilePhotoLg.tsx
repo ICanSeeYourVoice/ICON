@@ -1,5 +1,5 @@
 import React from "react";
-import Smile from "../../assets/svgs/record/smile.svg";
+import Smile from "../../../assets/svgs/record/smile.svg";
 
 interface SmilePhotoLgProps {
   src?: string;
