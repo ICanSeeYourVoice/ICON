@@ -16,4 +16,3 @@ EXPOSE 5173
 
 # Nginx 설정
 COPY --from=builder /app/build /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/nginx.conf
