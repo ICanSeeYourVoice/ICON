@@ -18,7 +18,7 @@ pipeline {
         stage('secret.yml delete') {
             steps {
                 script{
-                    sh 'rm -f ./back/src/main/resources/application.yml'
+                    sh 'rm -f ./back/alarm-service/src/main/resources/application.yml'
                 }
             }
         }
@@ -29,7 +29,7 @@ pipeline {
             	variable: 'applicationFile')]) {
                 	script {
                     	sh 'cp -f $applicationFile 
-                    	./back/src/main/resources/application.yml'
+                    	./back/alarm-service/src/main/resources/application.yml'
                     }
         		}
         	}
@@ -47,9 +47,9 @@ pipeline {
                     echo "back end - alarm 입니다."
                     // gradlew 빌드
                     //rwx
-                    sh 'chmod +x ./back/gradlew'
+                    sh 'chmod +x ./back/alarm-service/gradlew'
                     sh '''
-                        cd ./back
+                        cd ./back/alarm-service
                         ./gradlew clean build
                     '''
                 }
@@ -62,7 +62,7 @@ pipeline {
             steps {
                 script {
                     dockerImage = docker.build("backend-alarm",
-                     "-f back/Dockerfile ./back")
+                     "-f back/alarm-service/Dockerfile ./back/alarm-service")
                 }
             }
         }
