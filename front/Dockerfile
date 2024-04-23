@@ -8,16 +8,12 @@ ENV PATH ./node_modules/.bin:$PATH
 
 COPY . ./ 
 RUN npm install yarn
+RUN yarn
 RUN yarn build
-RUN yarn global add serve
-RUN mkdir ./build
-COPY ./build ./build
 
-ENTRYPOINT ["serve", "-s", "build"]
-# CMD ["yarn", "run", "dev"]
-
-# RUN yarn run dev
+RUN rm -rf /etc/nginx/conf.d 
+COPY conf /etc/nginx
+COPY --from=builder ./dist /usr/share/nginx/html
 
 EXPOSE 5173 
-
-STOPSIGNAL SIGTERM 
+CMD ["nginx", "-g", "daemon off;"]
