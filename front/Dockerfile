@@ -1,16 +1,19 @@
-FROM node:20.10.0 as builder 
-WORKDIR ./
+# 빌드 스테이지
+FROM node:20.10.0 as builder
+WORKDIR /app
 
-COPY package.json .
-COPY package-lock.json .
-
-ENV PATH ./node_modules/.bin:$PATH 
-
-COPY . .
+# 의존성 파일 복사 및 설치
+COPY package*.json ./
 RUN npm install
-RUN npm install yarn
-RUN yarn build
+COPY . .
 
-FROM nginx
-EXPOSE 5173 
-COPY --from=builder ./build /usr/share/nginx/html
+# 애플리케이션 빌드
+RUN npm run build
+
+# 실행 스테이지
+FROM nginx:alpine
+EXPOSE 5173
+
+# Nginx 설정
+COPY --from=builder /app/build /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/nginx.conf
