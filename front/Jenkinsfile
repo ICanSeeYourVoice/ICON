@@ -1,0 +1,63 @@
+pipeline {
+    environment {
+        dockerImage = ''
+    }
+
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+                script {
+                    // 코드 체크아웃
+                    checkout scm
+                }
+            }
+        }
+
+        stage('.env download') {
+        	steps {
+            	withCredentials([file(credentialsId: 'env', variable: 'env')]) {
+                	script {
+                    	sh 'cp -f ${env} ./front/'
+                    }
+        		}
+        	}
+        }
+
+        stage('Build Image') {
+            steps {
+                script {
+                    dockerImage = docker.build("frontend", "-f front/Dockerfile ./front") // Dockerfile 경로 수정
+                }
+            }
+        }
+
+        stage("Kill existing frontend container") {
+            steps {
+                script {
+                    def existingContainers = sh(script: "docker ps -aq -f name=frontend", returnStdout: true).trim()
+                    if (existingContainers) {
+                        sh "docker rm -f ${existingContainers}"
+                    }
+                }
+            }
+        }
+
+        stage("Run frontend container") {
+            steps {
+                script {
+                    sh 'docker rm -f frontend' // Remove container if exists
+                    sh "docker run -d --restart=always -p 5173:5173 --name frontend frontend"
+                }
+            }
+        }
+
+        stage('Clean Common Image') {
+            steps {
+                script {
+                    sh "docker system prune -af"
+                }
+            }
+        }
+    }
+}
