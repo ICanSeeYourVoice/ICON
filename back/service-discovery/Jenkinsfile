@@ -22,7 +22,7 @@ pipeline {
         }
         stage('secret.yml download') {
         	steps {
-            	withCredentials([file(credentialsId: 'secret-alarm', variable: 'applicationFile')]) {
+            	withCredentials([file(credentialsId: 'secret-discovery', variable: 'applicationFile')]) {
                 	script {
                     	sh 'cp -f $applicationFile ./back/src/main/resources/application.yml'
                     }
@@ -48,17 +48,17 @@ pipeline {
                 }
             }
         }
-        stage('Build Common Image') {
+        stage('Build Discovery Image') {
             steps {
                 script {
-                    dockerImage = docker.build("backend-alarm", "-f back/service-discovery/Dockerfile ./back")
+                    dockerImage = docker.build("backend-discovery", "-f back/service-discovery/Dockerfile ./back")
                 }
             }
         }
         stage("Kill exist container") {
             steps {
                 script {
-                    def existingContainers = sh(script: "docker ps -aq -f name=backend-alarm", returnStdout: true).trim()
+                    def existingContainers = sh(script: "docker ps -aq -f name=backend-discovery", returnStdout: true).trim()
                     if (existingContainers) {
                         sh "docker rm -f ${existingContainers}"
                     }
@@ -69,12 +69,12 @@ pipeline {
         stage("run container") {
             steps {
                 script {
-                    sh 'docker rm -f backend-alarm'
-                    sh "docker run -d --restart=always -p 8761:8761 --name backend-alarm backend-alarm"
+                    sh 'docker rm -f backend-discovery'
+                    sh "docker run -d --restart=always -p 8761:8761 --name backend-discovery backend-discovery"
                 }
             }
         }
-        stage('Clean Common Image') {
+        stage('Clean Discovery Image') {
             steps {
                 script {
                     sh "docker system prune -af"
