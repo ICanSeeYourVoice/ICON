@@ -35,7 +35,7 @@ pipeline {
         	}
         }
 
-        stage('Build Common-Server .JAR') {
+        stage('Build Alarm-Server .JAR') {
             steps {
                 script {
                     // 변경된 브랜치와 머지 대상 브랜치 출력
@@ -58,7 +58,7 @@ pipeline {
 
 
 
-        stage('Build Common Image') {
+        stage('Build Alarm Image') {
             steps {
                 script {
                     dockerImage = docker.build("backend-alarm",
@@ -85,13 +85,13 @@ pipeline {
             steps {
                 script {
                     sh 'docker rm -f backend-alarm'
-                    sh "docker run -d --restart=always -p 8761:8761 
+                    sh "docker run -d --restart=always -p 0:0 
                     --name backend-alarm backend-alarm"
                 }
             }
         }
 
-        stage('Clean Common Image') {
+        stage('Clean Alarm Image') {
             steps {
                 script {
                     sh "docker system prune -af"
