@@ -5,6 +5,12 @@ import LoginPage from "../pages/user/LoginPage";
 import JoinPage from "../pages/user/JoinPage";
 import AuthLayout from "../pages/user/AuthLayout";
 import SplashPage from "../pages/user/Splash";
+import RecordLayout from "../pages/record/RecordLayout";
+import RecordPage from "../pages/record/RecordPage";
+import DiaryPage from "../pages/record/DiaryPage";
+import DiaryDetailPage from "../pages/record/DiaryDetailPage";
+import RegisterPage from "../pages/record/RegisterPage";
+import ChartPage from "../pages/record/ChartPage";
 
 const authRoutes = [
   {
@@ -25,7 +31,21 @@ const detectionRoutes = [
   },
 ];
 
-const routes = [...authRoutes, ...detectionRoutes];
+const recordRoutes = [
+  {
+    path: "/record",
+    element: <RecordLayout />,
+    children: [
+      { index: true, element: <RecordPage /> },
+      { path: "diary", element: <DiaryPage /> },
+      { path: "detail/diary", element: <DiaryDetailPage /> },
+      { path: "diary/register", element: <RegisterPage /> },
+      { path: ":chart", element: <ChartPage /> },
+    ],
+  },
+];
+
+const routes = [...authRoutes, ...detectionRoutes, ...recordRoutes];
 
 const router = createBrowserRouter(routes);
 
