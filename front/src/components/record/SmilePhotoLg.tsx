@@ -6,17 +6,12 @@ interface SmilePhotoLgProps {
 }
 
 const SmilePhotoLg: React.FC<SmilePhotoLgProps> = ({ src }) => {
-  const backgroundImageStyle = {
-    backgroundImage: `url(${src || Smile})`,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
-  };
+  const backgroundImage = `url(${src || Smile})`;
 
   return (
     <div
-      className="w-[153px] h-[153px] bg-zinc-100 rounded-[14px]"
-      style={backgroundImageStyle}
+      className="w-[153px] h-[153px] bg-zinc-100 rounded-[14px] bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: backgroundImage }}
     />
   );
 };
