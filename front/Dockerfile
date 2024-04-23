@@ -7,7 +7,7 @@ COPY package-lock.json .
 ENV PATH ./node_modules/.bin:$PATH 
 
 COPY . .
-RUN npm install yarn
+RUN npm i
 RUN yarn build
 
 FROM nginx
