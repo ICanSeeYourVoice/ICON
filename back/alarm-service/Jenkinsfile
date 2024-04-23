@@ -98,5 +98,25 @@ pipeline {
                 }
             }
         }
+        
+        stage("Garbage Collect TESTS ERV") {
+            steps {
+                sshPublisher(
+                    continueOnError: true, failOnError: false,
+                    publishers: [
+                        sshPublisherDesc(
+                            configName: "ALARM_SERVER",
+                            verbose: true,
+                            transfers: [
+                                sshTransfer(execCommand: "sudo docker kill \$(docker ps | grep Common | tr ' ' '\t' | cut -f1)"),
+                                sshTransfer(execCommand: "sudo docker system prune -af")
+                            ]
+                        )
+                    ]
+                )
+            }
+        }
+        
     }
+
 }
