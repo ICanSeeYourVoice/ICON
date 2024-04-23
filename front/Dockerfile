@@ -10,7 +10,9 @@ COPY . ./
 RUN npm install
 RUN npm install yarn
 RUN yarn 
-RUN yarn run dev
+CMD ["yarn", "run", "dev"]
+
+# RUN yarn run dev
 
 FROM nginx:latest 
 RUN rm -rf /etc/nginx/conf.d 
