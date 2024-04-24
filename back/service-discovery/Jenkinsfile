@@ -28,11 +28,10 @@ pipeline {
 
                     echo "discovery server 입니다."
                     sh 'pwd'
-                    sh 'ls -al'
-                    sh './gradlew build'
+                    sh 'ls -al' 
                     //gradlew 빌드
                     sh 'java --version'
-                    sh 'chmod +x /back/service-discovery/gradlew'
+                    // sh 'chmod +x /back/service-discovery/gradlew'
                     dir('/back/service-discovery') {
                         sh './gradlew clean build'
                     }
