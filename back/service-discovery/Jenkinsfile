@@ -22,8 +22,6 @@ pipeline {
                     echo "Merge Target Branch: \${CHANGE_TARGET}"
                     echo "Current Branch: \${currentBranch}"
                     echo "back end 입니다."
-                    // gradlew 빌드
-                    //rwx
                     sh 'chmod +x ./back/service-discovery/gradlew'
                     sh '''
                         cd ./back/service-discovery/
@@ -46,14 +44,12 @@ pipeline {
                     if (existingContainers) {
                         sh "docker rm -f ${existingContainers}"
                     }
-//                     sh "docker system prune -af"
                 }
             }
         }
         stage("run container") {
             steps {
                 script {
-                    sh 'docker rm -f backend-discovery'
                     sh "docker run -d --restart=always -p 8761:8761 --name backend-discovery backend-discovery"
                 }
             }
@@ -72,7 +68,7 @@ pipeline {
                     continueOnError: true, failOnError: false,
                     publishers: [
                         sshPublisherDesc(
-                            configName: "EC2_1",
+                            configName: "icon-ssh",
                             verbose: true,
                             transfers: [
                                 sshTransfer(execCommand: "sudo docker kill \$(docker ps | grep Discovery_Server | tr ' ' '\t' | cut -f1)"),
