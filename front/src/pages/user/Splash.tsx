@@ -8,7 +8,7 @@ const SplashPage = () => {
     navigate("/Login");
   };
   return (
-    <div className="flex flex-col items-center  pt-[5rem] gap-[1rem] tracking-wide">
+    <div className="flex flex-col items-center  pt-[13rem] gap-[1rem] tracking-wide">
       <div className="flex flex-col items-center w-screen  pb-[5rem] gap-[1rem] leading-10">
         <img src={Logo} alt="Logo" className="mb-[1rem]" />
         <div className="h-[6rem] text-center text-slate-400  font-bold ">
