@@ -32,19 +32,19 @@ pipeline {
 
                     //gradlew 빌드
                     sh 'java --version'
-                    sh 'chmod -R u+w+x /var/jenkins_home/workspace/back-eureka/back/service-discovery/gradlew'
+                    sh 'chmod -R u+w+x /var/jenkins_home/workspace/back-test/back/service-discovery/gradlew'
                     
-                    sh '''cd /var/jenkins_home/workspace/back-eureka/back/service-discovery
+                    sh '''cd /var/jenkins_home/workspace/back-test/back/service-discovery
                     ls -al
                     ''' 
 
  
-                    // sh 'chmod +x /var/jenkins_home/workspace/back-eureka/gradlew'
-                    dir('/var/jenkins_home/workspace/back-eureka/back/service-discovery') {
+                    // sh 'chmod +x /var/jenkins_home/workspace/back-test/gradlew'
+                    dir('/var/jenkins_home/workspace/back-test/back/service-discovery') {
                         sh './gradlew clean build'
                     }
 //                     sh '''
-//                         cd ./var/jenkins_home/workspace/back-eureka &&
+//                         cd ./var/jenkins_home/workspace/back-test &&
 //                         ./gradlew clean build
 //                     '''
                 }
@@ -54,7 +54,7 @@ pipeline {
         stage('Build Discovery-Server Image'){
             steps{
                 script{
-                    dockerImage = docker.build("${repository}:icon-eureka_${BUILD_NUMBER}", "-f /var/jenkins_home/workspace/back-eureka/back/service-discovery/Dockerfile /var/jenkins_home/workspace/back-eureka/back/service-discovery")
+                    dockerImage = docker.build("${repository}:icon-eureka_${BUILD_NUMBER}", "-f /var/jenkins_home/workspace/back-test/back/service-discovery/Dockerfile /var/jenkins_home/workspace/back-test/back/service-discovery")
                 }
             }
         }
