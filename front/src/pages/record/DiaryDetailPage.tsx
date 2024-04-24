@@ -7,7 +7,7 @@ import ColorButton from "../../components/common/button/ColorButton";
 
 const DiaryDetailPage = () => {
   return (
-    <div className="flex flex-col items-center h-screen w-screen pt-[6rem] gap-[0.8rem]">
+    <div className="flex flex-col items-center gap-[0.8rem]">
       <Topbar text=" 일지" />
       <DateInput />
       <DiaryAll title="제목" content="내용" />

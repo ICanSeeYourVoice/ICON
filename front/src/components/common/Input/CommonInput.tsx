@@ -8,7 +8,7 @@ interface CommonInputProps {
 
 const CommonInput: React.FC<CommonInputProps> = ({ onChange, placeholder }) => {
   return (
-    <div className="w-[15.25rem] h-[2.9375rem] relative flex-col justify-start items-start inline-flex  border rounded-[0.875rem] border-gray-300">
+    <div className="w-[15.5rem] h-[3rem] relative flex-col justify-start items-start inline-flex  border rounded-[0.875rem] border-gray-300">
       <input
         type="text"
         placeholder={placeholder || "텍스트"}
