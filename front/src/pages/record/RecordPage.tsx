@@ -1,6 +1,7 @@
 import SmilePhotoLg from "../../components/main/record/SmilePhotoLg";
 import SmilePhotoSm from "../../components/main/record/SmilePhotoSm";
 import Nav from "../../components/common/Navigator/Nav";
+import DiaryThumbnail from "../../components/main/record/DiaryThumbnail";
 
 const RecordPage = () => {
   return (
@@ -21,6 +22,9 @@ const RecordPage = () => {
             <SmilePhotoSm />
           </div>
         </div>
+      </div>
+      <div className="w-full flex justify-center pt-[1rem] ">
+        <DiaryThumbnail />
       </div>
       <Nav />
     </div>
