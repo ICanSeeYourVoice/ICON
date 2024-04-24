@@ -31,6 +31,8 @@ pipeline {
                     sh 'ls -al' 
                     //gradlew 빌드
                     sh 'java --version'
+                    sh chmod -R u+w /back
+
                     // sh 'chmod +x /back/service-discovery/gradlew'
                     dir('/back/service-discovery') {
                         sh './gradlew clean build'
