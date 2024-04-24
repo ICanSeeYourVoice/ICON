@@ -14,17 +14,6 @@ pipeline {
             }
         }
 
-        stage('Prepare Environment') {
-            steps {
-                script {
-                    withCredentials([file(credentialsId: 'env-file', variable: 'ENV_FILE')]) {
-                        // 프로젝트 루트로 .env 파일 복사
-                        sh 'cp $ENV_FILE .env'
-                    }
-                }
-            }
-        }
-
         stage('Build Image') {
             steps {
                 script {
