@@ -107,7 +107,7 @@ pipeline {
                     continueOnError: false, failOnError: true,
                     publishers: [
                         sshPublisherDesc(
-                            configName: "EC2_1",
+                            configName: "icon-ssh",
                             verbose: true,
                             transfers: [
                                 sshTransfer(execCommand: "sudo docker rm -f icon-eureka"),
