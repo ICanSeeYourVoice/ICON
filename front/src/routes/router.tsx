@@ -11,6 +11,8 @@ import DiaryPage from "../pages/record/DiaryPage";
 import DiaryDetailPage from "../pages/record/DiaryDetailPage";
 import RegisterPage from "../pages/record/RegisterPage";
 import ChartPage from "../pages/record/ChartPage";
+import ChatLayout from "../pages/chat/ChatLayout";
+import ChatPage from "../pages/chat/ChatPage";
 
 const authRoutes = [
   {
@@ -45,7 +47,20 @@ const recordRoutes = [
   },
 ];
 
-const routes = [...authRoutes, ...detectionRoutes, ...recordRoutes];
+const chatRoutes = [
+  {
+    path: "/chat",
+    element: <ChatLayout />,
+    children: [{ index: true, element: <ChatPage /> }],
+  },
+];
+
+const routes = [
+  ...authRoutes,
+  ...detectionRoutes,
+  ...recordRoutes,
+  ...chatRoutes,
+];
 
 const router = createBrowserRouter(routes);
 
