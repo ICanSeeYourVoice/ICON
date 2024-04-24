@@ -20,7 +20,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center w-screen pt-[7rem] pb-[10rem] gap-[1rem] ">
+    <div className="flex flex-col items-center w-screen pt-[10rem] pb-[10rem] gap-[1rem] ">
       <img src={Logo} alt="Logo" className="mb-[1rem]" />
       <CommonInput
         placeholder="회원 ID"
