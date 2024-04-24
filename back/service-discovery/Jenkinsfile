@@ -29,7 +29,7 @@ pipeline {
                     echo "discovery server 입니다."
                     sh 'pwd'
                     sh 'ls -al'
-                    sh '''cd /var/jenkins_home/workspace/back-test/back
+                    sh '''cd /var/jenkins_home/workspace/back-test/back/service-discovery
                     ls -al
                     '''
 
