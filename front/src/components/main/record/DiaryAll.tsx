@@ -14,7 +14,7 @@ const DiaryAll: React.FC<DiaryAllProps> = ({ title = "", content = "" }) => {
     content.length > 0 ? content : content || "일지를 작성해주세요";
 
   return (
-    <div className="w-[16rem] h-[10rem] bg-white rounded-[1rem] shadow border">
+    <div className="w-[15.5rem] h-[10rem] bg-white rounded-[1rem] shadow border">
       {notPrompt ? (
         <div className="mx-5 flex items-center justify-center h-full">
           <div className="flex items-center justify-center h-full">
