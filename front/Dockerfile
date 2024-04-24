@@ -16,16 +16,16 @@ COPY . .
 RUN yarn build
 # CMD ["yarn", "build"]
 
+EXPOSE 3000
 # 개발서버 실행
 CMD ["yarn", "dev"]
 
 RUN ls 
 
-FROM nginx:alpine
+#FROM nginx:alpine
 
-RUN rm -rf /etc/nginx/conf.d 
-COPY conf /etc/nginx
-COPY --from=builder /app/dist /usr/share/nginx/html 
-
-EXPOSE 80 
-CMD ["nginx", "-g", "daemon off;"]
+#RUN rm -rf /etc/nginx/conf.d 
+#COPY conf /etc/nginx
+#COPY --from=builder /app/dist /usr/share/nginx/html 
+#EXPOSE 80 
+#CMD ["nginx", "-g", "daemon off;"]
