@@ -18,9 +18,9 @@ const Topbar: React.FC<TopbarProps> = ({ text, path }) => {
   };
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-10">
+    <div className="top-0 left-0 right-0 z-10 flex flex-col items-center ">
       <div className="m-auto">
-        <div className="flex justify-between items-center font-bold p-[3.125rem]">
+        <div className="flex w-[17rem] justify-between items-center font-bold pt-[3.125rem]">
           <div onClick={handleTopClick} className="cursor-pointer">
             <img src={Vector} alt="Back" />
           </div>
