@@ -32,10 +32,13 @@ pipeline {
                     //gradlew 빌드
                     sh 'java --version'
                     sh 'chmod +x ./back/service-discovery/gradlew'
-                    sh '''
-                        cd ./back/service-discovery
-                        ./gradlew clean build
-                    '''
+                    dir('back/service-discovery') {
+                        sh './gradlew clean build'
+                    }
+//                     sh '''
+//                         cd ./back/service-discovery &&
+//                         ./gradlew clean build
+//                     '''
                 }
             }
         }
