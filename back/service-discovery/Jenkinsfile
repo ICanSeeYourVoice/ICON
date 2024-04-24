@@ -29,15 +29,15 @@ pipeline {
                     echo "discovery server 입니다."
                     sh 'pwd'
                     sh 'ls -al'
-                    sh '''cd /var/jenkins_home/workspace/back-test/back/service-discovery
-                    ls -al
-                    '''
-
 
                     //gradlew 빌드
                     sh 'java --version'
                     sh 'chmod -R u+w /var/jenkins_home/workspace/back-test/back/service-discovery/gradlew'
-                    sh 'ls -l'
+                    
+                    sh '''cd /var/jenkins_home/workspace/back-test/back/service-discovery
+                    ls -al
+                    '''
+
  
                     // sh 'chmod +x /var/jenkins_home/workspace/back-test/gradlew'
                     dir('/var/jenkins_home/workspace/back-test/back/service-discovery') {
