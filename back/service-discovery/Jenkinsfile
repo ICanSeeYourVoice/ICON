@@ -36,11 +36,11 @@ pipeline {
 
                     //gradlew 빌드
                     sh 'java --version'
-                    sh 'chmod -R u+w /var/jenkins_home/workspace/back-test'
+                    sh 'chmod -R u+w /var/jenkins_home/workspace/back-test/back/service-discovery'
  
 
                     // sh 'chmod +x /var/jenkins_home/workspace/back-test/gradlew'
-                    dir('/var/jenkins_home/workspace/back-test') {
+                    dir('/var/jenkins_home/workspace/back-test/back/service-discovery') {
                         sh './gradlew clean build'
                     }
 //                     sh '''
@@ -54,7 +54,7 @@ pipeline {
         stage('Build Discovery-Server Image'){
             steps{
                 script{
-                    dockerImage = docker.build("${repository}:icon-eureka_${BUILD_NUMBER}", "-f /var/jenkins_home/workspace/back-test/Dockerfile ./var/jenkins_home/workspace/back-test")
+                    dockerImage = docker.build("${repository}:icon-eureka_${BUILD_NUMBER}", "-f /var/jenkins_home/workspace/back-test/back/service-discovery/Dockerfile ./var/jenkins_home/workspace/back-test/back/service-discovery")
                 }
             }
         }
