@@ -32,11 +32,11 @@ pipeline {
 
                     //gradlew 빌드
                     sh 'java --version'
-                    sh 'chmod -R u+w /var/jenkins_home/workspace/back-test/back/service-discovery/gradlew'
+                    sh 'chmod -R u+w+x /var/jenkins_home/workspace/back-test/back/service-discovery/gradlew'
                     
                     sh '''cd /var/jenkins_home/workspace/back-test/back/service-discovery
                     ls -al
-                    '''
+                    ''' 
 
  
                     // sh 'chmod +x /var/jenkins_home/workspace/back-test/gradlew'
