@@ -15,9 +15,9 @@ export const processAudioData = (
     const inputBuffer = audioProcessingEvent.inputBuffer;
     let inputData = inputBuffer.getChannelData(0);
 
-    const [scores, embeddings, spectrogram] = yamnet.predict(
+    const [scores ] = yamnet.predict(
       tf.tensor(inputData)
-    ) as [any, any, any];
+    ) as [any ];
 
     const top5 = tf.topk(scores, 3, true);
     const classes = top5.indices.dataSync();
