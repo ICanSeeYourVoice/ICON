@@ -29,8 +29,9 @@ pipeline {
                     echo "discovery server 입니다."
                     sh 'pwd'
                     sh 'ls -al'
-                    sh 'cd /var/jenkins_home/workspace/back-test/back'
-                    sh 'ls -al'
+                    sh '''cd /var/jenkins_home/workspace/back-test/back
+                    ls -al
+                    '''
 
 
                     //gradlew 빌드
