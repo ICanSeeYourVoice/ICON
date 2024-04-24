@@ -18,6 +18,7 @@ pipeline {
             steps {
                 script {
                     withCredentials([file(credentialsId: 'env-file-id', variable: 'ENV_FILE')]) {
+                        sh 'mkdir ./.env'
                         sh 'cp $ENV_FILE ./.env'
                     }
                 }
