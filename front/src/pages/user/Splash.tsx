@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 const SplashPage = () => {
   const navigate = useNavigate();
   const handleLoginClick = () => {
-    navigate("/Login");
+    navigate("/login");
   };
   return (
     <div className="flex flex-col items-center  pt-[13rem] gap-[1rem] tracking-wide">
