@@ -17,7 +17,7 @@ pipeline {
         stage('Prepare Environment') {
             steps {
                 script {
-                    withCredentials([file(credentialsId: 'env-file-id', variable: 'ENV_FILE')]) {
+                    withCredentials([file(credentialsId: 'env-file', variable: 'ENV_FILE')]) {
                         // .env 파일을 프로젝트 루트 또는 필요한 위치로 복사
                         sh 'cp $ENV_FILE front/.env'
                     }
