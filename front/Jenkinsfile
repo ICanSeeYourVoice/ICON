@@ -1,7 +1,6 @@
 pipeline {
     environment {
         dockerImage = ''
-        ENV_FILE = credentials('env-file')
     }
 
     agent any
@@ -38,8 +37,9 @@ pipeline {
 
         stage("Run frontend container") {
             steps {
-                script {
-                    sh "docker run -d -p 80:80 --name frontend --env-file ${ENV_FILE} frontend"
+                withCredentials([file(credentialsId: 'env-file', variable: 'ENV_FILE')]) {
+                    // `.env` 파일을 컨테이너 내부로 복사하고 실행
+                    sh "docker run -d -p 80:80 --name frontend --env-file $ENV_FILE frontend"
                 }
             }
         }
