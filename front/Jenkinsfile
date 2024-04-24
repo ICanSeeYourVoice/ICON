@@ -38,7 +38,7 @@ pipeline {
             steps {
                 script {
                     sh 'docker rm -f frontend' // Remove container if exists
-                    sh "docker run -d -p 3000:3000 --name frontend frontend"
+                    sh "docker run -d -p 80:80 --name frontend frontend"
                 }
             }
         }
