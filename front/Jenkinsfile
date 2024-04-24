@@ -18,7 +18,8 @@ pipeline {
             steps {
                 script {
                     withCredentials([file(credentialsId: 'env-file-id', variable: 'ENV_FILE')]) {
-                        sh 'cp $ENV_FILE .'
+                        // 프로젝트 루트로 .env 파일 복사
+                        sh 'cp $ENV_FILE .env'
                     }
                 }
             }
@@ -27,7 +28,8 @@ pipeline {
         stage('Build Image') {
             steps {
                 script {
-                    dockerImage = docker.build("frontend", "-f front/Dockerfile ./front") // Dockerfile 경로 수정
+                    // Docker 이미지 빌드, .env 파일을 참조하도록 Dockerfile 수정 필요
+                    dockerImage = docker.build("frontend", "-f front/Dockerfile ./front")
                 }
             }
         }
@@ -37,8 +39,8 @@ pipeline {
                 script {
                     def existingContainers = sh(script: "docker ps -aq -f name=frontend", returnStdout: true).trim()
                     if (existingContainers) {
-                        sh "docker stop ${existingContainers}"
-                        sh "docker rm -f ${existingContainers}"
+                        sh "docker stop $existingContainers"
+                        sh "docker rm -f $existingContainers"
                     }
                 }
             }
@@ -47,12 +49,10 @@ pipeline {
         stage("Run frontend container") {
             steps {
                 script {
-                    // `.env` 파일을 컨테이너 내부로 복사하고 실행
-                    sh "docker run -d -p 80:80 --name frontend"
+                    // Docker 컨테이너 실행, .env 파일 포함시키기
+                    sh "docker run -d -p 80:80 --name frontend --env-file .env frontend"
                 }
             }
         }
-
-
     }
 }
