@@ -1,14 +1,19 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 interface ButtonProps {
   label: string;
-  onClick: () => void;
+  path: string;
 }
 
-const Button: React.FC<ButtonProps> = ({ label, onClick }) => {
+const Button: React.FC<ButtonProps> = ({ label, path }) => {
+  const navigate = useNavigate();
+  const goPathClick = () => {
+    navigate(`${path}`);
+  };
   return (
     <div
-      onClick={onClick}
+      onClick={goPathClick}
       className="w-[150px] h-[41px] relative flex justify-center items-center"
     >
       <div className="w-[9.38rem] h-[2.56rem] left-0 top-0 absolute bg-gradient-to-r from-rose-300 to-indigo-400 rounded-[1.9375rem]" />
