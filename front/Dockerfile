@@ -5,7 +5,7 @@ WORKDIR /app
 RUN mkdir -p ./dist
 # 현재 디렉토리(/app)에 package.json과 yarn.lock 파일 복사
 COPY package.json ./
-# COPY yarn.lock .
+
 
 # yarn 설치 및 install
 RUN yarn
@@ -14,13 +14,6 @@ RUN yarn
 COPY . .
 
 RUN yarn build
-# CMD ["yarn", "build"]
-
-#EXPOSE 3000
-# 개발서버 실행
-CMD ["yarn", "dev"]
-
-RUN ls 
 
 FROM nginx:alpine
 
