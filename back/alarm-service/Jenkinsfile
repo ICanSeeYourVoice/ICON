@@ -21,11 +21,11 @@ pipeline {
         stage('secret.yml delete') {
             steps {
                 script{
-                    sh 'rm -f /var/jenkins_home/workspace/back-test/back/alarm-service/src/main/resources/application.yml'
+                    sh 'rm -f /var/jenkins_home/workspace/back-alarm/back/alarm-service/src/main/resources/application.yml'
 
                     echo "delete application.yml"
 
-                    sh '''cd /var/jenkins_home/workspace/back-test/back/alarm-service/src/main/resources
+                    sh '''cd /var/jenkins_home/workspace/back-alarm/back/alarm-service/src/main/resources
                     ls -al
                     '''
                 }
@@ -37,7 +37,7 @@ pipeline {
             	withCredentials([file(credentialsId: 'back-alarm-application', variable: 'applicationFile')]) {
                 	script {
                         echo "download application.yml"
-                    	sh 'cp -f $applicationFile /var/jenkins_home/workspace/back-test/back/alarm-service/src/main/resources/application.yml'
+                    	sh 'cp -f $applicationFile /var/jenkins_home/workspace/back-alarm/back/alarm-service/src/main/resources/application.yml'
                     }
         		}
             }
@@ -60,13 +60,13 @@ pipeline {
 
                     //gradlew 빌드
                     sh 'java --version'
-                    sh 'chmod -R u+w+x /var/jenkins_home/workspace/back-test/back/alarm-service/gradlew'
+                    sh 'chmod -R u+w+x /var/jenkins_home/workspace/back-alarm/back/alarm-service/gradlew'
 
-                    sh '''cd /var/jenkins_home/workspace/back-test/back/alarm-service
+                    sh '''cd /var/jenkins_home/workspace/back-alarm/back/alarm-service
                     ls -al
                     '''
 
-                    dir('/var/jenkins_home/workspace/back-test/back/alarm-service') {
+                    dir('/var/jenkins_home/workspace/back-alarm/back/alarm-service') {
                         sh './gradlew clean build'
                     }
                 }
