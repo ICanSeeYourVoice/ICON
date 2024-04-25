@@ -21,11 +21,11 @@ pipeline {
         stage('secret.yml delete') {
             steps {
                 script{
-                    sh 'rm -f /var/jenkins_home/workspace/back-test/back/service-discovery/src/main/resources/application.yml'
+                    sh 'rm -f /var/jenkins_home/workspace/back-eureka/back/service-discovery/src/main/resources/application.yml'
                     
                     echo "delete application.yml"
                     
-                    sh '''cd /var/jenkins_home/workspace/back-test/back/service-discovery/src/main/resources
+                    sh '''cd /var/jenkins_home/workspace/back-eureka/back/service-discovery/src/main/resources
                     ls -al
                     ''' 
                 }
@@ -37,7 +37,7 @@ pipeline {
             	withCredentials([file(credentialsId: 'back-eureka-application', variable: 'applicationFile')]) {
                 	script {
                         echo "download application.yml"
-                    	sh 'cp -f $applicationFile /var/jenkins_home/workspace/back-test/back/service-discovery/src/main/resources/application.yml'
+                    	sh 'cp -f $applicationFile /var/jenkins_home/workspace/back-eureka/back/service-discovery/src/main/resources/application.yml'
                     }
         		}
             }
@@ -60,13 +60,13 @@ pipeline {
 
                     //gradlew 빌드
                     sh 'java --version'
-                    sh 'chmod -R u+w+x /var/jenkins_home/workspace/back-test/back/service-discovery/gradlew'
+                    sh 'chmod -R u+w+x /var/jenkins_home/workspace/back-eureka/back/service-discovery/gradlew'
                     
-                    sh '''cd /var/jenkins_home/workspace/back-test/back/service-discovery
+                    sh '''cd /var/jenkins_home/workspace/back-eureka/back/service-discovery
                     ls -al
                     ''' 
  
-                    dir('/var/jenkins_home/workspace/back-test/back/service-discovery') {
+                    dir('/var/jenkins_home/workspace/back-eureka/back/service-discovery') {
                         sh './gradlew clean build'
                     } 
                 }
@@ -115,8 +115,7 @@ pipeline {
                             verbose: true,
                             transfers: [
                                 sshTransfer(execCommand: "sudo docker kill \$(docker ps | grep icon-eureka | tr ' ' '\t' | cut -f1)"),
-                                sshTransfer(execCommand: "sudo docker system prune -af"),
-                                sshTransfer(execCommand: "sudo docker image prune -f"),
+                                sshTransfer(execCommand: "sudo docker system prune -af"), 
                                 sshTransfer(execCommand: "sudo docker ps -a")
                             ]
                         )
