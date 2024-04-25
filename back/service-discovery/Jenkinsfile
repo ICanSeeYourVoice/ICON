@@ -1,6 +1,6 @@
 pipeline {
     environment {
-        repository = "hggew/icon-eureka"
+        repository = "hggew/icon"
         DOCKERHUB_CREDENTIALS = credentials('docker_credentials')
         dockerImage = ''
     }
@@ -114,7 +114,6 @@ pipeline {
                             transfers: [
                                 sshTransfer(execCommand: "sudo docker rm -f icon-eureka"),
                                 sshTransfer(execCommand: "sudo docker pull " + repository +":icon-eureka_${BUILD_NUMBER}"), 
-                                //sshTransfer(execCommand: "sudo docker run -d -p 8761:8761 --name icon-eureka --platform linux/arm64/v8 " + repository + ":icon-eureka_${BUILD_NUMBER}")
                                 sshTransfer(execCommand: "sudo docker run -d -p 8761:8761 --name icon-eureka " + repository + ":icon-eureka_${BUILD_NUMBER}")
                             ]
                         )
