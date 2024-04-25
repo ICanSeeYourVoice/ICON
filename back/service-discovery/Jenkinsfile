@@ -75,13 +75,13 @@ pipeline {
             }
         }
 
-        // stage('Clean Discovery-Server Image'){
-        //     steps{
-        //         script{
-        //             sh "docker rmi \${repository}:icon-eureka_\${BUILD_NUMBER}"
-        //         }
-        //     }
-        // }
+        stage('Clean Discovery-Server Image'){
+            steps{
+                script{
+                    sh "docker rmi \${repository}:icon-eureka_\${BUILD_NUMBER}"
+                }
+            }
+        }
 
         stage("Garbage Collect TESTSERV") {
             steps {
