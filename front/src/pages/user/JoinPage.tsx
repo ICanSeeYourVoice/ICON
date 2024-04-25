@@ -1,6 +1,6 @@
 import LabelInput from "../../components/common/Input/LabelInput";
 import PasswordInput from "../../components/common/Input/PasswordInput";
-import TopBar from "../../components/common/Navigator/TitleBar";
+import TopBar from "../../components/common/Navigator/TopBar";
 import PostButton from "../../components/common/button/PostButton";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";

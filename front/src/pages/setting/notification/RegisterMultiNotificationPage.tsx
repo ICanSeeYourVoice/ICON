@@ -1,5 +1,5 @@
 import Nav from "../../../components/common/Navigator/Nav";
-import TopBar from "../../../components/common/Navigator/TitleBar";
+import TopBar from "../../../components/common/Navigator/TopBar";
 
 const RegisterMultiNotificationPage = () => {
   return (

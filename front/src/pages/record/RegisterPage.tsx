@@ -1,4 +1,4 @@
-import TopBar from "../../components/common/Navigator/TitleBar";
+import TopBar from "../../components/common/Navigator/TopBar";
 import DateInp from "../../components/common/Input/DateInput";
 import LabelInput from "../../components/common/Input/LabelInput";
 import { useState } from "react";
