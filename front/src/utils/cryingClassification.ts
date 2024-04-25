@@ -9,15 +9,14 @@ export const loadYamnetModel = async () => {
 
 export const processAudioData = (
   yamnet: tf.GraphModel,
-  setIsBabyCry: (isCrying: boolean) => void
+  setIsBabyCry: (isCrying: boolean) => void,
+  setCryingType: (cryingType: number) => void
 ) => {
   return function (audioProcessingEvent: AudioProcessingEvent) {
     const inputBuffer = audioProcessingEvent.inputBuffer;
     let inputData = inputBuffer.getChannelData(0);
 
-    const [scores ] = yamnet.predict(
-      tf.tensor(inputData)
-    ) as [any ];
+    const [scores] = yamnet.predict(tf.tensor(inputData)) as [any];
 
     const top5 = tf.topk(scores, 3, true);
     const classes = top5.indices.dataSync();
@@ -26,6 +25,11 @@ export const processAudioData = (
     for (let i = 0; i < 3; i++) {
       if (classes[i] === 20 && probabilities[i] >= 0.5) {
         setIsBabyCry(true);
+
+        // 5초 뒤 울음 타입 임의 분류
+        setTimeout(() => {
+          setCryingType(1);
+        }, 5000);
         return;
       }
     }

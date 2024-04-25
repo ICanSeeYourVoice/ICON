@@ -12,11 +12,17 @@ import {
   loadYamnetModel,
   processAudioData,
 } from "../../utils/cryingClassification";
+import { useNavigate } from "react-router";
 
 const DetectionPage = () => {
+  const navigate = useNavigate();
+
   const model = useRef<tf.GraphModel | null>(null);
   const isBabyCry = useDetectionStore((state: any) => state.isBabyCry);
   const setIsBabyCry = useDetectionStore((state: any) => state.setIsBabyCry);
+
+  const cryingType = useDetectionStore((state: any) => state.cryingType);
+  const setCryingType = useDetectionStore((state: any) => state.setCryingType);
 
   useEffect(() => {
     const fetchDataAndProcess = async () => {
@@ -30,13 +36,17 @@ const DetectionPage = () => {
       const source = audioCtx.createMediaStreamSource(stream);
       const scriptNode = audioCtx.createScriptProcessor(8192, 1, 1);
 
-      scriptNode.onaudioprocess = processAudioData(yamnet, setIsBabyCry);
+      scriptNode.onaudioprocess = processAudioData(
+        yamnet,
+        setIsBabyCry,
+        setCryingType
+      );
 
       source.connect(scriptNode);
       scriptNode.connect(audioCtx.destination);
     };
 
-    fetchDataAndProcess();
+    if (!isBabyCry) fetchDataAndProcess();
 
     return () => {
       if (model.current) {
@@ -45,8 +55,14 @@ const DetectionPage = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (cryingType !== 0) {
+      navigate("/detection/result");
+    }
+  }, [cryingType]);
+
   return (
-    <div className="flex flex-col items-center justify-center gap-8">
+    <div className="flex flex-col items-center justify-center gap-5">
       <p className="text-gray-1 text-sm ">
         {isBabyCry ? LOADING_INFO : DETECTION_INFO}
       </p>
@@ -57,7 +73,7 @@ const DetectionPage = () => {
       {isBabyCry ? (
         <PulseLoader color="#c8c8c8" />
       ) : (
-        <div className="flex flex-col items-center justify-center text-gray-0 text-2xl">
+        <div className="flex flex-col items-center justify-center text-gray-0 text-xl">
           <p>아기가</p>
           <p>
             <span className="text-white">{DETECTION.NORMAL.MESSAGE}</span>
