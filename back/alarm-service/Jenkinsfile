@@ -3,10 +3,11 @@ pipeline {
         repository = "hggew/icon"
         DOCKERHUB_CREDENTIALS = credentials('docker_credentials')
         dockerImage = ''
+        DISCOVERY_SERVER="${env.DISCOVERY_SERVER}"
     }
 
     agent any
-
+    
     stages {
         stage('Checkout') {
             steps {
@@ -116,7 +117,7 @@ pipeline {
                             transfers: [
                                 sshTransfer(execCommand: "sudo docker kill \$(docker ps | grep icon-alarm | tr ' ' '\t' | cut -f1)"),
                                 sshTransfer(execCommand: "sudo docker system prune -af"),
-                                sshTransfer(execCommand: "sudo docker image prune -f"),
+//                                 sshTransfer(execCommand: "sudo docker image prune -f"),
                                 sshTransfer(execCommand: "sudo docker ps -a")
                             ]
                         )
@@ -136,7 +137,9 @@ pipeline {
                             transfers: [
                                 sshTransfer(execCommand: "sudo docker rm -f icon-alarm"),
                                 sshTransfer(execCommand: "sudo docker pull " + repository +":icon-alarm_${BUILD_NUMBER}"),
-                                sshTransfer(execCommand: "sudo docker run -d -P --name icon-alarm " + repository + ":icon-alarm_${BUILD_NUMBER}")
+                                sshTransfer(execCommand: "sudo docker run -d -p8082:8082 --name icon-alarm  -e DISCOVERY_SERVER=\"${DISCOVERY_SERVER}\" " + repository + ":icon-alarm_${BUILD_NUMBER}")
+//                                 sshTransfer(execCommand: "sudo docker run -d -p 8888:8888 --name chatting  -e CHATTING_SERVER=\"${CHATTING_SERVER}\" -e DISCOVERY_SERVER=\"${DISCOVERY_SERVER}\"   -e COMMON_SERVER=\"${COMMON_SERVER}\" " + repository + ":chatting_${BUILD_NUMBER}")
+
                             ]
                         )
                     ]
