@@ -16,7 +16,7 @@ const RegisterMultiNotificationPage = () => {
               <p>추가 보호자를 등록해</p>
               <p>울음감지 동시 알림을 받아보세요</p>
             </div>
-            <MoveButton text="QR코드 촬영하기" path="/" />
+            <MoveButton text="QR코드 촬영하기" path="/setting/scan" />
           </div>
 
           <div className="flex flex-col items-start w-full gap-3">

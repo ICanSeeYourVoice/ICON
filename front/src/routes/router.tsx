@@ -18,6 +18,7 @@ import SettingPage from "../pages/setting/SettingPage";
 import AccountPage from "../pages/setting/account/AccountPage";
 import RegisterMultiNotificationPage from "../pages/setting/notification/RegisterMultiNotificationPage";
 import SmartThingsPage from "../pages/setting/smartThings/SmartThingsPage";
+import QRScanPage from "../pages/setting/notification/QRScanPage";
 
 const authRoutes = [
   {
@@ -71,6 +72,7 @@ const settingRoutes = [
 const settingNavRoutes = [
   { path: "/setting/account", element: <AccountPage /> },
   { path: "/setting/share", element: <RegisterMultiNotificationPage /> },
+  { path: "/setting/scan", element: <QRScanPage /> },
   { path: "/setting/things", element: <SmartThingsPage /> },
 ];
 
