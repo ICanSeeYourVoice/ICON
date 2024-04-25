@@ -1,6 +1,15 @@
+import { useNavigate } from "react-router";
 import "./ReactButton.css";
+import { useDetectionStore } from "../../../stores/detection";
 
 const ReactButton = ({ icon, color }: { icon: string; color: string }) => {
+  const navigate = useNavigate();
+  // const isBabyCry = useDetectionStore((state: any) => state.isBabyCry);
+  const setIsBabyCry = useDetectionStore((state: any) => state.setIsBabyCry);
+
+  // const cryingType = useDetectionStore((state: any) => state.cryingType);
+  const setCryingType = useDetectionStore((state: any) => state.setCryingType);
+
   return (
     <div className="circle-container">
       <div
@@ -21,6 +30,11 @@ const ReactButton = ({ icon, color }: { icon: string; color: string }) => {
         </div>
       </div>
       <button
+        onClick={() => {
+          setCryingType(0);
+          setIsBabyCry(false);
+          navigate("/detection");
+        }}
         className="flex justify-center items-center w-[7.5rem] h-[7.5rem] rounded-full absolute"
         style={{ backgroundColor: color }}
       >
