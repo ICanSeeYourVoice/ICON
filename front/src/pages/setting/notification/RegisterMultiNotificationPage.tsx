@@ -8,8 +8,8 @@ const RegisterMultiNotificationPage = () => {
     <div className="flex flex-col items-center h-screen w-screen pt-[3.125rem] pb-[10.3125rem] gap-[1.5rem] ">
       <TopBar text="알림 계정 등록" path="setting" />
       <main className="flex flex-col items-center justify-center w-full">
-        <div className="flex flex-col items-center justify-center w-[15.25rem] gap-[2.6rem]">
-          <div className="flex flex-col items-center justify-center w-full gap-5">
+        <div className="flex flex-col items-center justify-center w-[15.25rem] gap-[2.3rem]">
+          <div className="flex flex-col items-center justify-center w-full gap-4">
             <div className="flex flex-col items-center justify-center w-[12rem] h-[12rem] bg-white rounded-[0.875rem] border-4 border-primary border-opacity-40">
               <div className=" w-[9.2rem] h-[9.2rem] bg-black"></div>
             </div>
