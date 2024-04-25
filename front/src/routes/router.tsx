@@ -13,6 +13,8 @@ import RegisterPage from "../pages/record/RegisterPage";
 import ChartPage from "../pages/record/ChartPage";
 import ChatLayout from "../pages/chat/ChatLayout";
 import ChatPage from "../pages/chat/ChatPage";
+import CommonLayout from "../components/common/layout/CommonLayout";
+import SettingPage from "../pages/setting/SettingPage";
 
 const authRoutes = [
   {
@@ -55,11 +57,20 @@ const chatRoutes = [
   },
 ];
 
+const settingRoutes = [
+  {
+    path: "/setting",
+    element: <CommonLayout title="설정" />,
+    children: [{ index: true, element: <SettingPage /> }],
+  },
+];
+
 const routes = [
   ...authRoutes,
   ...detectionRoutes,
   ...recordRoutes,
   ...chatRoutes,
+  ...settingRoutes,
 ];
 
 const router = createBrowserRouter(routes);
