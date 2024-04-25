@@ -114,7 +114,7 @@ pipeline {
                             configName: "icon-ssh",
                             verbose: true,
                             transfers: [
-                                sshTransfer(execCommand: "sudo docker kill \$(docker ps | grep icon-eureka | tr ' ' '\t' | cut -f1)"),
+                                sshTransfer(execCommand: "sudo docker kill \$(docker ps | grep icon-alarm | tr ' ' '\t' | cut -f1)"),
                                 sshTransfer(execCommand: "sudo docker system prune -af"),
                                 sshTransfer(execCommand: "sudo docker image prune -f"),
                                 sshTransfer(execCommand: "sudo docker ps -a")
