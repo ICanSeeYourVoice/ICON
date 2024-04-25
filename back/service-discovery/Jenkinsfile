@@ -90,8 +90,8 @@ pipeline {
                     continueOnError: true, failOnError: false,
                     publishers: [
                         sshPublisherDesc(
-                            // configName: "icon-ssh",
-                            configName: "icon-ssh-credential",
+                            configName: "icon-ssh",
+                            // configName: "icon-ssh-credential",
                             verbose: true,
                             transfers: [
                                 sshTransfer(execCommand: "sudo docker kill \$(docker ps | grep icon-eureka | tr ' ' '\t' | cut -f1)"),
