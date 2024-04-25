@@ -21,7 +21,7 @@ pipeline {
         stage('secret.yml delete') {
             steps {
                 script{
-                    sh 'rm -f ./var/jenkins_home/workspace/back-test/back/service-discovery/src/main/resources/application.yml'
+                    sh 'rm -f /var/jenkins_home/workspace/back-test/back/service-discovery/src/main/resources/application.yml'
                     
                     echo "delete application.yml"
                     
