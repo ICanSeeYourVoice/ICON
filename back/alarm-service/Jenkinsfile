@@ -1,5 +1,7 @@
 pipeline {
     environment {
+        repository = "hggew/icon"
+        DOCKERHUB_CREDENTIALS = credentials('docker_credentials')
         dockerImage = ''
     }
 
@@ -15,25 +17,33 @@ pipeline {
             }
         }
 
+        // application.yml
         stage('secret.yml delete') {
             steps {
                 script{
-                    sh 'rm -f ./back/alarm-service/src/main/resources/application.yml'
+                    sh 'rm -f /var/jenkins_home/workspace/back-test/back/alarm-service/src/main/resources/application.yml'
+
+                    echo "delete application.yml"
+
+                    sh '''cd /var/jenkins_home/workspace/back-test/back/alarm-service/src/main/resources
+                    ls -al
+                    '''
                 }
             }
         }
 
         stage('secret.yml download') {
         	steps {
-            	withCredentials([file(credentialsId: 'secret-alarm', 
-            	variable: 'applicationFile')]) {
+            	withCredentials([file(credentialsId: 'back-alarm-application', variable: 'applicationFile')]) {
                 	script {
-                    	sh 'cp -f $applicationFile 
-                    	./back/alarm-service/src/main/resources/application.yml'
+                        echo "download application.yml"
+                    	sh 'cp -f $applicationFile /var/jenkins_home/workspace/back-test/back/alarm-service/src/main/resources/application.yml'
                     }
         		}
-        	}
+            }
         }
+
+
 
         stage('Build Alarm-Server .JAR') {
             steps {
@@ -41,82 +51,97 @@ pipeline {
                     // 변경된 브랜치와 머지 대상 브랜치 출력
                     // 현재 빌드 중인 브랜치명 확인
                     def currentBranch = env.BRANCH_NAME
-                    echo "Merge Target Branch: \${CHANGE_TARGET}"
+                    echo "Merge Target Branch : \${CHANGE_TARGET}"
                     echo "Current Branch: \${currentBranch}"
 
-                    echo "back end - alarm 입니다."
-                    // gradlew 빌드
-                    //rwx
-                    sh 'chmod +x ./back/alarm-service/gradlew'
-                    sh '''
-                        cd ./back/alarm-service
-                        ./gradlew clean build
+                    echo "discovery server 입니다."
+                    sh 'pwd'
+                    sh 'ls -al'
+
+                    //gradlew 빌드
+                    sh 'java --version'
+                    sh 'chmod -R u+w+x /var/jenkins_home/workspace/back-test/back/alarm-service/gradlew'
+
+                    sh '''cd /var/jenkins_home/workspace/back-test/back/alarm-service
+                    ls -al
                     '''
-                }
-            }
-        }
 
-
-
-        stage('Build Alarm Image') {
-            steps {
-                script {
-                    dockerImage = docker.build("backend-alarm",
-                     "-f back/alarm-service/Dockerfile ./back/alarm-service")
-                }
-            }
-        }
-
-        stage("Kill exist container") {
-            steps {
-                script {
-                    def existingContainers 
-                    = sh(script: "docker ps -aq -f name=backend-alarm",
-                     returnStdout: true).trim()
-                    if (existingContainers) {
-                        sh "docker rm -f ${existingContainers}"
+                    dir('/var/jenkins_home/workspace/back-test/back/alarm-service') {
+                        sh './gradlew clean build'
                     }
-//                     sh "docker system prune -af"
                 }
             }
         }
 
-        stage("run container") {
-            steps {
-                script {
-                    sh 'docker rm -f backend-alarm'
-                    sh "docker run -d --restart=always -p 0:0 
-                    --name backend-alarm backend-alarm"
+        stage('Build Alarm-Server Image'){
+            steps{
+                script{
+                    dockerImage = docker.build("${repository}:icon-alarm_${BUILD_NUMBER}", "--platform linux/amd64 -f back/alarm-service/Dockerfile ./back/alarm-service")
                 }
             }
         }
 
-        stage('Clean Alarm Image') {
-            steps {
-                script {
-                    sh "docker system prune -af"
+        stage('DockerHub Login'){
+            steps{
+                script{
+                    sh "echo \${DOCKERHUB_CREDENTIALS_PSW} | docker login -u \${DOCKERHUB_CREDENTIALS_USR} --password-stdin"
                 }
             }
         }
-        
-        stage("Garbage Collect TESTS ERV") {
+
+        stage('Push Alarm-Server Image to DockerHub'){
+            steps {
+                script {
+                    sh "docker push \${repository}:icon-alarm_\${BUILD_NUMBER}"
+                }
+            }
+        }
+
+        stage('Clean Alarm-Server Image'){
+            steps{
+                script{
+                    sh "docker rmi \${repository}:icon-alarm_\${BUILD_NUMBER}"
+                }
+            }
+        }
+
+        stage("Garbage Collect TESTSERV") {
             steps {
                 sshPublisher(
                     continueOnError: true, failOnError: false,
                     publishers: [
                         sshPublisherDesc(
-                            configName: "ALARM_SERVER",
+                            configName: "icon-ssh",
                             verbose: true,
                             transfers: [
-                                sshTransfer(execCommand: "sudo docker kill \$(docker ps | grep Common | tr ' ' '\t' | cut -f1)"),
-                                sshTransfer(execCommand: "sudo docker system prune -af")
+                                sshTransfer(execCommand: "sudo docker kill \$(docker ps | grep icon-eureka | tr ' ' '\t' | cut -f1)"),
+                                sshTransfer(execCommand: "sudo docker system prune -af"),
+                                sshTransfer(execCommand: "sudo docker image prune -f"),
+                                sshTransfer(execCommand: "sudo docker ps -a")
                             ]
                         )
                     ]
                 )
             }
         }
-        
-    }
 
+        stage("Deploy"){
+            steps{
+                sshPublisher(
+                    continueOnError: false, failOnError: true,
+                    publishers: [
+                        sshPublisherDesc(
+                            configName: "icon-ssh",
+                            verbose: true,
+                            transfers: [
+                                sshTransfer(execCommand: "sudo docker rm -f icon-alarm"),
+                                sshTransfer(execCommand: "sudo docker pull " + repository +":icon-alarm_${BUILD_NUMBER}"),
+                                sshTransfer(execCommand: "sudo docker run -d -p 8761:8761 --name icon-alarm " + repository + ":icon-alarm_${BUILD_NUMBER}")
+                            ]
+                        )
+                    ]
+                )
+            }
+        }
+    }
 }
