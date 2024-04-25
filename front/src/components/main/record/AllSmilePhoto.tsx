@@ -1,15 +1,7 @@
 import SmilePhotoSm from "../../../components/main/record/SmilePhotoSm";
 
 const AllSmilePhoto = () => {
-  const photos = [
-    "더미1",
-    "더미2",
-    "더미3",
-    "더미4",
-    "더미5",
-    "더미5",
-    "더미5",
-  ];
+  const photos = ["더미1", "더미2", "더미3", "더미4", "더미5", "더미5"];
 
   //   const handleDelete = (index) => {
   //     setPhotos(prevPhotos => prevPhotos.filter((_, idx) => idx !== index));

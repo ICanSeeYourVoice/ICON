@@ -9,11 +9,14 @@ const DiaryDetailPage = () => {
   return (
     <div className="flex flex-col items-center h-screen w-screen pt-[3.125rem] pb-[10.3125rem] gap-[1.5rem]">
       <TopBar text=" 일지" />
-      <DateInput />
-      <DiaryAll title="제목" content="내용" />
-      <AllSmilePhoto />
+      <main className="flex flex-col items-center justify-center w-full gap-[1.5rem]">
+        <DateInput />
+        <DiaryAll title="제목" content="내용" />
+        <AllSmilePhoto />
+        <MoveButton path="/record/diary/register" text="일지 추가하기" />
+      </main>
       <Nav />
-      <MoveButton path="/record/diary/register" text="일지 추가하기" />
+      <div></div>
     </div>
   );
 };
