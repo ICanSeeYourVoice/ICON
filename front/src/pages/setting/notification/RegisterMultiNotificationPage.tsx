@@ -2,6 +2,7 @@ import Nav from "../../../components/common/Navigator/Nav";
 import TopBar from "../../../components/common/Navigator/TopBar";
 import MoveButton from "../../../components/common/button/MoveButton";
 import AccountItem from "../../../components/main/setting/AccountItem";
+import QR from "../../../components/main/setting/QR";
 
 const RegisterMultiNotificationPage = () => {
   return (
@@ -10,9 +11,7 @@ const RegisterMultiNotificationPage = () => {
       <main className="flex flex-col items-center justify-center w-full">
         <div className="flex flex-col items-center justify-center w-[15.25rem] gap-[2.3rem]">
           <div className="flex flex-col items-center justify-center w-full gap-4">
-            <div className="flex flex-col items-center justify-center w-[12rem] h-[12rem] bg-white rounded-[0.875rem] border-4 border-primary border-opacity-40">
-              <div className=" w-[9.2rem] h-[9.2rem] bg-black"></div>
-            </div>
+            <QR data={{ userId: "kimssafy" }} />
             <div className="flex flex-col items-center justify-center w-full text-gray-0 text-[0.875rem]">
               <p>추가 보호자를 등록해</p>
               <p>울음감지 동시 알림을 받아보세요</p>
