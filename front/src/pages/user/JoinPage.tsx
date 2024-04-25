@@ -1,6 +1,6 @@
 import LabelInput from "../../components/common/Input/LabelInput";
 import PasswordInput from "../../components/common/Input/PasswordInput";
-import Topbar from "../../components/common/Navigator/Topbar";
+import TopBar from "../../components/common/Navigator/TopBar";
 import PostButton from "../../components/common/button/PostButton";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -34,8 +34,8 @@ const JoinPage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center gap-[1.6rem] ">
-      <Topbar text="일지 등록" />
+    <div className="flex flex-col items-center h-screen w-screen pt-[3.125rem] pb-[10.3125rem] gap-[1.5rem]">
+      <TopBar text="일지 등록" />
       <div className="flex flex-col items-center gap-[1.6rem] mt-10">
         <LabelInput
           label="이름"

@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import Vector from "../../../../src/assets/svgs/nav/Vector.svg";
 
-interface TopbarProps {
+interface TopBarProps {
   text: string;
   path?: string;
 }
 
-const Topbar: React.FC<TopbarProps> = ({ text, path }) => {
+const TopBar: React.FC<TopBarProps> = ({ text, path }) => {
   const navigate = useNavigate();
 
   const handleTopClick = () => {
@@ -20,16 +20,16 @@ const Topbar: React.FC<TopbarProps> = ({ text, path }) => {
   return (
     <div className="top-0 left-0 right-0 z-10 flex flex-col items-center ">
       <div className="m-auto">
-        <div className="flex w-[17rem] justify-between items-center font-bold pt-[3.125rem]">
-          <div onClick={handleTopClick} className="cursor-pointer">
+        <div className="flex w-[17rem] h-[2.625rem] justify-between items-center font-bold">
+          <button onClick={handleTopClick}>
             <img src={Vector} alt="Back" />
-          </div>
+          </button>
           <div>{text}</div>
-          <div></div>
+          <div className="w-[16px]"></div>
         </div>
       </div>
     </div>
   );
 };
 
-export default Topbar;
+export default TopBar;
