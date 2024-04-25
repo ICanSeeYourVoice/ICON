@@ -21,7 +21,14 @@ pipeline {
         stage('secret.yml delete') {
             steps {
                 script{
+                    
+                    sh '''cd /var/jenkins_home/workspace/back-test/back/service-discovery
+                    ls -al
+                    ''' 
+ 
                     sh 'rm -f ./var/jenkins_home/workspace/back-test/back/service-discovery/src/main/resources/application.yml'
+                    
+                    echo "delete application.yml"
                 }
             }
         }
@@ -30,6 +37,7 @@ pipeline {
         	steps {
             	withCredentials([file(credentialsId: 'back-eureka-application', variable: 'applicationFile')]) {
                 	script {
+                        echo "download application.yml"
                     	sh 'cp -f $applicationFile ./var/jenkins_home/workspace/back-test/back/service-discovery/src/main/resources/application.yml'
                     }
         		}
