@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import BotChat from "../../components/main/chat/BotChat";
 import ChatDate from "../../components/main/chat/ChatDate";
 import MyChat from "../../components/main/chat/MyChat";
+import ChatInput from "../../components/main/chat/ChatInput";
+import MoveButton from "../../components/common/button/MoveButton";
 
 interface Message {
   id: number;
@@ -15,35 +17,39 @@ const ChatPage: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
-      type: "my",
-      text: `첫 번째 메시지입니다`,
-      timestamp: new Date("2024-04-24T12:20:00"),
-    },
-    {
-      id: 2,
       type: "bot",
-      text: "두 번째 메시지입니다.",
-      timestamp: new Date("2024-04-23T15:00:00"),
-    },
-    {
-      id: 3,
-      type: "bot",
-      text: "세 번째 메시지입니다.",
-      timestamp: new Date("2024-04-23T13:00:00"),
-    },
-    {
-      id: 4,
-      type: "my",
-      text: "네 번째 메시지입니다.",
-      timestamp: new Date("2024-04-23T23:16:00"),
-    },
-    {
-      id: 5,
-      type: "bot",
-      text: "다섯 번째 메시지입니다.",
+      text: "첫 번째 메시지입니다.",
       timestamp: new Date("2024-04-22T12:00:00"),
     },
   ]);
+  const handleSendMessage = (newText: string) => {
+    const newMessage: Message = {
+      id: messages.length + 1,
+      type: "my",
+      text: newText,
+      timestamp: new Date(),
+    };
+
+    // 마지막 메시지와 새 메시지의 날짜를 비교하여 날짜가 변경되었는지 확인
+    const lastMessage =
+      messages.length > 0 ? messages[messages.length - 1] : null;
+    const newMessages = [...messages];
+    if (
+      lastMessage &&
+      newMessage.timestamp.toDateString() !==
+        lastMessage.timestamp.toDateString()
+    ) {
+      newMessages.push({
+        id: newMessage.id - 1,
+        type: "date",
+        text: "",
+        timestamp: newMessage.timestamp,
+      });
+    }
+    console.log("새로운 메시지", newMessage);
+    newMessages.push(newMessage);
+    setMessages([newMessage, ...messages]);
+  };
 
   const addMessage = (text: string, type: "my" | "bot") => {
     const newMessage: Message = {
@@ -82,15 +88,15 @@ const ChatPage: React.FC = () => {
               arr[index + 1].timestamp.toDateString();
 
           return (
-            <React.Fragment key={message.id}>
+            <div key={message.id}>
+              {isFirstMessageOfDay && <ChatDate date={message.timestamp} />}
               {message.type === "my" && (
                 <MyChat text={message.text} timestamp={message.timestamp} />
               )}
               {message.type === "bot" && (
                 <BotChat text={message.text} timestamp={message.timestamp} />
               )}
-              {isFirstMessageOfDay && <ChatDate date={message.timestamp} />}
-            </React.Fragment>
+            </div>
           );
         })}
       </div>
@@ -99,14 +105,14 @@ const ChatPage: React.FC = () => {
           onClick={() => addMessage("봇 새로운 메시지", "bot")}
           className=" bg-blue-100 "
         >
-          봇 메시지 추가
+          봇 메시지
         </button>
-        <button
-          onClick={() => addMessage("나의 새로운 메시지", "my")}
-          className=" bg-red-100 "
-        >
-          나의 메시지 추가
-        </button>
+      </div>
+      <div className="mt-auto">
+        <div className="flex justify-center pb-5">
+          <MoveButton text="메인으로 돌아가기" path="/detection" />
+        </div>
+        <ChatInput onSendMessage={handleSendMessage} />
       </div>
     </div>
   );
