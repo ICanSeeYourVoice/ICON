@@ -121,7 +121,7 @@ pipeline {
                     ]
                 )
                 script{
-                    echo "Merge Target Branch : \${CHANGE_TARGET}"
+                    echo "This is end"
                 }
             }
         }
