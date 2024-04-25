@@ -7,9 +7,9 @@ interface SettingNavItemProps {
 
 const SettingPage = () => {
   const settingNavList: SettingNavItemProps[] = [
-    { text: "계정", path: "/" },
-    { text: "알림 계정 등록", path: "/" },
-    { text: "SmartThings", path: "/" },
+    { text: "계정", path: "/setting/account" },
+    { text: "알림 계정 등록", path: "/setting/share" },
+    { text: "SmartThings", path: "/setting/things" },
   ];
 
   return (
@@ -17,6 +17,11 @@ const SettingPage = () => {
       {settingNavList.map((item, index) => (
         <SettingNavItem key={index} text={item.text} path={item.path} />
       ))}
+      <button className="flex justify-center items-center w-full h-[4.125rem]">
+        <div className="flex justify-between items-center w-[15.25rem] ">
+          <p className="text-red-0">로그아웃</p>
+        </div>
+      </button>
     </>
   );
 };

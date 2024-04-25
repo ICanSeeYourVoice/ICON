@@ -15,6 +15,9 @@ import ChatLayout from "../pages/chat/ChatLayout";
 import ChatPage from "../pages/chat/ChatPage";
 import CommonLayout from "../components/common/layout/CommonLayout";
 import SettingPage from "../pages/setting/SettingPage";
+import AccountPage from "../pages/setting/account/AccountPage";
+import RegisterMultiNotificationPage from "../pages/setting/notification/RegisterMultiNotificationPage";
+import SmartThingsPage from "../pages/setting/smartThings/SmartThingsPage";
 
 const authRoutes = [
   {
@@ -65,12 +68,19 @@ const settingRoutes = [
   },
 ];
 
+const settingNavRoutes = [
+  { path: "/setting/account", element: <AccountPage /> },
+  { path: "/setting/share", element: <RegisterMultiNotificationPage /> },
+  { path: "/setting/things", element: <SmartThingsPage /> },
+];
+
 const routes = [
   ...authRoutes,
   ...detectionRoutes,
   ...recordRoutes,
   ...chatRoutes,
   ...settingRoutes,
+  ...settingNavRoutes,
 ];
 
 const router = createBrowserRouter(routes);
