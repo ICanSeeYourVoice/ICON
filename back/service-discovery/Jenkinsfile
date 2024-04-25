@@ -55,7 +55,7 @@ pipeline {
             steps{
                 script{
                     // dockerImage = docker.build("${repository}:icon-eureka_${BUILD_NUMBER}", "-f /var/jenkins_home/workspace/back-test/back/service-discovery/Dockerfile /var/jenkins_home/workspace/back-test/back/service-discovery")
-                    dockerImage = docker.build("${repository}:icon-eureka_${BUILD_NUMBER} --platform linux/amd64", "-f back/service-discovery/Dockerfile ./back/service-discovery")
+                    dockerImage = docker.build("-t ${repository}:icon-eureka_${BUILD_NUMBER} --platform linux/amd64 -f back/service-discovery/Dockerfile ./back/service-discovery")
                 }
             }
         }
