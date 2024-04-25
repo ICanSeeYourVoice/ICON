@@ -17,6 +17,27 @@ pipeline {
             }
         }
 
+        // application.yml
+        stage('secret.yml delete') {
+            steps {
+                script{
+                    sh 'rm -f ./var/jenkins_home/workspace/back-test/back/service-discovery/src/main/resources/application.yml'
+                }
+            }
+        }
+
+        stage('secret.yml download') {
+        	steps {
+            	withCredentials([file(credentialsId: 'back-eureka-application', variable: 'applicationFile')]) {
+                	script {
+                    	sh 'cp -f $applicationFile ./var/jenkins_home/workspace/back-test/back/service-discovery/src/main/resources/application.yml'
+                    }
+        		}
+            }
+        }
+
+
+
         stage('Build Discovery-Server .JAR') {
             steps {
                 script {
