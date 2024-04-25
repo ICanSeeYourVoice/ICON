@@ -1,4 +1,4 @@
-import TopBar from "../../components/common/Navigator/TopBar";
+import TopBar from "../../components/common/Navigator/TitleBar";
 import DateInput from "../../components/common/Input/DateInput";
 import DiaryAll from "../../components/main/record/DiaryAll";
 import AllSmilePhoto from "../../components/main/record/AllSmilePhoto";

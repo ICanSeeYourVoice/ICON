@@ -1,5 +1,5 @@
 import Nav from "../../../components/common/Navigator/Nav";
-import TopBar from "../../../components/common/Navigator/TopBar";
+import TopBar from "../../../components/common/Navigator/TitleBar";
 
 const AccountPage = () => {
   return (
