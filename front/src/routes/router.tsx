@@ -13,6 +13,11 @@ import RegisterPage from "../pages/record/RegisterPage";
 import ChartPage from "../pages/record/ChartPage";
 import ChatLayout from "../pages/chat/ChatLayout";
 import ChatPage from "../pages/chat/ChatPage";
+import CommonLayout from "../components/common/layout/CommonLayout";
+import SettingPage from "../pages/setting/SettingPage";
+import AccountPage from "../pages/setting/account/AccountPage";
+import RegisterMultiNotificationPage from "../pages/setting/notification/RegisterMultiNotificationPage";
+import SmartThingsPage from "../pages/setting/smartThings/SmartThingsPage";
 
 const authRoutes = [
   {
@@ -55,11 +60,27 @@ const chatRoutes = [
   },
 ];
 
+const settingRoutes = [
+  {
+    path: "/setting",
+    element: <CommonLayout title="설정" />,
+    children: [{ index: true, element: <SettingPage /> }],
+  },
+];
+
+const settingNavRoutes = [
+  { path: "/setting/account", element: <AccountPage /> },
+  { path: "/setting/share", element: <RegisterMultiNotificationPage /> },
+  { path: "/setting/things", element: <SmartThingsPage /> },
+];
+
 const routes = [
   ...authRoutes,
   ...detectionRoutes,
   ...recordRoutes,
   ...chatRoutes,
+  ...settingRoutes,
+  ...settingNavRoutes,
 ];
 
 const router = createBrowserRouter(routes);
