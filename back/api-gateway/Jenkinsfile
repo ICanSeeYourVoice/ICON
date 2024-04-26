@@ -135,7 +135,7 @@ pipeline {
                             verbose: true,
                             transfers: [
                                 sshTransfer(execCommand: "sudo docker rm -f icon-gateway"),
-                                sshTransfer(execCommand: "sudo docker pull " + repository +":icon-gateway${BUILD_NUMBER}"),
+                                sshTransfer(execCommand: "sudo docker pull " + repository +":icon-gateway_${BUILD_NUMBER}"),
                                 sshTransfer(execCommand: "sudo docker run -d -p 8000:8000 --name icon-gateway --net host " + repository + ":icon-gateway_${BUILD_NUMBER}")
                             ]
                         )
