@@ -12,6 +12,15 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
+                    // alarm 디렉토리에서 변화가 있을 때만 빌드
+                    def changes = sh(script: "git diff --name-only HEAD HEAD~1", returnStdout: true).trim()
+                    if (changes.contains("back/alarm-service/")) {
+                        echo 'Changes in alarm directory, proceeding with build.'
+                    } else {
+                        echo 'No changes in alarm directory, skipping build.'
+                        currentBuild.result = 'NOT_BUILT'
+                    }
+
                     // 코드 체크아웃
                     checkout scm
                 }
