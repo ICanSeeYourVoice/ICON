@@ -116,7 +116,7 @@ pipeline {
                             transfers: [
                                 sshTransfer(execCommand: "sudo docker kill \$(docker ps | grep icon-gateway | tr ' ' '\t' | cut -f1)"),
                                 sshTransfer(execCommand: "sudo docker image prune -af"),
-		       sshTransfer(execCommand: "sudo docker container prune -f"),
+		                        sshTransfer(execCommand: "sudo docker container prune -f"),
                                 sshTransfer(execCommand: "sudo docker ps -a")
                             ]
                         )
