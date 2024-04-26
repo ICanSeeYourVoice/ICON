@@ -115,7 +115,8 @@ pipeline {
                             verbose: true,
                             transfers: [
                                 sshTransfer(execCommand: "sudo docker kill \$(docker ps | grep icon-eureka | tr ' ' '\t' | cut -f1)"),
-                                sshTransfer(execCommand: "sudo docker system prune -af"), 
+                                sshTransfer(execCommand: "sudo docker image prune -af"), 
+                                sshTransfer(execCommand: "sudo docker container prune -af"), 
                                 sshTransfer(execCommand: "sudo docker ps -a")
                             ]
                         )
@@ -135,7 +136,7 @@ pipeline {
                             transfers: [
                                 sshTransfer(execCommand: "sudo docker rm -f icon-eureka"),
                                 sshTransfer(execCommand: "sudo docker pull " + repository +":icon-eureka_${BUILD_NUMBER}"), 
-                                sshTransfer(execCommand: "sudo docker run -d -p 8761:8761 --name icon-eureka " + repository + ":icon-eureka_${BUILD_NUMBER}")
+                                sshTransfer(execCommand: "sudo docker run -d -p 8761:8761 --name icon-eureka --network icon_bridge " + repository + ":icon-eureka_${BUILD_NUMBER}")
                             ]
                         )
                     ]
