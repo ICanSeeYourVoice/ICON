@@ -13,6 +13,7 @@ import {
   processAudioData,
 } from "../../utils/cryingClassification";
 import { useNavigate } from "react-router";
+import toast from "react-hot-toast";
 
 const DetectionPage = () => {
   const navigate = useNavigate();
@@ -26,24 +27,36 @@ const DetectionPage = () => {
 
   useEffect(() => {
     const fetchDataAndProcess = async () => {
-      const yamnet = await loadYamnetModel();
-      model.current = yamnet;
-      const constraints = { audio: true };
+      let toastId;
 
-      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      try {
+        toastId = toast.loading("아기울음감지를 준비 중입니다.");
 
-      const audioCtx = new AudioContext({ sampleRate: 16000 });
-      const source = audioCtx.createMediaStreamSource(stream);
-      const scriptNode = audioCtx.createScriptProcessor(8192, 1, 1);
+        const yamnet = await loadYamnetModel();
+        model.current = yamnet;
+        const constraints = { audio: true };
 
-      scriptNode.onaudioprocess = processAudioData(
-        yamnet,
-        setIsBabyCry,
-        setCryingType
-      );
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
 
-      source.connect(scriptNode);
-      scriptNode.connect(audioCtx.destination);
+        const audioCtx = new AudioContext({ sampleRate: 16000 });
+        const source = audioCtx.createMediaStreamSource(stream);
+        const scriptNode = audioCtx.createScriptProcessor(8192, 1, 1);
+
+        scriptNode.onaudioprocess = processAudioData(
+          yamnet,
+          setIsBabyCry,
+          setCryingType
+        );
+
+        source.connect(scriptNode);
+        scriptNode.connect(audioCtx.destination);
+
+        toast.success("울음감지 시작");
+      } catch (error) {
+        toast.error("아기울음감지를 준비 중 오류가 발생했습니다.");
+      } finally {
+        toast.dismiss(toastId);
+      }
     };
 
     if (!isBabyCry) fetchDataAndProcess();
