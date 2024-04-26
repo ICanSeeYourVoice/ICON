@@ -5,7 +5,7 @@ import router from "./routes/router";
 import { handleAllowNotification } from "./service/notificationPermission";
 import toast, { Toaster } from "react-hot-toast";
 import { useEffect, useRef } from "react";
-import { useNotificationStore } from "./stores/notification";
+import { useNotificationStore, useTokenStore } from "./stores/notification";
 import { messageHandler } from "./service/foregroundMessage";
 import { useDetectionStore } from "./stores/detection";
 import {
@@ -27,6 +27,7 @@ function App() {
   const setIsBabyCry = useDetectionStore((state: any) => state.setIsBabyCry);
   const setCryingType = useDetectionStore((state: any) => state.setCryingType);
   const streamRef = useRef<MediaStream | null>(null);
+  const { token, setToken } = useTokenStore();
 
   /* Notification setting */
   const notify = () => toast(<ToastDisplay />);
@@ -54,7 +55,18 @@ function App() {
 
   messageHandler(setNotification);
 
-  handleAllowNotification();
+  useEffect(() => {
+    const getTokenAndSet = async () => {
+      const newToken = await handleAllowNotification();
+      if (newToken) {
+        setToken(newToken);
+      }
+    };
+
+    if (!token) {
+      getTokenAndSet();
+    }
+  }, [token, setToken]);
 
   /* Detection setting */
   useEffect(() => {
