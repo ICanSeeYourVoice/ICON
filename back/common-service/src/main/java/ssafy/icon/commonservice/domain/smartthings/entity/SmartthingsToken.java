@@ -11,11 +11,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ssafy.icon.commonservice.domain.member.entity.Member;
 import ssafy.icon.commonservice.global.entity.BaseEntity;
 
 @NoArgsConstructor(access = PROTECTED)
+@Getter
 @Entity
 public class SmartthingsToken extends BaseEntity {
 
