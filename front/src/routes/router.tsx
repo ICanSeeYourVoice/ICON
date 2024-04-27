@@ -20,6 +20,8 @@ import RegisterMultiNotificationPage from "../pages/setting/notification/Registe
 import SmartThingsPage from "../pages/setting/smartThings/SmartThingsPage";
 import QRScanPage from "../pages/setting/notification/QRScanPage";
 import ResultPage from "../pages/detection/ResultPage";
+import VoiceLayout from "../components/common/layout/VoiceLayout";
+import ClovaVoicePage from "../pages/tts/ClovaVoicePage";
 
 const authRoutes = [
   {
