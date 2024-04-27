@@ -19,6 +19,8 @@ import AccountPage from "../pages/setting/account/AccountPage";
 import RegisterMultiNotificationPage from "../pages/setting/notification/RegisterMultiNotificationPage";
 import SmartThingsPage from "../pages/setting/smartThings/SmartThingsPage";
 import QRScanPage from "../pages/setting/notification/QRScanPage";
+import VoiceLayout from "../components/common/layout/VoiceLayout";
+import ClovaVoicePage from "../pages/tts/ClovaVoicePage";
 
 const authRoutes = [
   {
@@ -76,6 +78,14 @@ const settingNavRoutes = [
   { path: "/setting/things", element: <SmartThingsPage /> },
 ];
 
+const voiceRoutes = [
+  {
+    path: "/voice",
+    element: <VoiceLayout />,
+    children: [{ index: true, element: <ClovaVoicePage /> }],
+  },
+];
+
 const routes = [
   ...authRoutes,
   ...detectionRoutes,
@@ -83,6 +93,7 @@ const routes = [
   ...chatRoutes,
   ...settingRoutes,
   ...settingNavRoutes,
+  ...voiceRoutes,
 ];
 
 const router = createBrowserRouter(routes);
