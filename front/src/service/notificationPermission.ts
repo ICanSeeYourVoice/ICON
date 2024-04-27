@@ -16,6 +16,8 @@ export async function handleAllowNotification() {
       if (token) {
         // token 서버로 전송 로직 필요
         console.log(token);
+
+        return token;
       } else {
         alert("토큰 등록이 불가능 합니다. 생성하려면 권한을 허용해주세요");
       }

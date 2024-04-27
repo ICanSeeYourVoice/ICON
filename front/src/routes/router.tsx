@@ -19,8 +19,7 @@ import AccountPage from "../pages/setting/account/AccountPage";
 import RegisterMultiNotificationPage from "../pages/setting/notification/RegisterMultiNotificationPage";
 import SmartThingsPage from "../pages/setting/smartThings/SmartThingsPage";
 import QRScanPage from "../pages/setting/notification/QRScanPage";
-import VoiceLayout from "../components/common/layout/VoiceLayout";
-import ClovaVoicePage from "../pages/tts/ClovaVoicePage";
+import ResultPage from "../pages/detection/ResultPage";
 
 const authRoutes = [
   {
@@ -37,7 +36,10 @@ const detectionRoutes = [
   {
     path: "/detection",
     element: <DarkCommonLayout title="울음감지" />,
-    children: [{ index: true, element: <DetectionPage /> }],
+    children: [
+      { index: true, element: <DetectionPage /> },
+      { path: "/detection/result", element: <ResultPage /> },
+    ],
   },
 ];
 

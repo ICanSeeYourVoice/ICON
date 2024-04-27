@@ -24,7 +24,6 @@ const RegisterMultiNotificationPage = () => {
             <div>
               <AccountItem name="김싸피" userId="kimssafy" />
               <AccountItem name="이싸피" userId="leessafy" />
-              <AccountItem name="박싸피" userId="parkssafy" />
             </div>
           </div>
         </div>

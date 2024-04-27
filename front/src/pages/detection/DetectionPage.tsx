@@ -5,48 +5,23 @@ import {
   DETECTION_INFO,
   LOADING_INFO,
 } from "../../constants/detection";
-import * as tf from "@tensorflow/tfjs";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useDetectionStore } from "../../stores/detection";
-import {
-  loadYamnetModel,
-  processAudioData,
-} from "../../utils/cryingClassification";
+import { useNavigate } from "react-router";
 
 const DetectionPage = () => {
-  const model = useRef<tf.GraphModel | null>(null);
+  const navigate = useNavigate();
   const isBabyCry = useDetectionStore((state: any) => state.isBabyCry);
-  const setIsBabyCry = useDetectionStore((state: any) => state.setIsBabyCry);
+  const cryingType = useDetectionStore((state: any) => state.cryingType);
 
   useEffect(() => {
-    const fetchDataAndProcess = async () => {
-      const yamnet = await loadYamnetModel();
-      model.current = yamnet;
-      const constraints = { audio: true };
-
-      const stream = await navigator.mediaDevices.getUserMedia(constraints);
-
-      const audioCtx = new AudioContext({ sampleRate: 16000 });
-      const source = audioCtx.createMediaStreamSource(stream);
-      const scriptNode = audioCtx.createScriptProcessor(8192, 1, 1);
-
-      scriptNode.onaudioprocess = processAudioData(yamnet, setIsBabyCry);
-
-      source.connect(scriptNode);
-      scriptNode.connect(audioCtx.destination);
-    };
-
-    fetchDataAndProcess();
-
-    return () => {
-      if (model.current) {
-        model.current.dispose();
-      }
-    };
-  }, []);
+    if (cryingType !== 0) {
+      navigate("/detection/result");
+    }
+  }, [cryingType]);
 
   return (
-    <div className="flex flex-col items-center justify-center gap-8">
+    <div className="flex flex-col items-center justify-center gap-5">
       <p className="text-gray-1 text-sm ">
         {isBabyCry ? LOADING_INFO : DETECTION_INFO}
       </p>
@@ -57,7 +32,7 @@ const DetectionPage = () => {
       {isBabyCry ? (
         <PulseLoader color="#c8c8c8" />
       ) : (
-        <div className="flex flex-col items-center justify-center text-gray-0 text-2xl">
+        <div className="flex flex-col items-center justify-center text-gray-0 text-xl">
           <p>아기가</p>
           <p>
             <span className="text-white">{DETECTION.NORMAL.MESSAGE}</span>
