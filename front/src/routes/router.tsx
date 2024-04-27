@@ -80,6 +80,14 @@ const settingNavRoutes = [
   { path: "/setting/things", element: <SmartThingsPage /> },
 ];
 
+const voiceRoutes = [
+  {
+    path: "/voice",
+    element: <VoiceLayout />,
+    children: [{ index: true, element: <ClovaVoicePage /> }],
+  },
+];
+
 const routes = [
   ...authRoutes,
   ...detectionRoutes,
@@ -87,6 +95,7 @@ const routes = [
   ...chatRoutes,
   ...settingRoutes,
   ...settingNavRoutes,
+  ...voiceRoutes,
 ];
 
 const router = createBrowserRouter(routes);
