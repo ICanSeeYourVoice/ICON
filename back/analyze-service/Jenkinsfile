@@ -19,6 +19,7 @@ pipeline {
                     } else {
                         echo 'No changes in analyze directory, skipping build.'
                         currentBuild.result = 'NOT_BUILT'
+                        error('No changes in analyze directory. Halting pipeline.')
                     }
 
                     // 코드 체크아웃
