@@ -11,6 +11,16 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
+                    // api-gateway 디렉토리에서 변화가 있을 때만 빌드
+                    def changes = sh(script: "git diff --name-only HEAD HEAD~1", returnStdout: true).trim()
+                    if (changes.contains("back/api-gateway/")) {
+                        echo 'Changes in api-gateway directory, proceeding with build.'
+                    } else {
+                        echo 'No changes in api-gateway directory, skipping build.'
+                        currentBuild.result = 'NOT_BUILT'
+                        error('No changes in api-gateway directory. Halting pipeline.')
+                    }
+
                     // 코드 체크아웃
                     checkout scm
                 }
