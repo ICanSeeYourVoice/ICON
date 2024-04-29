@@ -3,6 +3,7 @@ pipeline {
         repository = "hggew/icon"
         DOCKERHUB_CREDENTIALS = credentials('docker_credentials')
         dockerImage = ''
+        DISCOVERY_SERVER="${env.DISCOVERY_SERVER}"
     }
 
     agent any
@@ -32,12 +33,7 @@ pipeline {
             steps {
                 script{
                     sh 'rm -f /var/jenkins_home/workspace/back-gateway/back/api-gateway/src/main/resources/application.yml'
-
-                    echo "delete application.yml"
-
-                    sh '''cd /var/jenkins_home/workspace/back-gateway/back/api-gateway/src/main/resources
-                    ls -al
-                    '''
+                    echo "delete application.yml" 
                 }
             }
         }
@@ -125,8 +121,8 @@ pipeline {
                             verbose: true,
                             transfers: [
                                 sshTransfer(execCommand: "sudo docker kill \$(docker ps | grep icon-gateway | tr ' ' '\t' | cut -f1)"),
-                                sshTransfer(execCommand: "sudo docker image prune -af"),
 		                        sshTransfer(execCommand: "sudo docker container prune -f"),
+                                sshTransfer(execCommand: "sudo docker image prune -af"),
                                 sshTransfer(execCommand: "sudo docker ps -a")
                             ]
                         )
@@ -146,7 +142,7 @@ pipeline {
                             transfers: [
                                 sshTransfer(execCommand: "sudo docker rm -f icon-gateway"),
                                 sshTransfer(execCommand: "sudo docker pull " + repository +":icon-gateway_${BUILD_NUMBER}"),
-                                sshTransfer(execCommand: "sudo docker run -d -p 8000:8000 --name icon-gateway --network host " + repository + ":icon-gateway_${BUILD_NUMBER}")
+                                sshTransfer(execCommand: "sudo docker run -d -p 8000:8000 --name icon-gateway --network host -e DISCOVERY_SERVER=\"${DISCOVERY_SERVER}\" " + repository + ":icon-gateway_${BUILD_NUMBER}")
                             ]
                         )
                     ]
