@@ -5,7 +5,6 @@ type ChatInputProps = {
   onSendMessage: (message: string) => void;
 };
 
-// ChatInput 컴포넌트 정의: ChatInputProps 타입을 사용
 const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage }) => {
   const [message, setMessage] = useState("");
 
