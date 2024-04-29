@@ -2985,6 +2985,11 @@ vite@^5.2.0:
   optionalDependencies:
     fsevents "~2.3.3"
 
+wavesurfer.js@^7.7.11:
+  version "7.7.11"
+  resolved "https://registry.yarnpkg.com/wavesurfer.js/-/wavesurfer.js-7.7.11.tgz#9db7a7974ec1d61dc7b2afe6360f575b5d216285"
+  integrity sha512-27otJlDBcUSbMh/YkxEZN0yXTHINQNYSOl5aJplYlIaHw2u3BrABUzOmUZV3dKIy8udOLJXS/67y5pOIzgAg+w==
+
 webidl-conversions@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-3.0.1.tgz#24534275e2a7bc6be7bc86611cc16ae0a5654871"

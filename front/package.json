@@ -23,6 +23,7 @@
     "react-hot-toast": "^2.4.1",
     "react-router-dom": "^6.22.3",
     "react-spinners": "^0.13.8",
+    "wavesurfer.js": "^7.7.11",
     "zustand": "^4.5.2"
   },
   "devDependencies": {
