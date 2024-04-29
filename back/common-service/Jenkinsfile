@@ -5,6 +5,11 @@ pipeline {
         dockerImage = ''
 
         DISCOVERY_SERVER="${env.DISCOVERY_SERVER}" 
+
+        DB_URL="${env.RDB_COMMON_URL}"
+        DB_USER="${env.RDB_USER}"
+        DB_PASSWORD="${env.RDB_PASSWORD}"
+
     }
 
     agent any
@@ -20,12 +25,14 @@ pipeline {
                     } else {
                         echo 'No changes in common directory, skipping build.'
                         currentBuild.result = 'NOT_BUILT'
+                        error('No changes in common directory. Halting pipeline.')
                     }
                     // 코드 체크아웃
                     checkout scm
                 }
             }
         }
+
         // application.yml
         stage('secret.yml delete') {
             steps {
@@ -152,4 +159,3 @@ pipeline {
         }
     } 
 }
-
