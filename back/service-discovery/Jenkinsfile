@@ -18,6 +18,7 @@ pipeline {
                     } else {
                         echo 'No changes in eureka directory, skipping build.'
                         currentBuild.result = 'NOT_BUILT'
+                        error('No changes in eureka directory. Halting pipeline.')
                     }
 
                     // 코드 체크아웃
