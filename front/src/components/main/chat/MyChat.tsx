@@ -1,7 +1,7 @@
 import React from "react";
 
-const MyChat: React.FC<{ text: string; timestamp: Date }> = ({
-  text,
+const MyChat: React.FC<{ content: string; timestamp: Date }> = ({
+  content,
   timestamp,
 }) => {
   const formatTime = (date: Date): string => {
@@ -14,12 +14,12 @@ const MyChat: React.FC<{ text: string; timestamp: Date }> = ({
   };
   return (
     <div className="flex justify-end mb-[1rem]">
-      <div className="text-black text-[0.6rem] mt-1 self-end">
+      <div className="text-black text-[0.6rem] mt-1 self-end mr-2">
         {formatTime(timestamp)}
       </div>
-      <div className="min-h-[3.5rem] max-w-[11rem] bg-blue-400 rounded-tl-[1rem] rounded-bl-[1rem] rounded-br-[1rem] p-3 flex items-center">
+      <div className="max-w-[11rem] bg-blue-400 rounded-tl-[1rem] rounded-bl-[1rem] rounded-br-[1rem] p-3 flex items-center">
         <div className="text-white text-[0.8rem] font-normal break-words overflow-hidden">
-          {text}
+          {content}
         </div>
       </div>
     </div>

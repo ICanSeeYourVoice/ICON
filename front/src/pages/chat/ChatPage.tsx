@@ -6,9 +6,8 @@ import ChatInput from "../../components/main/chat/ChatInput";
 import MoveButton from "../../components/common/button/MoveButton";
 
 interface Message {
-  id: number;
-  type: "my" | "bot" | "date";
-  text: string;
+  message_type: "USER" | "ASSISTANT" | "date";
+  content: string;
   timestamp: Date;
 }
 
@@ -16,17 +15,30 @@ const ChatPage: React.FC = () => {
   // 시간 역순으로 정렬을 해야함
   const [messages, setMessages] = useState<Message[]>([
     {
-      id: 1,
-      type: "bot",
-      text: "첫 번째 메시지입니다.",
+      message_type: "ASSISTANT",
+      content: "첫 번째 메시지입니다.",
+      timestamp: new Date("2024-04-22T12:00:00"),
+    },
+    {
+      message_type: "USER",
+      content: "첫 번째 메시지입니다.",
+      timestamp: new Date("2024-04-22T12:00:00"),
+    },
+    {
+      message_type: "USER",
+      content: "첫 번째 메시지입니다.",
+      timestamp: new Date("2024-04-22T12:00:00"),
+    },
+    {
+      message_type: "USER",
+      content: "첫 번째 메시지입니다.",
       timestamp: new Date("2024-04-22T12:00:00"),
     },
   ]);
-  const handleSendMessage = (newText: string) => {
+  const handleSendMessage = (newContent: string) => {
     const newMessage: Message = {
-      id: messages.length + 1,
-      type: "my",
-      text: newText,
+      message_type: "USER",
+      content: newContent,
       timestamp: new Date(),
     };
 
@@ -40,9 +52,8 @@ const ChatPage: React.FC = () => {
         lastMessage.timestamp.toDateString()
     ) {
       newMessages.push({
-        id: newMessage.id - 1,
-        type: "date",
-        text: "",
+        message_type: "date",
+        content: "",
         timestamp: newMessage.timestamp,
       });
     }
@@ -51,11 +62,10 @@ const ChatPage: React.FC = () => {
     setMessages([newMessage, ...messages]);
   };
 
-  const addMessage = (text: string, type: "my" | "bot") => {
+  const addMessage = (content: string, message_type: "USER" | "ASSISTANT") => {
     const newMessage: Message = {
-      id: messages.length + 1,
-      type: type,
-      text: text,
+      message_type: message_type,
+      content: content,
       timestamp: new Date(),
     };
 
@@ -67,9 +77,8 @@ const ChatPage: React.FC = () => {
         lastMessage.timestamp.toDateString()
     ) {
       const dateMessage: Message = {
-        id: newMessage.id - 1,
-        type: "date",
-        text: "",
+        message_type: "date",
+        content: "",
         timestamp: newMessage.timestamp,
       };
       setMessages([dateMessage, newMessage, ...messages]);
@@ -88,13 +97,19 @@ const ChatPage: React.FC = () => {
               arr[index + 1].timestamp.toDateString();
 
           return (
-            <div key={message.id}>
+            <div>
               {isFirstMessageOfDay && <ChatDate date={message.timestamp} />}
-              {message.type === "my" && (
-                <MyChat text={message.text} timestamp={message.timestamp} />
+              {message.message_type === "USER" && (
+                <MyChat
+                  content={message.content}
+                  timestamp={message.timestamp}
+                />
               )}
-              {message.type === "bot" && (
-                <BotChat text={message.text} timestamp={message.timestamp} />
+              {message.message_type === "ASSISTANT" && (
+                <BotChat
+                  content={message.content}
+                  timestamp={message.timestamp}
+                />
               )}
             </div>
           );
@@ -102,7 +117,7 @@ const ChatPage: React.FC = () => {
       </div>
       <div>
         <button
-          onClick={() => addMessage("봇 새로운 메시지", "bot")}
+          onClick={() => addMessage("봇 새로운 메시지", "ASSISTANT")}
           className=" bg-blue-100 "
         >
           봇 메시지
