@@ -3,6 +3,7 @@ package ssafy.icon.chatservice.domain.conversation.service;
 import static org.springframework.ai.chat.messages.MessageType.SYSTEM;
 import static org.springframework.ai.chat.messages.MessageType.USER;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -27,18 +28,20 @@ public class ConversationService {
 	public ChatMessage ask(Integer memberId, String message) {
 		// 기존 대화 컨텍스트 불러오기
 		Conversation conversation = conversationRepository.findByMemberId(memberId)
-			.switchIfEmpty(Mono.defer(() -> conversationRepository.save(new Conversation(memberId))))
+			.switchIfEmpty(
+				Mono.defer(() -> conversationRepository.save(new Conversation(memberId))))
 			.block();
 
-		conversation.addMessage(new ChatMessage(USER, message));
+		conversation.addMessage(new ChatMessage(USER, message, LocalDateTime.now()));
 
 		List<Message> chatMessages = new ArrayList<>();
-		chatMessages.add(new ChatMessage(SYSTEM, "You are a specialist in infant health and childcare.\n"
-			+ "You do not answer questions that are not related to infant health and childcare.\n"
-			+ "The answer is in Korean.\n"
-			+ "Please deliver accurate information professionally and respond as friendly as a woman in her 20s.\n"
-			+ " Please use a contextual emoji too.\n"
-			+ "Please write it in 2 paragraphs."));
+		chatMessages.add(
+			new ChatMessage(SYSTEM, "You are a specialist in infant health and childcare.\n"
+				+ "You do not answer questions that are not related to infant health and childcare.\n"
+				+ "The answer is in Korean.\n"
+				+ "Please deliver accurate information professionally and respond as friendly as a woman in her 20s.\n"
+				+ " Please use a contextual emoji too.\n"
+				+ "Please write it in 2 paragraphs.", LocalDateTime.now()));
 
 		chatMessages.addAll(conversation.getChatMessages());
 
@@ -46,7 +49,8 @@ public class ConversationService {
 
 		ChatResponse call = openAiChatClient.call(prompt);
 
-		ChatMessage resultMessage = new ChatMessage(MessageType.ASSISTANT, call.getResult().getOutput().getContent());
+		ChatMessage resultMessage = new ChatMessage(MessageType.ASSISTANT,
+			call.getResult().getOutput().getContent(), LocalDateTime.now());
 
 		conversation.addMessage(resultMessage);
 
@@ -57,7 +61,8 @@ public class ConversationService {
 
 	public void reset(Integer memberId) {
 		Conversation conversation = conversationRepository.findByMemberId(memberId)
-			.switchIfEmpty(Mono.defer(() -> conversationRepository.save(new Conversation(memberId))))
+			.switchIfEmpty(
+				Mono.defer(() -> conversationRepository.save(new Conversation(memberId))))
 			.block();
 
 		conversation.getChatMessages().clear();
@@ -67,7 +72,8 @@ public class ConversationService {
 
 	public List<ChatMessage> getMessages(Integer memberId) {
 		Conversation conversation = conversationRepository.findByMemberId(memberId)
-			.switchIfEmpty(Mono.defer(() -> conversationRepository.save(new Conversation(memberId))))
+			.switchIfEmpty(
+				Mono.defer(() -> conversationRepository.save(new Conversation(memberId))))
 			.block();
 		return conversation.getChatMessages();
 	}
