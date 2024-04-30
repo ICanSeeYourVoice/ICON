@@ -35,7 +35,8 @@ pipeline {
                     
                     echo "delete application.yml"
                     
-                    sh '''cd /var/jenkins_home/workspace/back-eureka/back/service-discovery/src/main/resources
+                    sh '''cd /var/jenkins_home/workspace/back-eureka/back/service-discovery/src/main
+                    mkdir -p resources
                     ls -al
                     ''' 
                 }

@@ -20,7 +20,6 @@ pipeline {
                         echo 'No changes in alarm directory, skipping build.'
                         currentBuild.result = 'NOT_BUILT'
                         error('No changes in alarm directory. Halting pipeline.')
-           
                     }
 
                     // 코드 체크아웃
@@ -37,7 +36,8 @@ pipeline {
 
                     echo "delete application.yml"
 
-                    sh '''cd /var/jenkins_home/workspace/back-alarm/back/alarm-service/src/main/resources
+                    sh '''cd /var/jenkins_home/workspace/back-alarm/back/alarm-service/src/main
+                    mkdir -p resources
                     ls -al
                     '''
                 }
@@ -149,8 +149,6 @@ pipeline {
                                 sshTransfer(execCommand: "sudo docker rm -f icon-alarm"),
                                 sshTransfer(execCommand: "sudo docker pull " + repository +":icon-alarm_${BUILD_NUMBER}"),
                                 sshTransfer(execCommand: "sudo docker run -d -p 8082:8082 --name icon-alarm --network host -e DISCOVERY_SERVER=\"${DISCOVERY_SERVER}\" " + repository + ":icon-alarm_${BUILD_NUMBER}")
-//                                 sshTransfer(execCommand: "sudo docker run -d -p 8888:8888 --name chatting  -e CHATTING_SERVER=\"${CHATTING_SERVER}\" -e DISCOVERY_SERVER=\"${DISCOVERY_SERVER}\"   -e COMMON_SERVER=\"${COMMON_SERVER}\" " + repository + ":chatting_${BUILD_NUMBER}")
-
                             ]
                         )
                     ]

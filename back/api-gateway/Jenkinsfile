@@ -34,6 +34,10 @@ pipeline {
                 script{
                     sh 'rm -f /var/jenkins_home/workspace/back-gateway/back/api-gateway/src/main/resources/application.yml'
                     echo "delete application.yml" 
+                    sh '''cd /var/jenkins_home/workspace/back-alarm/back/alarm-service/src/main
+                    mkdir -p resources
+                    ls -al
+                    '''
                 }
             }
         }
@@ -48,6 +52,8 @@ pipeline {
         		}
             }
         }
+
+
 
         stage('Build Gateway-Server .JAR') {
             steps {
