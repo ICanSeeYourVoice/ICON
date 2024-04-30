@@ -8,10 +8,7 @@ import { useEffect, useRef } from "react";
 import { useNotificationStore, useTokenStore } from "./stores/notification";
 import { messageHandler } from "./service/foregroundMessage";
 import { useDetectionStore } from "./stores/detection";
-import {
-  loadYamnetModel,
-  processAudioData,
-} from "./utils/cryingClassification";
+import { loadYamnetModel } from "./utils/cryingClassification";
 import * as tf from "@tensorflow/tfjs";
 
 const queryClient = new QueryClient();
@@ -27,6 +24,7 @@ function App() {
   const setIsBabyCry = useDetectionStore((state: any) => state.setIsBabyCry);
   const setCryingType = useDetectionStore((state: any) => state.setCryingType);
   const streamRef = useRef<MediaStream | null>(null);
+
   const { token, setToken } = useTokenStore();
 
   /* Notification setting */
@@ -72,7 +70,6 @@ function App() {
   useEffect(() => {
     const fetchDataAndProcess = async () => {
       let toastId;
-      console.log(streamRef.current);
 
       try {
         if (!streamRef.current) {
@@ -90,11 +87,50 @@ function App() {
           const source = audioCtx.createMediaStreamSource(stream);
           const scriptNode = audioCtx.createScriptProcessor(8192, 1, 1);
 
-          scriptNode.onaudioprocess = processAudioData(
-            yamnet,
-            setIsBabyCry,
-            setCryingType
-          );
+          // 3초 마다 녹음
+          setInterval(() => {
+            console.log("아기울음녹음시작");
+            const mediaRecorder = new MediaRecorder(stream);
+
+            mediaRecorder.start();
+
+            scriptNode.onaudioprocess = function (e) {
+              const inputBuffer = e.inputBuffer;
+              let inputData = inputBuffer.getChannelData(0);
+
+              const [scores] = yamnet.predict(tf.tensor(inputData)) as [any];
+
+              const top5 = tf.topk(scores, 3, true);
+              const classes = top5.indices.dataSync();
+              const probabilities = top5.values.dataSync();
+
+              for (let i = 0; i < 3; i++) {
+                if (classes[i] === 20 && probabilities[i] >= 0.5) {
+                  setIsBabyCry(true);
+
+                  // 5초 뒤 임의로 결과 페이지 이동
+                  // 녹음 중지
+                  setTimeout(() => {
+                    setCryingType(1);
+                    mediaRecorder.stop();
+
+                    // URL 출력 및 sound 파일 저장
+                    mediaRecorder.ondataavailable = function (e) {
+                      console.log(URL.createObjectURL(e.data));
+
+                      const sound = new File([e.data], "soundBlob", {
+                        lastModified: new Date().getTime(),
+                        type: "audio",
+                      });
+
+                      console.log(sound); // File 정보 출력
+                    };
+                  }, 5000);
+                  return;
+                }
+              }
+            };
+          }, 3000);
 
           source.connect(scriptNode);
           scriptNode.connect(audioCtx.destination);
@@ -112,11 +148,11 @@ function App() {
 
     if (!isBabyCry) fetchDataAndProcess(); // 로그인 여부 확인 필요
 
-    return () => {
-      if (streamRef.current) {
-        streamRef.current.getTracks().forEach((track) => track.stop());
-      }
-    };
+    // return () => {
+    //   if (streamRef.current) {
+    //     streamRef.current.getTracks().forEach((track) => track.stop());
+    //   }
+    // };
   }, []);
 
   return (
