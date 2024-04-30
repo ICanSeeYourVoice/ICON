@@ -11,7 +11,6 @@ import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.MessageType;
 
 @JsonNaming(SnakeCaseStrategy.class)
-@Getter
 public class ChatMessage implements Message {
 
 	private final MessageType messageType;
@@ -45,5 +44,7 @@ public class ChatMessage implements Message {
 		return this.messageType;
 	}
 
-
+	public LocalDateTime getTimestamp() {
+		return timestamp;
+	}
 }
