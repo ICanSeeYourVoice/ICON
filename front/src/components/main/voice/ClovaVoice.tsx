@@ -1,56 +1,48 @@
-import { useMutation } from "@tanstack/react-query";
-import { clovaVoice } from "../../../apis/Voice";
-import { useState, useRef } from "react";
+import { useState } from "react";
+import MoveButton from "../../common/button/MoveButton";
 import mic from "../../../assets/svgs/voice/mic.svg";
+import WaveSurferComponent from "./Wave";
+import Music from "./icon.mp3";
+import "./VoiceWave.css";
 
 const ClovaVoice = () => {
   const [text, setText] = useState("");
-
-  const { mutate } = useMutation({
-    mutationFn: clovaVoice,
-    onSuccess: (data) => {
-      console.log("voice 성공");
-      if (audioRef.current) {
-        audioRef.current.src = URL.createObjectURL(data);
-      }
-    },
-    onError: (error) => {
-      console.log("voice 실패", error);
-    },
-  });
-
-  const audioRef = useRef<HTMLAudioElement>(null);
-
-  const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setText(event.target.value);
-  };
+  const [tempText, setTempText] = useState("");
+  const [audioUrl, setAudioUrl] = useState<string | null>(null);
 
   const handleSubmit = () => {
-    const voiceParams = {
-      text: text,
-      speaker: "nara",
-      volume: 0,
-      speed: 0,
-      pitch: 0,
-      format: "mp3",
-    };
-    mutate(voiceParams);
+    setText(tempText);
+    setAudioUrl(Music);
   };
 
+  const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setTempText(event.target.value);
+
   return (
-    <div>
-      <div className="bg-blue-800 rounded-full p-2 inline-block w-16 h-16 flex items-center justify-center">
-        <img src={mic} alt="mic" className="w-full h-full object-cover" />
-      </div>
+    <div className="flex flex-col items-center justify-center">
+      {!text && (
+        <div className="border-2 border-blue-300 rounded-lg p-4 bg-blue-100 m-4">
+          <p className="text-lg text-blue-800 animate-pulse">아기에게 말하기</p>
+        </div>
+      )}
+
+      {text && <WaveSurferComponent audioUrl={audioUrl} />}
 
       <div className="fixed bottom-0 left-0 right-0 p-3 bg-white shadow-xl">
-        <audio ref={audioRef} controls />
+        <div className="flex flex-col items-center justify-center text-gray-0 text-xl mb-20">
+          <p>{text}</p>
+        </div>
+
+        <div className="flex items-center justify-center mb-20">
+          <MoveButton text="메인으로 돌아가기" path="/detection" />
+        </div>
+
         <div className="flex justify-center">
           <input
             type="text"
             className="flex-1 p-2"
             placeholder="아기에게 말해보세요"
-            value={text}
+            value={tempText}
             onChange={handleTextChange}
           />
           <button
