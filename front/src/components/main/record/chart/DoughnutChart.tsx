@@ -8,16 +8,19 @@ interface DoughnutChartProps {
 }
 
 const DoughnutChart: React.FC<DoughnutChartProps> = (date) => {
-  console.log(date);
+  console.log("DoughnutChart SelectDate(Today): ", date.date);
+
+  // 임시 데이터
   const res = {
     data_body: {
-      total: 10,
+      total: 21,
       hungry: 12,
       tired: 5,
       discomfrot: 3,
       cold: 1,
     },
   };
+
   const data = {
     labels: ["배고파요", "졸려요", "불편해요", "아파요"],
     datasets: [
@@ -57,7 +60,14 @@ const DoughnutChart: React.FC<DoughnutChartProps> = (date) => {
     maintainAspectRatio: false,
   };
 
-  return <Doughnut data={data} width={230} height={200} options={options} />;
+  return (
+    <>
+      {res.data_body.total == 0 && <div>오늘은 아기가 울지 않았어요!</div>}
+      {res.data_body.total != 0 && (
+        <Doughnut data={data} width={230} height={200} options={options} />
+      )}
+    </>
+  );
 };
 
 export default DoughnutChart;

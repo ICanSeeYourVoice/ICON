@@ -5,7 +5,7 @@ import DoughnutChart from "./chart/DoughnutChart";
 const TodayChart = () => {
   const navigate = useNavigate();
   const handleChartDetail = () => {
-    navigate("/record/chart");
+    navigate("/record/chart", { state: { date } });
   };
   const [date, setDate] = useState("");
 
