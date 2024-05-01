@@ -5,11 +5,6 @@ pipeline {
         dockerImage = ''
 
         DISCOVERY_SERVER="${env.DISCOVERY_SERVER}" 
-
-        DB_URL="${env.RDB_COMMON_URL}"
-        DB_USER="${env.RDB_USER}"
-        DB_PASSWORD="${env.RDB_PASSWORD}"
-
     }
 
     agent any
