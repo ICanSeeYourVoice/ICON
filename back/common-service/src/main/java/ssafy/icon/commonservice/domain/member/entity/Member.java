@@ -32,10 +32,27 @@ public class Member extends BaseEntity {
 	@Column(nullable = false, length = 20)
 	private String name;
 
+
+	@Column(name = "web_token", length = 255)
+	private String webToken;
+
+	@Column(name = "app_token", length = 255)
+	private String appToken;
+
+
 	@Builder
-	public Member(String uid, String pw, String name) {
+	public Member(String uid, String pw, String name, String webToken, String appToken) {
 		this.uid = uid;
 		this.pw = pw;
 		this.name = name;
+		this.webToken = webToken;
+		this.appToken = appToken;
+	}
+
+	public void updateToken(String token, boolean isApp){
+		if(isApp)
+			this.appToken = token;
+		else
+			this.webToken = token;
 	}
 }
