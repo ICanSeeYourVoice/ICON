@@ -22,7 +22,9 @@ import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 import ssafy.icon.commonservice.domain.member.dto.PostTTSReq;
 import ssafy.icon.commonservice.domain.member.dto.SignUpForm;
+import ssafy.icon.commonservice.domain.member.entity.Guardian;
 import ssafy.icon.commonservice.domain.member.entity.Member;
+import ssafy.icon.commonservice.domain.member.repository.GuardianRepository;
 import ssafy.icon.commonservice.domain.member.repository.MemberRepository;
 import ssafy.icon.commonservice.domain.smartthings.dto.GetMemberDto;
 import ssafy.icon.commonservice.global.error.exception.MemberException;
@@ -34,6 +36,7 @@ public class MemberService {
 
 	private final PasswordEncoder passwordEncoder;
 	private final MemberRepository memberRepository;
+	private final GuardianRepository guardianRepository;
 
 	public void addMember(SignUpForm form) {
 		// 회원 아이디가 이미 있는지
@@ -66,7 +69,7 @@ public class MemberService {
 	}
 
 	// public void  postTTS() {
-	public File postTTS(String apiKeyId, String apiKey,   PostTTSReq request) {
+	public File postTTS(String apiKeyId, String apiKey, PostTTSReq request) {
 		try {
 			String text = URLEncoder.encode(request.getText(), "UTF-8");
 			String apiURL = "https://naveropenapi.apigw.ntruss.com/tts-premium/v1/tts";
@@ -114,6 +117,25 @@ public class MemberService {
 		} catch (Exception e) {
 			log.error(String.valueOf(e));
 		}
-		return  null;
+		return null;
+	}
+
+	public void addGuardian(Integer memberId, String uid) {
+		Member member = memberRepository.findById(memberId)
+			.orElseThrow(() -> new MemberException(BAD_REQUEST, "존재하지 않은 회원 ID입니다."));
+		log.info("member : {}", member);
+
+		// 예외처리
+		memberRepository.findByUid(uid)
+			.orElseThrow(() -> new MemberException(BAD_REQUEST, "존재하지 않은 보호자 회원 UID입니다."));
+		if (guardianRepository.findByUidAndMemberId(uid, memberId).isPresent()) {
+			throw new MemberException(BAD_REQUEST, "등록된 보호자입니다.");
+		}
+
+		Guardian guardian = Guardian.builder()
+			.uid(uid)
+			.member(member)
+			.build();
+		guardianRepository.save(guardian);
 	}
 }

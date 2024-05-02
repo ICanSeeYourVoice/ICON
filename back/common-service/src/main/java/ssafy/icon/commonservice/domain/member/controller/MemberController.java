@@ -77,4 +77,11 @@ public class MemberController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
+
+	@PostMapping("/guardian")
+	public ResponseEntity<Void> addGuardian(@RequestHeader("X-Authorization-Id") Integer memberId,
+		@RequestBody String guardianUid) {
+		memberService.addGuardian(memberId, guardianUid);
+		return ResponseEntity.ok().build();
+	}
 }
