@@ -2,12 +2,25 @@ package ssafy.icon.commonservice.domain.member.service;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.Date;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
-import ssafy.icon.commonservice.domain.member.dto.AddTokenReq;
+import ssafy.icon.commonservice.domain.member.dto.PostTTSReq;
 import ssafy.icon.commonservice.domain.member.dto.SignUpForm;
 import ssafy.icon.commonservice.domain.member.entity.Member;
 import ssafy.icon.commonservice.domain.member.repository.MemberRepository;
@@ -35,7 +48,6 @@ public class MemberService {
 			.build());
 	}
 
-
 	public GetMemberDto getMember(Integer memberId) {
 		log.info("test : {}", memberId);
 		Member member = memberRepository.findById(memberId)
@@ -51,5 +63,57 @@ public class MemberService {
 		log.info("memberdto : {}", memberDto.toString());
 
 		return memberDto;
+	}
+
+	// public void  postTTS() {
+	public File postTTS(String apiKeyId, String apiKey,   PostTTSReq request) {
+		try {
+			String text = URLEncoder.encode(request.getText(), "UTF-8");
+			String apiURL = "https://naveropenapi.apigw.ntruss.com/tts-premium/v1/tts";
+			URL url = new URL(apiURL);
+			HttpURLConnection con = (HttpURLConnection)url.openConnection();
+
+			con.setRequestMethod("POST");
+			con.setRequestProperty("X-NCP-APIGW-API-KEY-ID", apiKeyId);
+			con.setRequestProperty("X-NCP-APIGW-API-KEY", apiKey);
+			// post request
+			String postParams = "speaker=nara&volume=0&speed=0&pitch=0&format=mp3&text=" + text;
+			con.setDoOutput(true);
+			DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+			wr.writeBytes(postParams);
+			wr.flush();
+			wr.close();
+
+			int responseCode = con.getResponseCode();
+			BufferedReader br;
+			if (responseCode == 200) { // 정상 호출
+				log.info("service postTTS con 200");
+				InputStream is = con.getInputStream();
+				int read = 0;
+				byte[] bytes = new byte[1024];
+				// 랜덤한 이름으로 mp3 파일 생성
+				String tempname = Long.valueOf(new Date().getTime()).toString();
+				File f = new File(tempname + ".mp3");
+				f.createNewFile();
+				OutputStream outputStream = new FileOutputStream(f);
+				while ((read = is.read(bytes)) != -1) {
+					outputStream.write(bytes, 0, read);
+				}
+				is.close();
+				return f;
+			} else {  // 오류 발생
+				br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+				String inputLine;
+				StringBuffer response = new StringBuffer();
+				while ((inputLine = br.readLine()) != null) {
+					response.append(inputLine);
+				}
+				br.close();
+				log.info("post TTS error : {}", response.toString());
+			}
+		} catch (Exception e) {
+			log.error(String.valueOf(e));
+		}
+		return  null;
 	}
 }
