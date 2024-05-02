@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,7 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ssafy.icon.commonservice.domain.member.dto.AddTokenReq;
 import ssafy.icon.commonservice.domain.member.dto.SignUpForm;
+import ssafy.icon.commonservice.domain.member.entity.Member;
 import ssafy.icon.commonservice.domain.member.service.MemberService;
+import ssafy.icon.commonservice.domain.smartthings.dto.GetMemberDto;
 
 @RequiredArgsConstructor
 @RequestMapping("/members")
@@ -33,5 +36,12 @@ public class MemberController {
 		@RequestBody @Valid AddTokenReq token) {
 		memberService.addToken(memberId, token);
 		return ResponseEntity.ok().build();
+	}
+
+	@GetMapping
+	public GetMemberDto getMember(@RequestHeader("X-Authorization-Id") Integer memberId) {
+		GetMemberDto dto = memberService.getMember(memberId);
+		System.out.println(dto.toString());
+		return dto;
 	}
 }
