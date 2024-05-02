@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { userJoin } from "../../apis/User";
+import toast from "react-hot-toast";
 
 const JoinPage = () => {
   const [nameValue, setNameValue] = useState("");
@@ -18,11 +19,11 @@ const JoinPage = () => {
   const { mutate } = useMutation({
     mutationFn: userJoin,
     onSuccess: () => {
-      alert("회원가입이 완료되었습니다.\n로그인해주세요!");
+      toast.success("회원가입이 완료되었습니다.\n로그인해주세요!");
       navigate("/login");
     },
-    onError: (error) => {
-      console.log("error", error);
+    onError: () => {
+      toast.error("아이디와 비밀번호를 확인해주세요");
     },
   });
   const handleConfirmClick = () => {
@@ -34,10 +35,10 @@ const JoinPage = () => {
           name: nameValue,
         });
       } else {
-        alert("비밀번호를 다시 확인해 주세요!");
+        toast.error("비밀번호를 다시 확인해 주세요!");
       }
     } else {
-      alert("모든 정보를 입력해주세요!");
+      toast.error("모든 정보를 입력해주세요!");
     }
   };
 
