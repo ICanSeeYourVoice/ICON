@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ssafy.icon.commonservice.domain.smartthings.dto.RegisterRoutineRequest;
 import ssafy.icon.commonservice.domain.smartthings.dto.RegisterTokenRequest;
+import ssafy.icon.commonservice.domain.smartthings.dto.RoutineInfo;
 import ssafy.icon.commonservice.domain.smartthings.dto.SceneInfo;
 import ssafy.icon.commonservice.domain.smartthings.service.SmartThingsService;
 
@@ -45,6 +46,13 @@ public class SmartThingsController {
 	) {
 		smartThingsService.registerRoutine(request, memberId);
 		return ResponseEntity.ok().build();
+	}
+
+	@GetMapping("/routines")
+	public ResponseEntity<List<RoutineInfo>> getRegisterRoutines(
+		@RequestHeader("X-Authorization-Id") Integer memberId
+	) {
+		return ResponseEntity.ok(smartThingsService.getRegisterRoutines(memberId));
 	}
 
 }
