@@ -27,12 +27,12 @@ const ChatPage: React.FC = () => {
   });
 
   useEffect(() => {
-    if (chatAll && Array.isArray(chatAll)) {
-      const convertedMessages = chatAll.map((msg) => ({
+    if (chatAll) {
+      const convertedMessages = chatAll.map((msg: Message) => ({
         ...msg,
         timestamp: new Date(msg.timestamp),
       }));
-      setMessages(convertedMessages);
+      setMessages(convertedMessages.reverse());
     }
   }, [chatAll]);
 
@@ -46,22 +46,28 @@ const ChatPage: React.FC = () => {
         timestamp: new Date(),
       };
 
-      const newMessages = [newMessage, ...messages];
+      // 새로운 메시지를 상태에 추가하고, 날짜 구분도 유지
+      setMessages((prevMessages) => {
+        const newMessages = [newMessage, ...prevMessages];
+        const lastMessage =
+          prevMessages.length > 0
+            ? prevMessages[prevMessages.length - 1]
+            : null;
 
-      const lastMessage = newMessages[1];
-      if (
-        !lastMessage ||
-        newMessage.timestamp.toDateString() !==
-          lastMessage.timestamp.toDateString()
-      ) {
-        newMessages.splice(1, 0, {
-          message_type: "date",
-          content: "",
-          timestamp: newMessage.timestamp,
-        });
-      }
+        if (
+          lastMessage &&
+          newMessage.timestamp.toDateString() !==
+            lastMessage.timestamp.toDateString()
+        ) {
+          newMessages.splice(1, 0, {
+            message_type: "date",
+            content: "",
+            timestamp: newMessage.timestamp,
+          });
+        }
 
-      setMessages(newMessages);
+        return newMessages;
+      });
     },
     onError: () => {
       alert("채팅 보내기 실패");
@@ -75,22 +81,26 @@ const ChatPage: React.FC = () => {
       timestamp: new Date(),
     };
 
-    const lastMessage =
-      messages.length > 0 ? messages[messages.length - 1] : null;
-    const newMessages = [...messages];
-    if (
-      lastMessage &&
-      newMessage.timestamp.toDateString() !==
-        lastMessage.timestamp.toDateString()
-    ) {
-      newMessages.push({
-        message_type: "date",
-        content: "",
-        timestamp: newMessage.timestamp,
-      });
-    }
-    newMessages.push(newMessage);
-    setMessages([newMessage, ...messages]);
+    setMessages((prevMessages) => {
+      const newMessages = [newMessage, ...prevMessages];
+      const lastMessage =
+        prevMessages.length > 0 ? prevMessages[prevMessages.length - 1] : null;
+
+      if (
+        lastMessage &&
+        newMessage.timestamp.toDateString() !==
+          lastMessage.timestamp.toDateString()
+      ) {
+        newMessages.splice(1, 0, {
+          message_type: "date",
+          content: "",
+          timestamp: newMessage.timestamp,
+        });
+      }
+
+      return newMessages;
+    });
+
     sendChat({ message: newContent });
   };
 
@@ -99,7 +109,7 @@ const ChatPage: React.FC = () => {
   }
 
   if (isError) {
-    return <div>Error loading chat data.</div>;
+    return <div>Error</div>;
   }
 
   return (
