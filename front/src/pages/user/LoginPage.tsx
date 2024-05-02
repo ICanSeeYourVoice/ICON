@@ -28,7 +28,7 @@ const LoginPage = () => {
     mutationFn: userLogin,
     onSuccess: (res) => {
       if (res.access_token) {
-        sessionStorage.setItem("access_Token", res.access_token);
+        sessionStorage.setItem("access_token", res.access_token);
         navigate("/detection");
       } else {
         alert("토큰이 존재하지 않습니다. 다시 시도하세요.");
