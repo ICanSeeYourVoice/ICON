@@ -3,6 +3,7 @@ package ssafy.icon.commonservice.domain.smartthings.service;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 import jakarta.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import ssafy.icon.commonservice.domain.smartthings.client.SmartthingsApiClient;
 import ssafy.icon.commonservice.domain.smartthings.client.dto.GetDevicesApiResponse;
 import ssafy.icon.commonservice.domain.smartthings.client.dto.GetScenesApiResponse;
 import ssafy.icon.commonservice.domain.smartthings.dto.RegisterRoutineRequest;
+import ssafy.icon.commonservice.domain.smartthings.dto.RoutineInfo;
 import ssafy.icon.commonservice.domain.smartthings.dto.SceneInfo;
 import ssafy.icon.commonservice.domain.smartthings.entity.SmartthingsRoutine;
 import ssafy.icon.commonservice.domain.smartthings.entity.SmartthingsToken;
@@ -86,6 +88,37 @@ public class SmartThingsService {
 		} else {
 			optionalRoutine.get().changeScene(request.sceneId());
 		}
+	}
+
+	@Transactional
+	public List<RoutineInfo> getRegisterRoutines(Integer memberId) {
+
+		List<SceneInfo> routines = getRoutines(memberId);
+
+		List<SmartthingsRoutine> registerRoutines =
+			smartthingsRoutineRepository.findAllByMemberId(memberId);
+
+		ArrayList<RoutineInfo> result = new ArrayList<>();
+
+		// 없는 것은 제거
+		registerRoutines.forEach(routine -> {
+			boolean isExists = false;
+			SceneInfo tempScene = null;
+			for (SceneInfo scene : routines) {
+				if (routine.getSceneId().equals(scene.getSceneId())) {
+					isExists = true;
+					result.add(new RoutineInfo(scene.getName(), routine.getSceneId(),
+						routine.getTriggerType()));
+					break;
+				}
+			}
+
+			if (!isExists) {
+				smartthingsRoutineRepository.delete(routine);
+			}
+		});
+
+		return result;
 	}
 
 }

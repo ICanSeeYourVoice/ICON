@@ -14,6 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ssafy.icon.commonservice.domain.member.entity.Member;
 import ssafy.icon.commonservice.domain.smartthings.enums.RoutineTrigger;
@@ -28,6 +29,7 @@ import ssafy.icon.commonservice.global.entity.BaseEntity;
 		}
 	)
 })
+@Getter
 @Entity
 public class SmartthingsRoutine extends BaseEntity {
 
@@ -47,6 +49,7 @@ public class SmartthingsRoutine extends BaseEntity {
 	@Column(nullable = false, name = "scene_id")
 	private String sceneId;
 
+
 	public SmartthingsRoutine(Member member, RoutineTrigger triggerType, String sceneId) {
 		this.member = member;
 		this.triggerType = triggerType;
@@ -56,4 +59,5 @@ public class SmartthingsRoutine extends BaseEntity {
 	public void changeScene(String sceneId) {
 		this.sceneId = sceneId;
 	}
+
 }
