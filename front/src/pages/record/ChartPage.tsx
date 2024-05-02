@@ -17,10 +17,10 @@ const ChartPage = () => {
 
   return (
     <div className="flex flex-col items-center h-screen w-screen pt-[3.125rem] pb-[10.3125rem] gap-[1.5rem] ">
-      <TopBar text="울음 통계" path="record" />
+      <TopBar text="통계" path="record" />
       <main className="flex flex-col items-center justify-center w-full">
         <LabelInput value={selectDay} onChange={handleDateChange} />
-        <div className="w-[15rem] h-[15rem] mt-[1rem]">
+        <div className="w-[15rem] h-[13rem] mt-[1rem]">
           <MultiaxisLineChart date={selectDay} />
         </div>
         <VerticalTimeLine date={selectDay} />

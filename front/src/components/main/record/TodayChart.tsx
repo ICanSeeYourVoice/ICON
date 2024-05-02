@@ -22,9 +22,9 @@ const TodayChart = () => {
   }, [date]);
 
   return (
-    <div>
-      <div className="flex justify-between pt-[3rem] w-[14.5rem] text-slate-500 text-xs pb-[0.5rem]">
-        <div>울음 통계</div>
+    <div className="h-full">
+      <div className="flex justify-between pt-[2rem] w-[14.5rem] text-slate-500 text-xs pb-[0.5rem]">
+        <div>통계</div>
 
         <div onClick={handleChartDetail}>+더보기</div>
       </div>

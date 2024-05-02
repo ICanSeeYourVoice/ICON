@@ -4,7 +4,7 @@ import {
   VerticalTimelineElement,
 } from "react-vertical-timeline-component";
 import "react-vertical-timeline-component/style.min.css";
-import hungry from "../../../../assets/svgs/detection/hungry.svg";
+import { RECORD } from "../../../../constants/record";
 
 interface VerticalTimeLineProps {
   date: string;
@@ -12,64 +12,47 @@ interface VerticalTimeLineProps {
 
 const VerticalTimeLine: React.FC<VerticalTimeLineProps> = (date) => {
   console.log("VerticalTimeLine SelectDate: ", date.date);
-
+  // dummy data
+  const res = {
+    data_body: {
+      timeline: [
+        { time: "2024.05.01 23:55", type: "HUNGRY" },
+        { time: "2024.05.01 23:35", type: "UNCOMFORTABLE" },
+        { time: "2024.05.01 23:25", type: "SLEEPY" },
+        { time: "2024.05.01 22:55", type: "SICK" },
+      ],
+    },
+  };
   return (
-    <div className="w-[15rem] h-[15rem]">
-      <VerticalTimeline layout="1-column-left" lineColor="#7BB7F7">
-        <VerticalTimelineElement
-          className=""
-          contentStyle={{ background: "rgb(33, 150, 243)", color: "#fff" }}
-          contentArrowStyle={{ borderRight: "7px solid  rgb(33, 150, 243)" }}
-          date="2024.05.01 23:55"
-          iconStyle={{
-            background: "rgba(250, 217, 46, 1)",
-            color: "#fff",
-            // fontSize: "10px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "2rem",
-            height: "2rem",
-          }}
-          icon={<img width={15} height={15} src={hungry} alt="Icon" />}
-        >
-          <h3 className="vertical-timeline-element-title">
-            아기가 배고파 했어요
-          </h3>
-        </VerticalTimelineElement>
-        <VerticalTimelineElement
-          className="vertical-timeline-element--work"
-          date="2010 - 2011"
-          iconStyle={{ background: "rgb(33, 150, 243)", color: "#fff" }}
-          // icon={<WorkIcon />}
-        >
-          <h3 className="vertical-timeline-element-title">Art Director</h3>
-          <h4 className="vertical-timeline-element-subtitle">
-            San Francisco, CA
-          </h4>
-          <p>
-            Creative Direction, User Experience, Visual Design, SEO, Online
-            Marketing
-          </p>
-        </VerticalTimelineElement>
-        <VerticalTimelineElement
-          className="vertical-timeline-element--work"
-          date="2008 - 2010"
-          iconStyle={{ background: "rgb(33, 150, 243)", color: "#fff" }}
-          // icon={<WorkIcon />}
-        >
-          <h3 className="vertical-timeline-element-title">Web Designer</h3>
-          <h4 className="vertical-timeline-element-subtitle">
-            Los Angeles, CA
-          </h4>
-          <p>User Experience, Visual Design</p>
-        </VerticalTimelineElement>
-
-        <VerticalTimelineElement
-          iconStyle={{ background: "rgb(16, 204, 82)", color: "#fff" }}
-          // icon={<StarIcon />}
-        />
-      </VerticalTimeline>
+    <div className="flex-col w-[15rem] h-[15rem] ">
+      <div className="flex justify-start w-[14.5rem] pb-[0.5rem] text-slate-500 text-xs">
+        타임라인
+      </div>
+      <div className="w-[15rem] h-[15rem] overflow-y-scroll no-scrollbar">
+        <VerticalTimeline layout="1-column-left" lineColor="#7BB7F7">
+          {res.data_body.timeline.map((val) => {
+            return (
+              <VerticalTimelineElement
+                className=""
+                contentStyle={{
+                  background: "rgb(33, 150, 243)",
+                  color: "#fff",
+                }}
+                contentArrowStyle={{
+                  borderRight: "7px solid  rgb(33, 150, 243)",
+                }}
+                date={val.time}
+                iconStyle={RECORD[val.type].ICONSTYLE}
+                icon={RECORD[val.type].ICON}
+              >
+                <h3 className="vertical-timeline-element-title">
+                  {RECORD[val.type].MESSAGE}
+                </h3>
+              </VerticalTimelineElement>
+            );
+          })}
+        </VerticalTimeline>
+      </div>
     </div>
   );
 };
