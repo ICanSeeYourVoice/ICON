@@ -32,14 +32,14 @@ pipeline {
         stage('secret.yml delete') {
             steps {
                 script{
-                    sh 'rm -f /var/jenkins_home/workspace/back-analyze/back/analyze-service/src/main/resources/application.yml'
+                    sh 'rm -rf /var/jenkins_home/workspace/back-analyze/back/analyze-service/src/main/resources'
+                    echo "delete resources directory" 
+                    // resources 폴더 새로 생성
+                    sh 'mkdir -p /var/jenkins_home/workspace/back-analyze/back/analyze-service/src/main/resources'
+                    echo "Recreated resources directory"
 
-                    echo "delete application.yml"
-
-                    sh '''cd /var/jenkins_home/workspace/back-analyze/back/analyze-service/src/main
-                    mkdir -p resources
-                    ls -al
-                    '''
+                    // 현재 상태 확인
+                    sh 'ls -al /var/jenkins_home/workspace/back-analyze/back/analyze-service/src/main/resources'
                 }
             }
         }
