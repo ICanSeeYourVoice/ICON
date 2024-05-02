@@ -40,8 +40,7 @@ public class MemberController {
 
 	@GetMapping
 	public GetMemberDto getMember(@RequestHeader("X-Authorization-Id") Integer memberId) {
-		GetMemberDto dto = memberService.getMember(memberId);
-		System.out.println(dto.toString());
+		GetMemberDto dto = memberService.getMember(memberId); 
 		return dto;
 	}
 }
