@@ -57,7 +57,7 @@ pipeline {
         }
 
 
-        stage('secret.yml download') {
+        stage('secret.json download') {
         	steps {
                 withCredentials([file(credentialsId: 'fcm-certification', variable: 'certificationFile')]) {
                 	script {
