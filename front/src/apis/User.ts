@@ -1,17 +1,17 @@
 import { api } from "./Base";
 
-interface LoginType {
+interface LoginProps {
   uid: string;
   pw: string;
 }
 
-interface JoinType {
+interface JoinProps {
   uid: string;
   pw: string;
   name: string;
 }
 
-export const userLogin = async (loginData: LoginType) => {
+export const userLogin = async (loginData: LoginProps) => {
   try {
     const response = await api.post("/common-service/auth/login", loginData);
     console.log(response.data);
@@ -22,7 +22,7 @@ export const userLogin = async (loginData: LoginType) => {
   }
 };
 
-export const userJoin = async (joinData: JoinType) => {
+export const userJoin = async (joinData: JoinProps) => {
   try {
     const response = await api.post("/common-service/members", joinData);
     console.log("API 들어옴");

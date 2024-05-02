@@ -1,91 +1,125 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { ChatAll, SendChat } from "../../apis/Chat";
 import BotChat from "../../components/main/chat/BotChat";
 import ChatDate from "../../components/main/chat/ChatDate";
 import MyChat from "../../components/main/chat/MyChat";
 import ChatInput from "../../components/main/chat/ChatInput";
 import MoveButton from "../../components/common/button/MoveButton";
+import { useChatStore } from "../../stores/chat";
+import { PulseLoader } from "react-spinners";
 
-interface Message {
+interface MessageProps {
   message_type: "USER" | "ASSISTANT" | "date";
   content: string;
   timestamp: Date;
 }
 
 const ChatPage: React.FC = () => {
-  // 시간 역순으로 정렬을 해야함
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      message_type: "ASSISTANT",
-      content: "첫 번째 메시지입니다.",
-      timestamp: new Date("2024-04-22T12:00:00"),
+  const { messages, setMessages } = useChatStore();
+  const [isSending, setIsSending] = useState(false);
+
+  // 채팅 가져오기
+  const {
+    data: chatAll,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryFn: ChatAll,
+    queryKey: ["chatAll"],
+  });
+
+  useEffect(() => {
+    if (chatAll) {
+      const convertedMessages = chatAll.map((msg: MessageProps) => ({
+        ...msg,
+        timestamp: new Date(msg.timestamp),
+      }));
+
+      setMessages(convertedMessages.reverse());
+    }
+  }, [chatAll]);
+
+  // 채팅 보내기
+  const { mutate: sendChat } = useMutation({
+    mutationFn: SendChat,
+    onMutate: () => {
+      setIsSending(true);
     },
-    {
-      message_type: "USER",
-      content: "첫 번째 메시지입니다.",
-      timestamp: new Date("2024-04-22T12:00:00"),
+    onSuccess: (res) => {
+      setIsSending(false);
+
+      const newMessage: MessageProps = {
+        message_type: "ASSISTANT",
+        content: res.content,
+        timestamp: new Date(),
+      };
+
+      setMessages((prevMessages) => {
+        const newMessages = [newMessage, ...prevMessages];
+        const lastMessage =
+          prevMessages.length > 0
+            ? prevMessages[prevMessages.length - 1]
+            : null;
+
+        if (
+          lastMessage &&
+          newMessage.timestamp.toDateString() !==
+            lastMessage.timestamp.toDateString()
+        ) {
+          newMessages.splice(1, 0, {
+            message_type: "date",
+            content: "",
+            timestamp: newMessage.timestamp,
+          });
+        }
+
+        return newMessages;
+      });
     },
-    {
-      message_type: "USER",
-      content: "첫 번째 메시지입니다.",
-      timestamp: new Date("2024-04-22T12:00:00"),
+    onError: () => {
+      setIsSending(false);
+      alert("채팅 보내기 실패");
     },
-    {
-      message_type: "USER",
-      content: "첫 번째 메시지입니다.",
-      timestamp: new Date("2024-04-22T12:00:00"),
-    },
-  ]);
+  });
+
   const handleSendMessage = (newContent: string) => {
-    const newMessage: Message = {
+    const newMessage: MessageProps = {
       message_type: "USER",
       content: newContent,
       timestamp: new Date(),
     };
 
-    // 마지막 메시지와 새 메시지의 날짜를 비교하여 날짜가 변경되었는지 확인
-    const lastMessage =
-      messages.length > 0 ? messages[messages.length - 1] : null;
-    const newMessages = [...messages];
-    if (
-      lastMessage &&
-      newMessage.timestamp.toDateString() !==
-        lastMessage.timestamp.toDateString()
-    ) {
-      newMessages.push({
-        message_type: "date",
-        content: "",
-        timestamp: newMessage.timestamp,
-      });
-    }
-    console.log("새로운 메시지", newMessage);
-    newMessages.push(newMessage);
-    setMessages([newMessage, ...messages]);
+    setMessages((prevMessages) => {
+      const newMessages = [newMessage, ...prevMessages];
+      const lastMessage =
+        prevMessages.length > 0 ? prevMessages[prevMessages.length - 1] : null;
+
+      if (
+        lastMessage &&
+        newMessage.timestamp.toDateString() !==
+          lastMessage.timestamp.toDateString()
+      ) {
+        newMessages.splice(1, 0, {
+          message_type: "date",
+          content: "",
+          timestamp: newMessage.timestamp,
+        });
+      }
+
+      return newMessages;
+    });
+
+    sendChat({ message: newContent });
   };
 
-  const addMessage = (content: string, message_type: "USER" | "ASSISTANT") => {
-    const newMessage: Message = {
-      message_type: message_type,
-      content: content,
-      timestamp: new Date(),
-    };
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
-    const lastMessage = messages[0];
-    // 날짜 메시지 생성
-    if (
-      !lastMessage ||
-      newMessage.timestamp.toDateString() !==
-        lastMessage.timestamp.toDateString()
-    ) {
-      const dateMessage: Message = {
-        message_type: "date",
-        content: "",
-        timestamp: newMessage.timestamp,
-      };
-      setMessages([dateMessage, newMessage, ...messages]);
-    } else {
-      setMessages([newMessage, ...messages]);
-    }
-  };
+  if (isError) {
+    return <div>Error loading chat data.</div>;
+  }
 
   return (
     <div className="flex flex-col gap-[1rem] p-[2rem]">
@@ -97,7 +131,7 @@ const ChatPage: React.FC = () => {
               arr[index + 1].timestamp.toDateString();
 
           return (
-            <div>
+            <div key={index}>
               {isFirstMessageOfDay && <ChatDate date={message.timestamp} />}
               {message.message_type === "USER" && (
                 <MyChat
@@ -115,14 +149,13 @@ const ChatPage: React.FC = () => {
           );
         })}
       </div>
-      <div>
-        <button
-          onClick={() => addMessage("봇 새로운 메시지", "ASSISTANT")}
-          className=" bg-blue-100 "
-        >
-          봇 메시지
-        </button>
-      </div>
+
+      {isSending && (
+        <div className="flex justify-center items-center">
+          <PulseLoader color="#7ec3f0" />
+        </div>
+      )}
+
       <div className="mt-auto">
         <div className="flex justify-center pb-5">
           <MoveButton text="메인으로 돌아가기" path="/detection" />
