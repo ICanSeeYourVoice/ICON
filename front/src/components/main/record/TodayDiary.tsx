@@ -1,7 +1,6 @@
-import SmilePhotoLg from "../../components/main/record/SmilePhotoLg";
-import SmilePhotoSm from "../../components/main/record/SmilePhotoSm";
-import Nav from "../../components/common/Navigator/Nav";
-import DiaryThumbnail from "../../components/main/record/DiaryThumbnail";
+import SmilePhotoLg from "./SmilePhotoLg";
+import SmilePhotoSm from "./SmilePhotoSm";
+import DiaryThumbnail from "./DiaryThumbnail";
 import { useNavigate } from "react-router-dom";
 
 const TodayDiary = () => {
@@ -38,7 +37,6 @@ const TodayDiary = () => {
           content="날이 좋아서 그런지 아기가 빨리 성장해서 같이 나들이 가고싶어"
         />
       </div>
-      <Nav />
     </div>
   );
 };

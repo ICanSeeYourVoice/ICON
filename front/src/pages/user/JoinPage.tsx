@@ -57,7 +57,7 @@ const JoinPage = () => {
 
   return (
     <div className="flex flex-col items-center h-screen w-screen pt-[3.125rem] pb-[10.3125rem] gap-[1.5rem]">
-      <TopBar text="일지 등록" />
+      <TopBar text="회원 가입" />
       <div className="flex flex-col items-center gap-[1.6rem] mt-10">
         <LabelInput
           label="이름"
