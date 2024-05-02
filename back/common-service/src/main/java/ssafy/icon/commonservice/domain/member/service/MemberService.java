@@ -35,16 +35,6 @@ public class MemberService {
 			.build());
 	}
 
-	public void addToken(Integer memberId, AddTokenReq token) {
-		// token의 id로 유저 정보 가져오기
-		Member member = memberRepository.findById(memberId)
-			.orElseThrow(() -> new MemberException(BAD_REQUEST, "존재하지 않은 회원 ID입니다."));
-
-		// new token 저장
-		member.updateToken(token.getToken(), token.isApp());
-
-		memberRepository.save(member);
-	}
 
 	public GetMemberDto getMember(Integer memberId) {
 		log.info("test : {}", memberId);

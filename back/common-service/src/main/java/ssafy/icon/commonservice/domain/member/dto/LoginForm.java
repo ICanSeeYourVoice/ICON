@@ -14,7 +14,12 @@ public record LoginForm(
 	@NotBlank
 	@Size(min = 5, max = 12, message = "비밀번호는 5~12자 내여야 합니다.")
 	@Pattern(regexp = "^[a-zA-Z0-9!@#$%^&*()]*$")
-	String pw
-) {
+	String pw,
+
+	@NotBlank
+	String token,
+
+	boolean isApp
+	) {
 
 }

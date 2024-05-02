@@ -31,12 +31,6 @@ public class MemberController {
 		return ResponseEntity.ok().build();
 	}
 
-	@PatchMapping("/fcmtoken")
-	public ResponseEntity<Void> addToken(@RequestHeader("X-Authorization-Id") Integer memberId,
-		@RequestBody @Valid AddTokenReq token) {
-		memberService.addToken(memberId, token);
-		return ResponseEntity.ok().build();
-	}
 
 	@GetMapping
 	public GetMemberDto getMember(@RequestHeader("X-Authorization-Id") Integer memberId) {
