@@ -22,7 +22,7 @@ const JoinPage = () => {
       navigate("/login");
     },
     onError: (error) => {
-      console.log("ddfdf", error);
+      console.log("error", error);
     },
   });
   const handleConfirmClick = () => {
@@ -43,19 +43,15 @@ const JoinPage = () => {
 
   const nameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNameValue(e.target.value);
-    console.log(e.target.value);
   };
   const idChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIdValue(e.target.value);
-    console.log(e.target.value);
   };
   const passwordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPasswordValue(e.target.value);
-    console.log(e.target.value);
   };
   const passwordCorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPasswordCorValueValue(e.target.value);
-    console.log(e.target.value);
   };
 
   return (

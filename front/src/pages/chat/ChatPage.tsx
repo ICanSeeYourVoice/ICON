@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { ChatAll, SendChat } from "../../apis/Chat";
 import BotChat from "../../components/main/chat/BotChat";
 import ChatDate from "../../components/main/chat/ChatDate";
 import MyChat from "../../components/main/chat/MyChat";
@@ -12,29 +14,60 @@ interface Message {
 }
 
 const ChatPage: React.FC = () => {
-  // 시간 역순으로 정렬을 해야함
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      message_type: "ASSISTANT",
-      content: "첫 번째 메시지입니다.",
-      timestamp: new Date("2024-04-22T12:00:00"),
+  const [messages, setMessages] = useState<Message[]>([]);
+
+  // 채팅 전체 받아오기
+  const {
+    data: chatAll,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryFn: ChatAll,
+    queryKey: ["chatAll"],
+  });
+
+  useEffect(() => {
+    if (chatAll && Array.isArray(chatAll)) {
+      const convertedMessages = chatAll.map((msg) => ({
+        ...msg,
+        timestamp: new Date(msg.timestamp),
+      }));
+      setMessages(convertedMessages);
+    }
+  }, [chatAll]);
+
+  // 채팅 보내기
+  const { mutate: sendChat } = useMutation({
+    mutationFn: SendChat,
+    onSuccess: (res) => {
+      const newMessage: Message = {
+        message_type: "ASSISTANT",
+        content: res.content,
+        timestamp: new Date(),
+      };
+
+      const newMessages = [newMessage, ...messages];
+
+      const lastMessage = newMessages[1];
+      if (
+        !lastMessage ||
+        newMessage.timestamp.toDateString() !==
+          lastMessage.timestamp.toDateString()
+      ) {
+        newMessages.splice(1, 0, {
+          message_type: "date",
+          content: "",
+          timestamp: newMessage.timestamp,
+        });
+      }
+
+      setMessages(newMessages);
     },
-    {
-      message_type: "USER",
-      content: "첫 번째 메시지입니다.",
-      timestamp: new Date("2024-04-22T12:00:00"),
+    onError: () => {
+      alert("채팅 보내기 실패");
     },
-    {
-      message_type: "USER",
-      content: "첫 번째 메시지입니다.",
-      timestamp: new Date("2024-04-22T12:00:00"),
-    },
-    {
-      message_type: "USER",
-      content: "첫 번째 메시지입니다.",
-      timestamp: new Date("2024-04-22T12:00:00"),
-    },
-  ]);
+  });
+
   const handleSendMessage = (newContent: string) => {
     const newMessage: Message = {
       message_type: "USER",
@@ -42,7 +75,6 @@ const ChatPage: React.FC = () => {
       timestamp: new Date(),
     };
 
-    // 마지막 메시지와 새 메시지의 날짜를 비교하여 날짜가 변경되었는지 확인
     const lastMessage =
       messages.length > 0 ? messages[messages.length - 1] : null;
     const newMessages = [...messages];
@@ -57,35 +89,18 @@ const ChatPage: React.FC = () => {
         timestamp: newMessage.timestamp,
       });
     }
-    console.log("새로운 메시지", newMessage);
     newMessages.push(newMessage);
     setMessages([newMessage, ...messages]);
+    sendChat({ message: newContent });
   };
 
-  const addMessage = (content: string, message_type: "USER" | "ASSISTANT") => {
-    const newMessage: Message = {
-      message_type: message_type,
-      content: content,
-      timestamp: new Date(),
-    };
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
-    const lastMessage = messages[0];
-    // 날짜 메시지 생성
-    if (
-      !lastMessage ||
-      newMessage.timestamp.toDateString() !==
-        lastMessage.timestamp.toDateString()
-    ) {
-      const dateMessage: Message = {
-        message_type: "date",
-        content: "",
-        timestamp: newMessage.timestamp,
-      };
-      setMessages([dateMessage, newMessage, ...messages]);
-    } else {
-      setMessages([newMessage, ...messages]);
-    }
-  };
+  if (isError) {
+    return <div>Error loading chat data.</div>;
+  }
 
   return (
     <div className="flex flex-col gap-[1rem] p-[2rem]">
@@ -115,14 +130,7 @@ const ChatPage: React.FC = () => {
           );
         })}
       </div>
-      <div>
-        <button
-          onClick={() => addMessage("봇 새로운 메시지", "ASSISTANT")}
-          className=" bg-blue-100 "
-        >
-          봇 메시지
-        </button>
-      </div>
+
       <div className="mt-auto">
         <div className="flex justify-center pb-5">
           <MoveButton text="메인으로 돌아가기" path="/detection" />
