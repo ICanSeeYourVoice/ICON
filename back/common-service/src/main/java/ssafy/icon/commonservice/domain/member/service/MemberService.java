@@ -6,13 +6,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
 import ssafy.icon.commonservice.domain.member.dto.AddTokenReq;
 import ssafy.icon.commonservice.domain.member.dto.SignUpForm;
 import ssafy.icon.commonservice.domain.member.entity.Member;
 import ssafy.icon.commonservice.domain.member.repository.MemberRepository;
+import ssafy.icon.commonservice.domain.smartthings.dto.GetMemberDto;
 import ssafy.icon.commonservice.global.error.exception.MemberException;
 
 @RequiredArgsConstructor
+@Slf4j
 @Service
 public class MemberService {
 
@@ -41,5 +44,22 @@ public class MemberService {
 		member.updateToken(token.getToken(), token.isApp());
 
 		memberRepository.save(member);
+	}
+
+	public GetMemberDto getMember(Integer memberId) {
+		log.info("test : {}", memberId);
+		Member member = memberRepository.findById(memberId)
+			.orElseThrow(() -> new MemberException(BAD_REQUEST, "존재하지 않은 회원 ID입니다."));
+		GetMemberDto memberDto = GetMemberDto.builder()
+			.id(member.getId())
+			.uid(member.getUid())
+			.name(member.getName())
+			.webToken(member.getWebToken())
+			.appToken(member.getAppToken())
+			.build();
+
+		log.info("memberdto : {}", memberDto.toString());
+
+		return memberDto;
 	}
 }
