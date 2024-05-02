@@ -8,8 +8,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class KafkaBabyStatusConsumer {
 
-	@KafkaListener(topics = "test", groupId = "con2")
-	public void test(String message) {
+	// @KafkaListener(topics = "test", groupId = "con2")
+	// public void test(String message) {
+	// 	log.info("전달받은 메시지 : {}",message);
+	//
+	// }
+
+	@KafkaListener(topics = "baby-status", groupId = "alarm")
+	public void tesddt(String message) {
 		log.info("전달받은 메시지 : {}",message);
 
 	}

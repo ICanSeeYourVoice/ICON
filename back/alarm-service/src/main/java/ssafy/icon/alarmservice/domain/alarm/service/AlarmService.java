@@ -31,8 +31,34 @@ public class AlarmService {
 		}
 
 		Notification noti = Notification.builder()
-			.setTitle("아기가 울고 있어요!")
-			.setBody("아기가 울고 있어요엉엉엉엉")
+			.setTitle("울음 감지")
+			.setBody("아기가 울고 있어요!")
+			.build();
+
+		Message msg = Message.builder()
+			.setToken(member.getWebToken())
+			.setNotification(noti)
+			.build();
+
+		try {
+			firebaseMessaging.send(msg);
+		} catch (FirebaseMessagingException e) {
+			throw new RuntimeException(e);
+		}
+
+	}
+
+	// 울음 종류 : CRY, TIRED, HUNGRY, DISCOMFORT, DANGER, PAIN
+	public void sendAnalyzeMessage(Integer memberId, String type) {
+		GetMemberApiRes member = alarmApiClient.getMember(memberId);
+		log.info("GetMemberApiRes : {}", member.toString());
+		if(member.getWebToken().isEmpty()){
+			throw new AlarmException(BAD_REQUEST, "회원의 fcm 토큰이 존재하지 않습니다.");
+		}
+
+		Notification noti = Notification.builder()
+			.setTitle("울음 분석 완료!")
+			.setBody("아기가 울고 있어요!")
 			.build();
 
 		Message msg = Message.builder()
