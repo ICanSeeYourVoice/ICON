@@ -1,5 +1,4 @@
 import { api } from "./Base";
-
 interface sendChatProps {
   message: string;
 }
