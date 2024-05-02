@@ -33,6 +33,7 @@ public class AnalyzeService {
 	private AnalyzeResult getAnalyzeResult(MultipartFile babyCryingAudio) {
 		AnalyzeResult analyzeResult = null;
 		// try{
+		System.out.println(babyCryingAudio.getName());
 		analyzeResult = colabApiClient.getAnalyze(babyCryingAudio);
 		// } catch (Exception e) {
 		// 	throw new AnalyzeException(HttpStatus.BAD_REQUEST, "분석에 실패했습니다.");
