@@ -25,16 +25,7 @@ import ssafy.icon.analyzeservice.global.kafka.KafkaBabyStatusProducer;
 @RequestMapping("/analyze")
 public class CryAnalyzeController {
 
-	private final KafkaBabyStatusProducer kafkaBabyStatusProducer;
 	private final AnalyzeService analyzeService;
-
-	@GetMapping("/test")
-	public ResponseEntity<String> test() {
-
-		kafkaBabyStatusProducer.send("test", "I feel good");
-
-		return ResponseEntity.ok("good");
-	}
 
 	@PostMapping("/predict")
 	public ResponseEntity<AnalyzeResponse> cryAnalyze(

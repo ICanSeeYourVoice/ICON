@@ -11,7 +11,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ssafy.icon.analyzeservice.domain.analyze.client.ColabApiClient;
 import ssafy.icon.analyzeservice.domain.analyze.client.dto.AnalyzeResult;
+import ssafy.icon.analyzeservice.domain.analyze.dto.KafkaAlarm;
 import ssafy.icon.analyzeservice.global.error.exception.AnalyzeException;
+import ssafy.icon.analyzeservice.global.kafka.KafkaBabyStatusProducer;
 
 @Service
 @Slf4j
@@ -19,6 +21,7 @@ import ssafy.icon.analyzeservice.global.error.exception.AnalyzeException;
 public class AnalyzeService {
 
 	private final ColabApiClient colabApiClient;
+	private final KafkaBabyStatusProducer kafkaBabyStatusProducer;
 
 	//울음 분석
 	public String getCryReason(Integer memberId,MultipartFile babyCryingAudio) {
@@ -32,12 +35,11 @@ public class AnalyzeService {
 	//울음 분석 결과 가져오기
 	private AnalyzeResult getAnalyzeResult(MultipartFile babyCryingAudio) {
 		AnalyzeResult analyzeResult = null;
-		// try{
-		System.out.println(babyCryingAudio.getName());
-		analyzeResult = colabApiClient.getAnalyze(babyCryingAudio);
-		// } catch (Exception e) {
-		// 	throw new AnalyzeException(HttpStatus.BAD_REQUEST, "분석에 실패했습니다.");
-		// }
+		try{
+			analyzeResult = colabApiClient.getAnalyze(babyCryingAudio);
+		} catch (Exception e) {
+			throw new AnalyzeException(HttpStatus.BAD_REQUEST, "분석에 실패했습니다.");
+		}
 		return analyzeResult;
 	}
 
@@ -54,6 +56,6 @@ public class AnalyzeService {
 
 	//울음 분석 결과 카프카에 저장
 	private void addAlarm(Integer memberId, String cryReason) {
-		//TODO
+		kafkaBabyStatusProducer.send("baby-status", new KafkaAlarm(memberId, cryReason));
 	}
 }

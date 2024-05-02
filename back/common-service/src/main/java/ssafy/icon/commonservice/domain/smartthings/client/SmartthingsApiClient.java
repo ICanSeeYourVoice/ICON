@@ -22,7 +22,7 @@ public interface SmartthingsApiClient {
 		@RequestHeader("Authorization") String smartthingsToken
 	);
 
-	@PostMapping("/{sceneId}/execute")
+	@PostMapping("/scenes/{sceneId}/execute")
 	void executeRoutine(
 		@PathVariable String sceneId,
 		@RequestHeader("Authorization") String smartthingsToken
