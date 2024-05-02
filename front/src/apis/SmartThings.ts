@@ -1,35 +1,60 @@
 import { api } from "./Base";
 
 interface TokenProps {
-  smartthingsToken: string;
+  token: string;
 }
 
+interface RegisterRoutineProps {
+  scene_id: string;
+  trigger: string;
+}
+
+// GET: 루틴 조회
 export const CheckRoutine = async () => {
-  const access_token = sessionStorage.getItem("access_token");
   try {
-    const response = await api.get("/common-service/smart-things/scenes", {
-      headers: { Authorization: `Bearer ${access_token}` },
-    });
+    const response = await api.get("/common-service/smart-things/scenes");
     return response.data;
   } catch (error) {
-    console.error("등록 루틴 조회 실패: ", error);
+    console.error("CheckRoutine 등록 루틴 조회 실패: ", error);
     throw error;
   }
 };
 
-export const RegisterToken = async (smartthingsToken: TokenProps) => {
-  const access_token = sessionStorage.getItem("access_token");
+// POST: 토큰 등록
+export const RegisterToken = async (token: TokenProps) => {
   try {
     const response = await api.post(
       "/common-service/smart-things/token",
-      smartthingsToken,
-      {
-        headers: { Authorization: `Bearer ${access_token}` },
-      }
+      token
     );
     return response.data;
   } catch (error) {
-    console.error("개인 토큰 등록 실패: ", error);
+    console.error("RegisterToken 개인 토큰 등록 실패: ", error);
+    throw error;
+  }
+};
+
+// GET: 상태 루틴 조회
+export const GetStatusRoutine = async () => {
+  try {
+    const response = await api.get("/common-service/smart-things/routines");
+    return response.data;
+  } catch (error) {
+    console.error("GetStatusRoutine 상태 등록 루틴 조회 실패: ", error);
+    throw error;
+  }
+};
+
+// POST: 상태 루틴 등록
+export const RegisterRoutine = async (routine: RegisterRoutineProps) => {
+  try {
+    const response = await api.post(
+      "/common-service/smart-things/routines",
+      routine
+    );
+    return response.data;
+  } catch (error) {
+    console.error("RegisterRoutine 루틴 등록 실패: ", error);
     throw error;
   }
 };

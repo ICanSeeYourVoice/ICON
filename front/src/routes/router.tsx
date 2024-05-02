@@ -21,6 +21,7 @@ import QRScanPage from "../pages/setting/notification/QRScanPage";
 import ResultPage from "../pages/detection/ResultPage";
 import VoiceLayout from "../components/common/layout/VoiceLayout";
 import ClovaVoicePage from "../pages/tts/ClovaVoicePage";
+import SettingRoutinePage from "../pages/setting/smartThings/SettingRoutinePage";
 
 const authRoutes = [
   {
@@ -78,6 +79,7 @@ const settingNavRoutes = [
   { path: "/setting/share", element: <RegisterMultiNotificationPage /> },
   { path: "/setting/scan", element: <QRScanPage /> },
   { path: "/setting/things", element: <SmartThingsPage /> },
+  { path: "/setting/things/routine", element: <SettingRoutinePage /> },
 ];
 
 const voiceRoutes = [

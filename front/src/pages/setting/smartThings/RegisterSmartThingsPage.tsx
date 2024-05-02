@@ -21,18 +21,15 @@ const RegisterSmartThingsPage: React.FC<RegisterSmartThingsPageProps> = ({
 
   const handleRegisterToken = () => {
     if (smartthingsToken != "" && smartthingsToken.length > 10) {
-      console.log(smartthingsToken);
-      mutate({ smartthingsToken: smartthingsToken });
+      mutate({ token: smartthingsToken });
     } else {
       toast.error("스마트싱스 개인 토큰을 정확히 입력해주세요.");
     }
-    console.log(smartthingsToken);
   };
 
   const { mutate } = useMutation({
     mutationFn: RegisterToken,
     onSuccess: (res) => {
-      console.log(res);
       setIsToken(true);
       toast.success("스마트싱스 토큰 등록 성공", { duration: 800 });
     },
