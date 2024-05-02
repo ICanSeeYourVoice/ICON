@@ -8,11 +8,28 @@ import {
 import { useEffect } from "react";
 import { useDetectionStore } from "../../stores/detection";
 import { useNavigate } from "react-router";
+import { useMutation } from "@tanstack/react-query";
+import { cryAlarm } from "../../apis/Notification";
+import toast from "react-hot-toast";
 
 const DetectionPage = () => {
   const navigate = useNavigate();
   const isBabyCry = useDetectionStore((state: any) => state.isBabyCry);
   const cryingType = useDetectionStore((state: any) => state.cryingType);
+
+  const { mutate } = useMutation({
+    mutationFn: cryAlarm,
+    onSuccess: () => {},
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
+  useEffect(() => {
+    if (isBabyCry) {
+      mutate();
+    }
+  }, [isBabyCry]);
 
   useEffect(() => {
     if (cryingType !== 0) {
