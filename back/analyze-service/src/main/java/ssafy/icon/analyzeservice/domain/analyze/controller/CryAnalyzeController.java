@@ -27,7 +27,6 @@ public class CryAnalyzeController {
 
 	private final KafkaBabyStatusProducer kafkaBabyStatusProducer;
 	private final AnalyzeService analyzeService;
-	private final ColabApiClient colabApiClient;
 
 	@GetMapping("/test")
 	public ResponseEntity<String> test() {
@@ -40,7 +39,7 @@ public class CryAnalyzeController {
 	@PostMapping("/predict")
 	public ResponseEntity<AnalyzeResponse> cryAnalyze(
 		@RequestHeader("X-Authorization-Id") Integer memberId,
-		MultipartFile babyCryingAudio
+		@RequestBody MultipartFile babyCryingAudio
 	) {
 		String cryReason = analyzeService.getCryReason(memberId, babyCryingAudio);
 		AnalyzeResponse analyzeResponse = new AnalyzeResponse(cryReason);
