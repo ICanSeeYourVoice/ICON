@@ -49,8 +49,7 @@ public class MemberService {
 	public GetMemberDto getMember(Integer memberId) {
 		log.info("test : {}", memberId);
 		Member member = memberRepository.findById(memberId)
-			.orElse(new Member("0",null,null,null,null));
-			// .orElseThrow(() -> new MemberException(BAD_REQUEST, "존재하지 않은 회원 ID입니다."));
+			.orElseThrow(() -> new MemberException(BAD_REQUEST, "존재하지 않은 회원 ID입니다."));
 		GetMemberDto memberDto = GetMemberDto.builder()
 			.id(member.getId())
 			.uid(member.getUid())
