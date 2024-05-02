@@ -32,11 +32,11 @@ public class AnalyzeService {
 	//울음 분석 결과 가져오기
 	private AnalyzeResult getAnalyzeResult(MultipartFile babyCryingAudio) {
 		AnalyzeResult analyzeResult = null;
-		try{
-			analyzeResult = colabApiClient.getAnalyze(babyCryingAudio);
-		} catch (Exception e) {
-			throw new AnalyzeException(HttpStatus.BAD_REQUEST, "분석에 실패했습니다.");
-		}
+		// try{
+		analyzeResult = colabApiClient.getAnalyze(babyCryingAudio);
+		// } catch (Exception e) {
+		// 	throw new AnalyzeException(HttpStatus.BAD_REQUEST, "분석에 실패했습니다.");
+		// }
 		return analyzeResult;
 	}
 
