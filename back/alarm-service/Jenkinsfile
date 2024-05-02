@@ -32,15 +32,14 @@ pipeline {
         stage('secret.yml delete') {
             steps {
                 script{
-                    sh 'rm -f /var/jenkins_home/workspace/back-alarm/back/alarm-service/src/main/resources/application.yml'
-                    sh 'rm -f /var/jenkins_home/workspace/back-alarm/back/alarm-service/src/main/resources/certification.json'
+                    sh 'rm -rf /var/jenkins_home/workspace/back-alarm/back/alarm-service/src/main/resources'
+                    echo "delete resources directory" 
+                    // resources 폴더 새로 생성
+                    sh 'mkdir -p /var/jenkins_home/workspace/back-alarm/back/alarm-service/src/main/resources'
+                    echo "Recreated resources directory"
 
-                    echo "delete application.yml & certification.json"
-
-                    sh '''cd /var/jenkins_home/workspace/back-alarm/back/alarm-service/src/main
-                    mkdir -p resources
-                    ls -al
-                    '''
+                    // 현재 상태 확인
+                    sh 'ls -al /var/jenkins_home/workspace/back-alarm/back/alarm-service/src/main/resources'
                 }
             }
         }
@@ -50,9 +49,16 @@ pipeline {
             	withCredentials([file(credentialsId: 'back-alarm-application', variable: 'applicationFile')]) {
                 	script {
                         echo "download application.yml"
+                        
                     	sh 'cp -f $applicationFile /var/jenkins_home/workspace/back-alarm/back/alarm-service/src/main/resources/application.yml'
                     }
         		}
+            }
+        }
+
+
+        stage('secret.yml download') {
+        	steps {
                 withCredentials([file(credentialsId: 'fcm-certification', variable: 'certificationFile')]) {
                 	script {
                         echo "download certification.json"
@@ -61,6 +67,8 @@ pipeline {
         		}
             }
         }
+
+
 
 
         stage('Build Alarm-Server .JAR') {
