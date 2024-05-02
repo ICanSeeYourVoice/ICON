@@ -6,17 +6,20 @@ import ChatDate from "../../components/main/chat/ChatDate";
 import MyChat from "../../components/main/chat/MyChat";
 import ChatInput from "../../components/main/chat/ChatInput";
 import MoveButton from "../../components/common/button/MoveButton";
+import { useChatStore } from "../../stores/chat";
+import { PulseLoader } from "react-spinners";
 
-interface Message {
+interface MessageProps {
   message_type: "USER" | "ASSISTANT" | "date";
   content: string;
   timestamp: Date;
 }
 
 const ChatPage: React.FC = () => {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const { messages, setMessages } = useChatStore();
+  const [isSending, setIsSending] = useState(false);
 
-  // 채팅 전체 받아오기
+  // 채팅 가져오기
   const {
     data: chatAll,
     isLoading,
@@ -28,10 +31,11 @@ const ChatPage: React.FC = () => {
 
   useEffect(() => {
     if (chatAll) {
-      const convertedMessages = chatAll.map((msg: Message) => ({
+      const convertedMessages = chatAll.map((msg: MessageProps) => ({
         ...msg,
         timestamp: new Date(msg.timestamp),
       }));
+
       setMessages(convertedMessages.reverse());
     }
   }, [chatAll]);
@@ -39,14 +43,18 @@ const ChatPage: React.FC = () => {
   // 채팅 보내기
   const { mutate: sendChat } = useMutation({
     mutationFn: SendChat,
+    onMutate: () => {
+      setIsSending(true);
+    },
     onSuccess: (res) => {
-      const newMessage: Message = {
+      setIsSending(false);
+
+      const newMessage: MessageProps = {
         message_type: "ASSISTANT",
         content: res.content,
         timestamp: new Date(),
       };
 
-      // 새로운 메시지를 상태에 추가하고, 날짜 구분도 유지
       setMessages((prevMessages) => {
         const newMessages = [newMessage, ...prevMessages];
         const lastMessage =
@@ -70,12 +78,13 @@ const ChatPage: React.FC = () => {
       });
     },
     onError: () => {
+      setIsSending(false);
       alert("채팅 보내기 실패");
     },
   });
 
   const handleSendMessage = (newContent: string) => {
-    const newMessage: Message = {
+    const newMessage: MessageProps = {
       message_type: "USER",
       content: newContent,
       timestamp: new Date(),
@@ -109,7 +118,7 @@ const ChatPage: React.FC = () => {
   }
 
   if (isError) {
-    return <div>Error</div>;
+    return <div>Error loading chat data.</div>;
   }
 
   return (
@@ -122,7 +131,7 @@ const ChatPage: React.FC = () => {
               arr[index + 1].timestamp.toDateString();
 
           return (
-            <div>
+            <div key={index}>
               {isFirstMessageOfDay && <ChatDate date={message.timestamp} />}
               {message.message_type === "USER" && (
                 <MyChat
@@ -140,6 +149,12 @@ const ChatPage: React.FC = () => {
           );
         })}
       </div>
+
+      {isSending && (
+        <div className="flex justify-center items-center">
+          <PulseLoader color="#7ec3f0" />
+        </div>
+      )}
 
       <div className="mt-auto">
         <div className="flex justify-center pb-5">
