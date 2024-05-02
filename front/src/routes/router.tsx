@@ -7,7 +7,6 @@ import AuthLayout from "../pages/user/AuthLayout";
 import SplashPage from "../pages/user/Splash";
 import RecordLayout from "../pages/record/RecordLayout";
 import RecordPage from "../pages/record/RecordPage";
-import DiaryPage from "../pages/record/DiaryPage";
 import DiaryDetailPage from "../pages/record/DiaryDetailPage";
 import RegisterPage from "../pages/record/RegisterPage";
 import ChartPage from "../pages/record/ChartPage";
@@ -51,7 +50,6 @@ const recordRoutes = [
     element: <RecordLayout />,
     children: [
       { index: true, element: <RecordPage /> },
-      { path: "diary", element: <DiaryPage /> },
       { path: "detail/diary", element: <DiaryDetailPage /> },
       { path: "diary/register", element: <RegisterPage /> },
       { path: ":chart", element: <ChartPage /> },
