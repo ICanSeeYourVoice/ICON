@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import setting from "../../../assets/svgs/nav/setting.svg";
-import detection from "../../../assets/svgs/nav/detection.svg";
+import voice from "../../../assets/svgs/nav/detection.svg";
 import diary from "../../../assets/svgs/nav/diary.svg";
 import chat from "../../../assets/svgs/nav/chat.svg";
+import heart from "../../../assets/svgs/nav/heart.svg";
 
 interface NavItemProps {
   text: string;
@@ -39,7 +40,8 @@ const NavItem = ({
 const Nav = () => {
   const navList: NavItemProps[] = [
     { text: "성장일지", icon: diary, path: "/record" },
-    { text: "울음감지", icon: detection, path: "/detection" },
+    { text: "보이스", icon: voice, path: "/voice" },
+    { text: "울음감지", icon: heart, path: "/detection" },
     { text: "챗봇", icon: chat, path: "/chat" },
     { text: "설정", icon: setting, path: "/setting" },
   ];

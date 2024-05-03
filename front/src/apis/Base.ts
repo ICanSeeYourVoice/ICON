@@ -14,13 +14,13 @@ export const api = {
       },
       ...params,
     }),
-  post: <T>(url: string, data: any) =>
+  post: <T>(url: string, data: unknown) =>
     baseApi.post<T>(url, data, {
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem("access_token")}`,
       },
     }),
-  patch: <T>(url: string, data: any) =>
+  patch: <T>(url: string, data: unknown) =>
     baseApi.patch<T>(url, data, {
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem("access_token")}`,
