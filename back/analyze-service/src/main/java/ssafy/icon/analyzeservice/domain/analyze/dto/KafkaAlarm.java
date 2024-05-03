@@ -1,11 +1,11 @@
 package ssafy.icon.analyzeservice.domain.analyze.dto;
 
 public record KafkaAlarm(
-	Integer MEMBERID,
-	String CRYREASON
+	Integer memberId,
+	String cryReason
 ) {
-	public KafkaAlarm(Integer MEMBERID, String CRYREASON) {
-		this.MEMBERID = MEMBERID;
-		this.CRYREASON = CRYREASON.toLowerCase();
+	public KafkaAlarm(Integer memberId, String cryReason) {
+		this.memberId = memberId;
+		this.cryReason = cryReason;
 	}
 }
