@@ -27,17 +27,15 @@ public class Guardian extends BaseEntity {
 	@Id
 	private Integer id;
 
-	@Column(nullable = false, length = 12)
-	private String uid;
+	@Column(nullable = false, name = "guest_id")
+	private Integer guestId;
 
-	// Member와의 연관관계 설정
-	@ManyToOne(fetch = FetchType.LAZY) // 관계 설정은 LAZY 로딩으로
-	@JoinColumn(name = "member_id") // 외래키는 member_id
-	private Member member;
+	@Column(nullable = false, name = "host_id")
+	private Integer hostId;
 
 	@Builder
-	public Guardian(String uid, Member member) {
-		this.uid = uid;
-		this.member = member;
+	public Guardian(Integer guestId, Integer hostId) {
+		this.guestId = guestId;
+		this.hostId = hostId;
 	}
 }

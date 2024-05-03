@@ -8,6 +8,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class GetGuardiansDto {
-	private String uid;
+	private Integer id;
+	private Integer guestId;
 	private String name;
 }

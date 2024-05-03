@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -73,15 +74,15 @@ public class MemberController {
 
 	@PostMapping("/guardian")
 	public ResponseEntity<Void> addGuardian(@RequestHeader("X-Authorization-Id") Integer memberId,
-		@RequestBody String guardianUid) {
-		memberService.addGuardian(memberId, guardianUid);
+		@RequestBody Integer guestId) {
+		memberService.addGuardian(memberId, guestId);
 		return ResponseEntity.ok().build();
 	}
 
-	@DeleteMapping("/guardian")
+	@DeleteMapping("/guardian/{guardianId}")
 	public ResponseEntity<Void> deleteGuardian(@RequestHeader("X-Authorization-Id") Integer memberId,
-		@RequestBody String guardianUid) {
-		memberService.deleteGuardian(memberId, guardianUid);
+		@PathVariable Integer guardianId) {
+		memberService.deleteGuardian(memberId, guardianId);
 		return ResponseEntity.ok().build();
 	}
 
