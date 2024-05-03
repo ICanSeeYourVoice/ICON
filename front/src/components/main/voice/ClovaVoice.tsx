@@ -6,6 +6,7 @@ import "./VoiceWave.css";
 import { useMutation } from "@tanstack/react-query";
 import { clovaVoice } from "../../../apis/Voice";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 const ClovaVoice = () => {
   const [text, setText] = useState("");
@@ -22,6 +23,13 @@ const ClovaVoice = () => {
       }
     },
     onError: (error: unknown) => {
+      if (axios.isAxiosError(error)) {
+        if (error.response && error.response.status === 503) {
+          toast.error("정확한 문장을 작성해주세요");
+        }
+      } else {
+        toast.error("문제가 발생했습니다. 관리자에게 문의하세요.");
+      }
       console.error("API 에러:", error);
     },
   });
