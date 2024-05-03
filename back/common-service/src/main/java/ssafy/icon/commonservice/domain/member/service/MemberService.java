@@ -3,6 +3,7 @@ package ssafy.icon.commonservice.domain.member.service;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -69,7 +70,7 @@ public class MemberService {
 	}
 
 	// public void  postTTS() {
-	public File postTTS(String apiKeyId, String apiKey, PostTTSReq request) {
+	public byte[] postTTS(String apiKeyId, String apiKey, PostTTSReq request) {
 		try {
 			String text = URLEncoder.encode(request.getText(), "UTF-8");
 			String apiURL = "https://naveropenapi.apigw.ntruss.com/tts-premium/v1/tts";
@@ -94,16 +95,19 @@ public class MemberService {
 				InputStream is = con.getInputStream();
 				int read = 0;
 				byte[] bytes = new byte[1024];
-				// 랜덤한 이름으로 mp3 파일 생성
-				String tempname = Long.valueOf(new Date().getTime()).toString();
-				File f = new File(tempname + ".mp3");
-				f.createNewFile();
-				OutputStream outputStream = new FileOutputStream(f);
+				// // 랜덤한 이름으로 mp3 파일 생성
+				// String tempname = Long.valueOf(new Date().getTime()).toString();
+				//
+				// File f = new File(tempname + ".mp3");
+				// f.createNewFile();
+				// OutputStream outputStream = new FileOutputStream(f);
+				ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 				while ((read = is.read(bytes)) != -1) {
 					outputStream.write(bytes, 0, read);
 				}
 				is.close();
-				return f;
+				// return f;
+				return outputStream.toByteArray();
 			} else {  // 오류 발생
 				br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
 				String inputLine;

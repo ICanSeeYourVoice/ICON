@@ -51,28 +51,21 @@ public class MemberController {
 	}
 
 	@PostMapping(value = "/tts", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Resource> postTTS(
+	public ResponseEntity<byte[]> postTTS(
 		@RequestHeader("X-NCP-APIGW-API-KEY-ID") String apiKeyId,
 		@RequestHeader("X-NCP-APIGW-API-KEY") String apiKey,
 		// @RequestHeader("Content-Type") String contentType,
 		@RequestBody @Valid PostTTSReq request
 	) throws IOException {
 
-		File cc = memberService.postTTS(apiKeyId, apiKey, request);
+		byte[] mp3 = memberService.postTTS(apiKeyId, apiKey, request);
 
-		if (cc != null) {
-			// 파일을 Resource로 변환
-			Path path = cc.toPath();
-			Resource resource = new InputStreamResource(Files.newInputStream(path));
+		if (mp3 != null) {
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM); // MP3 파일의 Content-Type 설정
+			headers.setContentDispositionFormData("filename", "output.mp3"); // 다운로드되는 파일의 이름 설정
 
-			// 파일 다운로드를 위한 헤더 설정
-			String mimeType = Files.probeContentType(path);
-			mimeType = mimeType == null ? "application/octet-stream" : mimeType;
-
-			return ResponseEntity.ok()
-				.contentType(MediaType.parseMediaType(mimeType))
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + cc.getName() + "\"")
-				.body(resource);
+			return new ResponseEntity<>(mp3, headers, HttpStatus.OK);
 		} else {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
