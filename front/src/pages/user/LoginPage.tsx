@@ -29,7 +29,7 @@ const LoginPage = () => {
 
   const { mutate } = useMutation({
     mutationFn: userLogin,
-    onSuccess: (res: any) => {
+    onSuccess: (res) => {
       if (res.access_token) {
         sessionStorage.setItem("access_token", res.access_token);
 
