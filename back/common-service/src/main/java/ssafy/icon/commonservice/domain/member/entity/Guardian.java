@@ -13,11 +13,13 @@ import jakarta.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import ssafy.icon.commonservice.global.entity.BaseEntity;
 
 @NoArgsConstructor(access = PROTECTED)
 @Getter
 @Entity
+@ToString
 public class Guardian extends BaseEntity {
 
 	@GeneratedValue(strategy = IDENTITY)

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,8 +27,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
+import ssafy.icon.commonservice.domain.member.dto.GetGuardiansDto;
 import ssafy.icon.commonservice.domain.member.dto.PostTTSReq;
 import ssafy.icon.commonservice.domain.member.dto.SignUpForm;
+import ssafy.icon.commonservice.domain.member.entity.Guardian;
 import ssafy.icon.commonservice.domain.member.service.MemberService;
 import ssafy.icon.commonservice.domain.smartthings.dto.GetMemberDto;
 
@@ -53,7 +57,7 @@ public class MemberController {
 	@PostMapping(value = "/tts", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<byte[]> postTTS(
 		@RequestBody @Valid PostTTSReq request
-	){
+	) {
 
 		byte[] mp3 = memberService.postTTS(request);
 		if (mp3 != null) {
@@ -72,5 +76,18 @@ public class MemberController {
 		@RequestBody String guardianUid) {
 		memberService.addGuardian(memberId, guardianUid);
 		return ResponseEntity.ok().build();
+	}
+
+	@DeleteMapping("/guardian")
+	public ResponseEntity<Void> deleteGuardian(@RequestHeader("X-Authorization-Id") Integer memberId,
+		@RequestBody String guardianUid) {
+		memberService.deleteGuardian(memberId, guardianUid);
+		return ResponseEntity.ok().build();
+	}
+
+	@GetMapping("/guardian")
+	public ResponseEntity<List<GetGuardiansDto>> getGuardian(@RequestHeader("X-Authorization-Id") Integer memberId) {
+		List<GetGuardiansDto> guardians = memberService.getGuardian(memberId);
+		return ResponseEntity.ok(guardians);
 	}
 }

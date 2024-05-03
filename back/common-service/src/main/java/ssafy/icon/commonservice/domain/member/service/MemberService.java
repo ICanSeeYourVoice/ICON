@@ -13,7 +13,10 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,6 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
+import ssafy.icon.commonservice.domain.member.dto.GetGuardiansDto;
 import ssafy.icon.commonservice.domain.member.dto.PostTTSReq;
 import ssafy.icon.commonservice.domain.member.dto.SignUpForm;
 import ssafy.icon.commonservice.domain.member.entity.Guardian;
@@ -86,7 +90,7 @@ public class MemberService {
 			con.setRequestProperty("X-NCP-APIGW-API-KEY-ID", naverTTSConfig.getApiKeyId());
 			con.setRequestProperty("X-NCP-APIGW-API-KEY", naverTTSConfig.getApiKey());
 			// post request
-			String postParams = "speaker=" +speaker +"&volume=5&speed=0&pitch=0&format=mp3&text=" + text;
+			String postParams = "speaker=" + speaker + "&volume=5&speed=0&pitch=0&format=mp3&text=" + text;
 			con.setDoOutput(true);
 			DataOutputStream wr = new DataOutputStream(con.getOutputStream());
 			wr.writeBytes(postParams);
@@ -141,5 +145,39 @@ public class MemberService {
 			.member(member)
 			.build();
 		guardianRepository.save(guardian);
+	}
+
+	public void deleteGuardian(Integer memberId, String guardianUid) {
+		Member member = memberRepository.findById(memberId)
+			.orElseThrow(() -> new MemberException(BAD_REQUEST, "존재하지 않은 회원 ID입니다."));
+		log.info("member : {}", member);
+
+		// 예외처리
+		memberRepository.findByUid(guardianUid)
+			.orElseThrow(() -> new MemberException(BAD_REQUEST, "존재하지 않은 보호자 회원 UID입니다."));
+
+		Guardian guardian = guardianRepository.findByUidAndMemberId(guardianUid, memberId).orElseThrow(
+			() -> new MemberException(BAD_REQUEST, "존재하지 않은 보호자 회원 UID입니다."));
+
+		guardianRepository.delete(guardian);
+	}
+
+	public List<GetGuardiansDto> getGuardian(Integer memberId) {
+		Member member = memberRepository.findById(memberId)
+			.orElseThrow(() -> new MemberException(BAD_REQUEST, "존재하지 않은 회원 ID입니다."));
+		log.info("member : {}", member);
+
+		List<Guardian> guardians = guardianRepository.findAllByMemberId(memberId);
+
+		List<GetGuardiansDto> gDtoList = new ArrayList<>();
+		for (Guardian guardian : guardians) {
+			Member m = memberRepository.findByUid(guardian.getUid())
+				.orElseThrow(() -> new MemberException(BAD_REQUEST, "존재하지 않은 보호자 회원 UID입니다."));
+			gDtoList.add(GetGuardiansDto.builder()
+				.uid(guardian.getUid())
+				.name(m.getName()).build());
+		}
+
+		return gDtoList;
 	}
 }
