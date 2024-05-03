@@ -10,7 +10,6 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 import ssafy.icon.commonservice.domain.smartthings.client.SmartthingsApiClient;
 import ssafy.icon.commonservice.domain.smartthings.dto.BabyStatusInfo;
-import ssafy.icon.commonservice.domain.smartthings.dto.RoutineInfo;
 import ssafy.icon.commonservice.domain.smartthings.entity.SmartthingsRoutine;
 import ssafy.icon.commonservice.domain.smartthings.entity.SmartthingsToken;
 import ssafy.icon.commonservice.domain.smartthings.repository.SmartthingsRoutineRepository;
@@ -27,11 +26,18 @@ public class SmartthingsBabyStatusConsumer {
 	private final SmartthingsRoutineRepository smartthingsRoutineRepository;
 	private final SmartthingsTokenRepository smartthingsTokenRepository;
 	private static final String BEARER = "Bearer ";
-
-
+	
 	@KafkaListener(topics = "baby-status", groupId = "smartthings-routine")
-	public void activateSmartThingsRoutines(String message) {
+	public void activateBabyStatusRoutine(String message) {
+		activateRoutine(message);
+	}
 
+	@KafkaListener(topics = "baby-cry", groupId = "smartthings-routine")
+	public void activateCryRoutine(String message) {
+		activateRoutine(message);
+	}
+
+	private void activateRoutine(String message) {
 		try {
 			BabyStatusInfo babyStatusInfo = objectMapper.readValue(message, BabyStatusInfo.class);
 
@@ -51,7 +57,6 @@ public class SmartthingsBabyStatusConsumer {
 		} catch (JsonProcessingException e) {
 			throw new SmartThingsException(HttpStatus.INTERNAL_SERVER_ERROR, "매핑 오류 발생");
 		}
-
 	}
 
 }
