@@ -9,7 +9,7 @@ import { useEffect, useRef } from "react";
 import { useDetectionStore } from "../../stores/detection";
 import { useNavigate } from "react-router";
 import { useMutation } from "@tanstack/react-query";
-import { cryAlarm } from "../../apis/Notification";
+import { analyzeAlarm, cryAlarm } from "../../apis/Notification";
 import toast from "react-hot-toast";
 import * as tf from "@tensorflow/tfjs";
 import { loadYamnetModel } from "../../utils/cryingClassification";
@@ -22,12 +22,23 @@ const DetectionPage = () => {
   const cryingType = useDetectionStore((state: any) => state.cryingType);
   const model = useRef<tf.GraphModel | null>(null);
   const setIsBabyCry = useDetectionStore((state: any) => state.setIsBabyCry);
-  // const setCryingType = useDetectionStore((state: any) => state.setCryingType);
+  const setCryingType = useDetectionStore((state: any) => state.setCryingType);
   const streamRef = useRef<MediaStream | null>(null);
 
   const { mutate } = useMutation({
     mutationFn: cryAlarm,
     onSuccess: () => {},
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
+  const { mutate: analyzeMutate } = useMutation({
+    mutationFn: analyzeAlarm,
+    onSuccess: (res) => {
+      console.log(res);
+      setCryingType(res);
+    },
     onError: (error) => {
       toast.error(error.message);
     },
@@ -59,7 +70,6 @@ const DetectionPage = () => {
           const source = audioCtx.createMediaStreamSource(stream);
           const scriptNode = audioCtx.createScriptProcessor(8192, 1, 1);
 
-          // 3초 마다 녹음
           setInterval(() => {
             console.log("아기울음녹음시작");
 
@@ -80,15 +90,19 @@ const DetectionPage = () => {
               for (let i = 0; i < 3; i++) {
                 if (classes[i] === 20 && probabilities[i] >= 0.5) {
                   setIsBabyCry(true);
-
                   setTimeout(() => {
                     worker.postMessage(audioBuffer);
-                  }, 3000);
+
+                    worker.onmessage = function (e) {
+                      const sound = e.data;
+                      analyzeMutate({ data: sound });
+                    };
+                  }, 1000);
                   return;
                 }
               }
             };
-          }, 3000);
+          }, 5000);
 
           source.connect(scriptNode);
           scriptNode.connect(audioCtx.destination);
