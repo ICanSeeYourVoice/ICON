@@ -1,35 +1,25 @@
-import axios from "axios";
+import { baseApi } from "./Base";
 
-interface VoiceType {
-  [key: string]: string | number;
+interface VoiceProps {
   text: string;
-  speaker: string;
-  volume: number;
-  speed: number;
-  pitch: number;
-  format: string;
+  speaker : string;
 }
 
-export const clovaVoice = async (voiceData: VoiceType): Promise<Blob> => {
-  const params = new URLSearchParams();
-  Object.keys(voiceData).forEach((key) => {
-    params.append(key, voiceData[key].toString());
-  });
+export const clovaVoice = async (voiceData: VoiceProps): Promise<Blob> => {
+  const access_token = sessionStorage.getItem("access_token");
 
   const headers = {
-    "X-NCP-APIGW-API-KEY-ID": import.meta.env.VITE_APP_CLIENT_ID,
-    "X-NCP-APIGW-API-KEY": import.meta.env.VITE_APP_CLIENT_SECRET,
-    "Content-Type": "application/x-www-form-urlencoded",
+    "Authorization" : `Bearer ${access_token}`,
   };
-
-  const response = await axios.post<Blob>(
-    "https://naveropenapi.apigw.ntruss.com/tts-premium/v1/tts",
-    params,
-    {
-      headers,
-      responseType: "blob",
-    }
-  );
-  console.log("voice API 들어옴");
-  return response.data;
+try {
+    const response = await baseApi.post<Blob>(
+      "/common-service/members/tts",
+      voiceData,
+      { headers, responseType: 'blob' } 
+    );
+    return response.data;
+  } catch (error) {
+    console.error("API 에러:", error);
+    throw error;
+  }
 };
