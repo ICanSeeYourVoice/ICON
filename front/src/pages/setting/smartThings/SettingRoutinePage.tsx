@@ -16,6 +16,7 @@ interface RoutineItem {
   scene_id: string;
   name: string;
   trigger?: string;
+  istype?: boolean;
 }
 
 const SettingRoutinePage = () => {
@@ -23,12 +24,12 @@ const SettingRoutinePage = () => {
   const navigate = useNavigate();
   const { type } = location.state || {};
   const [isLodding, setIsLodding] = useState(true);
-  const [routineList, setRoutineList] = useState([]);
+  const [routineList, setRoutineList] = useState<RoutineItem[]>([]);
   const [selectedSceneId, setSelectedSceneId] = useState("");
 
-  const { data: checkRoutineData, isLoading: isLoadingCheckRoutine } = useQuery(
-    { queryFn: CheckRoutine, queryKey: ["checkRoutineData"] }
-  );
+  const { data: checkRoutineData, isLoading: isLoadingCheckRoutine } = useQuery<
+    RoutineItem[]
+  >({ queryFn: CheckRoutine, queryKey: ["checkRoutineData"] });
   const { data: getStatusRoutineData, isLoading: isLoadingGetStatusRoutine } =
     useQuery({ queryFn: GetStatusRoutine, queryKey: ["getStatusRoutineData"] });
 
@@ -51,9 +52,10 @@ const SettingRoutinePage = () => {
 
       setRoutineList(data);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkRoutineData, getStatusRoutineData]);
 
-  const handleItemClick = (scene_id) => {
+  const handleItemClick = (scene_id: string) => {
     setSelectedSceneId(scene_id);
     setRoutineList((data) =>
       data.map((item) =>
@@ -97,7 +99,7 @@ const SettingRoutinePage = () => {
             <header className="text-primary w-[15.25rem] text-2xl">
               {type}
             </header>
-            {routineList.map((item) => (
+            {routineList.map((item: RoutineItem) => (
               <div
                 key={item.scene_id}
                 className={`p-4 m-2 rounded-lg ${

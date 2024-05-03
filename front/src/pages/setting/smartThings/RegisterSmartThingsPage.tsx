@@ -29,7 +29,7 @@ const RegisterSmartThingsPage: React.FC<RegisterSmartThingsPageProps> = ({
 
   const { mutate } = useMutation({
     mutationFn: RegisterToken,
-    onSuccess: (res) => {
+    onSuccess: () => {
       setIsToken(true);
       toast.success("스마트싱스 토큰 등록 성공", { duration: 800 });
     },

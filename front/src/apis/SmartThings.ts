@@ -1,4 +1,4 @@
-import { api } from "./Base";
+import { api, baseApi } from "./Base";
 
 interface TokenProps {
   token: string;
@@ -12,7 +12,11 @@ interface RegisterRoutineProps {
 // GET: 루틴 조회
 export const CheckRoutine = async () => {
   try {
-    const response = await api.get("/common-service/smart-things/scenes");
+    const response = await baseApi.get("/common-service/smart-things/scenes", {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("access_token")}`,
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("CheckRoutine 등록 루틴 조회 실패: ", error);
@@ -37,7 +41,14 @@ export const RegisterToken = async (token: TokenProps) => {
 // GET: 상태 루틴 조회
 export const GetStatusRoutine = async () => {
   try {
-    const response = await api.get("/common-service/smart-things/routines");
+    const response = await baseApi.get(
+      "/common-service/smart-things/routines",
+      {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("access_token")}`,
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     console.error("GetStatusRoutine 상태 등록 루틴 조회 실패: ", error);
