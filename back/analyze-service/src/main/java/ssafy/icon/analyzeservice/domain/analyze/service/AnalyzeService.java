@@ -1,6 +1,9 @@
 package ssafy.icon.analyzeservice.domain.analyze.service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Map.Entry;
 
 import org.springframework.http.HttpStatus;
@@ -31,7 +34,7 @@ public class AnalyzeService {
 	public String getCryReason(Integer memberId,MultipartFile babyCryingAudio) {
 		AnalyzeResult analyzeResult = getAnalyzeResult(babyCryingAudio);
 		String cryReason = getKey(analyzeResult);
-		// addAlarm(memberId, cryReason);
+		addAlarm(memberId, cryReason);
 		saveAnalyze(memberId, cryReason);
 		return cryReason;
 	}
@@ -56,8 +59,12 @@ public class AnalyzeService {
 
 	//울음 분석 결과 저장
 	protected void saveAnalyze(Integer memberId, String cryReason) {
-		BabyStatus status = new BabyStatus(memberId, cryReason);
-		analyzeRepository.save(status).block();
+		Date date = new Date();
+		DateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm");
+
+		analyzeRepository
+			.save(new BabyStatus(memberId, cryReason, dateFormat.format(date)))
+			.block();
 	}
 
 	//울음 분석 결과 카프카에 저장
