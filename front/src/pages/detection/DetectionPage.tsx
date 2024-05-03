@@ -35,9 +35,9 @@ const DetectionPage = () => {
 
   const { mutate: analyzeMutate } = useMutation({
     mutationFn: analyzeAlarm,
-    onSuccess: (res) => {
+    onSuccess: (res: any) => {
       console.log(res);
-      setCryingType(res);
+      setCryingType(res.cryReason);
     },
     onError: (error) => {
       toast.error(error.message);
