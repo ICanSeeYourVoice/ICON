@@ -10,6 +10,12 @@ class HomeController extends GetxController {
   RxBool isAdvertising = false.obs;
   RxBool isBleOn = false.obs;
   RxList<String> devices = <String>[].obs;
+  RxString status = 'normal'.obs;
+
+  void updateStatus(String newStatus) {
+    status.value = newStatus;
+    print(status.value);
+  }
 
   String get deviceName => switch (defaultTargetPlatform) {
     TargetPlatform.android => "BleDroid",

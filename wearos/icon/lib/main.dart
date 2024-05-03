@@ -61,20 +61,6 @@ void main() async {
       print('Foreground 메시지 수신: $messageString');
     }
   });
-  // // background message notification
-  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  //
-  // await FirebaseMessaging.instance.setAutoInitEnabled(true);
-  // final fcmToken = await FirebaseMessaging.instance.getToken();
-  // print("FCMToken $fcmToken");
-  //
-  // FirebaseMessaging.onMessage.listen((RemoteMessage event) {
-  //   print("message recieved");
-  //   print(event.notification!.body);
-  // });
-  // FirebaseMessaging.onMessageOpenedApp.listen((message) {
-  //   print('Message clicked!');
-  // });
   Get.put(HomeController());
   runApp(const GetMaterialApp(
     debugShowCheckedModeBanner: false,

@@ -9,6 +9,8 @@ class HomeView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(HomeController());  // build 아래 선언
+
     return Scaffold(
         body: Container(
           decoration: BoxDecoration(
@@ -37,7 +39,8 @@ class HomeView extends GetView<HomeController> {
                       const SizedBox(height: 20),
                           Obx(() =>
                               Text("Advertising: ${controller.isAdvertising.value}")),
-                          Obx(() => Text("BleOn: ${controller.isBleOn.value}")),
+                      Obx(() => Text("BleOn: ${controller.isBleOn.value}")),
+                      Obx(() => Text("status: ${controller.status.value}")),
                       const Divider(),
                             const ElevatedButton(
                               onPressed: BlePeripheral.askBlePermission,
