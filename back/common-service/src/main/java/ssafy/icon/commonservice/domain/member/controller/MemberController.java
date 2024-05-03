@@ -52,14 +52,10 @@ public class MemberController {
 
 	@PostMapping(value = "/tts", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<byte[]> postTTS(
-		@RequestHeader("X-NCP-APIGW-API-KEY-ID") String apiKeyId,
-		@RequestHeader("X-NCP-APIGW-API-KEY") String apiKey,
-		// @RequestHeader("Content-Type") String contentType,
 		@RequestBody @Valid PostTTSReq request
-	) throws IOException {
+	){
 
-		byte[] mp3 = memberService.postTTS(apiKeyId, apiKey, request);
-
+		byte[] mp3 = memberService.postTTS(request);
 		if (mp3 != null) {
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM); // MP3 파일의 Content-Type 설정

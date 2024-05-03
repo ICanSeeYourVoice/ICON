@@ -1,6 +1,6 @@
 package ssafy.icon.commonservice.domain.member.service;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.*;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -17,6 +17,7 @@ import java.util.Date;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,7 @@ import ssafy.icon.commonservice.domain.member.entity.Member;
 import ssafy.icon.commonservice.domain.member.repository.GuardianRepository;
 import ssafy.icon.commonservice.domain.member.repository.MemberRepository;
 import ssafy.icon.commonservice.domain.smartthings.dto.GetMemberDto;
+import ssafy.icon.commonservice.global.config.NaverTTSConfig;
 import ssafy.icon.commonservice.global.error.exception.MemberException;
 
 @RequiredArgsConstructor
@@ -38,6 +40,9 @@ public class MemberService {
 	private final PasswordEncoder passwordEncoder;
 	private final MemberRepository memberRepository;
 	private final GuardianRepository guardianRepository;
+
+	@Autowired
+	private NaverTTSConfig naverTTSConfig;
 
 	public void addMember(SignUpForm form) {
 		// 회원 아이디가 이미 있는지
@@ -70,18 +75,18 @@ public class MemberService {
 	}
 
 	// public void  postTTS() {
-	public byte[] postTTS(String apiKeyId, String apiKey, PostTTSReq request) {
+	public byte[] postTTS(PostTTSReq request) {
 		try {
 			String text = URLEncoder.encode(request.getText(), "UTF-8");
-			String apiURL = "https://naveropenapi.apigw.ntruss.com/tts-premium/v1/tts";
-			URL url = new URL(apiURL);
+			String speaker = URLEncoder.encode(request.getSpeaker(), "UTF-8");
+			URL url = new URL("https://naveropenapi.apigw.ntruss.com/tts-premium/v1/tts");
 			HttpURLConnection con = (HttpURLConnection)url.openConnection();
 
 			con.setRequestMethod("POST");
-			con.setRequestProperty("X-NCP-APIGW-API-KEY-ID", apiKeyId);
-			con.setRequestProperty("X-NCP-APIGW-API-KEY", apiKey);
+			con.setRequestProperty("X-NCP-APIGW-API-KEY-ID", naverTTSConfig.getApiKeyId());
+			con.setRequestProperty("X-NCP-APIGW-API-KEY", naverTTSConfig.getApiKey());
 			// post request
-			String postParams = "speaker=nara&volume=0&speed=0&pitch=0&format=mp3&text=" + text;
+			String postParams = "speaker=" +speaker +"&volume=5&speed=0&pitch=0&format=mp3&text=" + text;
 			con.setDoOutput(true);
 			DataOutputStream wr = new DataOutputStream(con.getOutputStream());
 			wr.writeBytes(postParams);
@@ -95,18 +100,12 @@ public class MemberService {
 				InputStream is = con.getInputStream();
 				int read = 0;
 				byte[] bytes = new byte[1024];
-				// // 랜덤한 이름으로 mp3 파일 생성
-				// String tempname = Long.valueOf(new Date().getTime()).toString();
-				//
-				// File f = new File(tempname + ".mp3");
-				// f.createNewFile();
-				// OutputStream outputStream = new FileOutputStream(f);
+
 				ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 				while ((read = is.read(bytes)) != -1) {
 					outputStream.write(bytes, 0, read);
 				}
 				is.close();
-				// return f;
 				return outputStream.toByteArray();
 			} else {  // 오류 발생
 				br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
@@ -117,11 +116,12 @@ public class MemberService {
 				}
 				br.close();
 				log.info("post TTS error : {}", response.toString());
+				throw new MemberException(SERVICE_UNAVAILABLE, "TTS 요청이 실패했습니다.");
 			}
 		} catch (Exception e) {
 			log.error(String.valueOf(e));
+			throw new MemberException(SERVICE_UNAVAILABLE, "TTS 요청이 실패했습니다.");
 		}
-		return null;
 	}
 
 	public void addGuardian(Integer memberId, String uid) {

@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class PostTTSReq {
 	private String text;
+	private String speaker;
 }
