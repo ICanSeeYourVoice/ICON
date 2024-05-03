@@ -6,6 +6,6 @@ public record KafkaAlarm(
 ) {
 	public KafkaAlarm(Integer memberId, String cryReason) {
 		this.memberId = memberId;
-		this.cryReason = cryReason.toUpperCase();
+		this.cryReason = cryReason;
 	}
 }

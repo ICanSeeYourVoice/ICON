@@ -31,9 +31,9 @@ public class AnalyzeService {
 	private final AnalyzeRepository analyzeRepository;
 
 	//울음 분석
-	public String getCryReason(Integer memberId,MultipartFile babyCryingAudio) {
+	public String getCryReason(Integer memberId, MultipartFile babyCryingAudio) {
 		AnalyzeResult analyzeResult = getAnalyzeResult(babyCryingAudio);
-		String cryReason = getKey(analyzeResult);
+		String cryReason = getKey(analyzeResult).toUpperCase();
 		addAlarm(memberId, cryReason);
 		saveAnalyze(memberId, cryReason);
 		return cryReason;
