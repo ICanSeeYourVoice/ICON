@@ -8,7 +8,6 @@ import java.util.Map.Entry;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
@@ -63,8 +62,7 @@ public class AnalyzeService {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm");
 
 		analyzeRepository
-			.save(new BabyStatus(memberId, cryReason, dateFormat.format(date)))
-			.block();
+			.save(new BabyStatus(memberId, cryReason, dateFormat.format(date)));
 	}
 
 	//울음 분석 결과 카프카에 저장
