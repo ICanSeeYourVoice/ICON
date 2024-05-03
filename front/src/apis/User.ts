@@ -1,8 +1,10 @@
-import { api } from "./Base";
+import { baseApi } from "./Base";
 
 interface LoginProps {
   uid: string;
   pw: string;
+  token: string;
+  isApp: 0;
 }
 
 interface JoinProps {
@@ -13,8 +15,11 @@ interface JoinProps {
 
 export const userLogin = async (loginData: LoginProps) => {
   try {
-    const response = await api.post("/common-service/auth/login", loginData);
-    console.log(response.data);
+    const response = await baseApi.post(
+      "/common-service/auth/login",
+      loginData
+    );
+
     return response.data;
   } catch (error) {
     console.error("API에러: ", error);
@@ -24,8 +29,7 @@ export const userLogin = async (loginData: LoginProps) => {
 
 export const userJoin = async (joinData: JoinProps) => {
   try {
-    const response = await api.post("/common-service/members", joinData);
-    console.log("API 들어옴");
+    const response = await baseApi.post("/common-service/members", joinData);
 
     return response.data;
   } catch (error) {
