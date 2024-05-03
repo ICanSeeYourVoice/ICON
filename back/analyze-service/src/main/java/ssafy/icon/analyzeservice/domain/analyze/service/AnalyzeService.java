@@ -5,13 +5,16 @@ import java.util.Map.Entry;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ssafy.icon.analyzeservice.domain.analyze.client.ColabApiClient;
 import ssafy.icon.analyzeservice.domain.analyze.client.dto.AnalyzeResult;
+import ssafy.icon.analyzeservice.domain.analyze.document.BabyStatus;
 import ssafy.icon.analyzeservice.domain.analyze.dto.KafkaAlarm;
+import ssafy.icon.analyzeservice.domain.analyze.repository.AnalyzeRepository;
 import ssafy.icon.analyzeservice.global.error.exception.AnalyzeException;
 import ssafy.icon.analyzeservice.global.kafka.KafkaBabyStatusProducer;
 
@@ -22,13 +25,14 @@ public class AnalyzeService {
 
 	private final ColabApiClient colabApiClient;
 	private final KafkaBabyStatusProducer kafkaBabyStatusProducer;
+	private final AnalyzeRepository analyzeRepository;
 
 	//울음 분석
 	public String getCryReason(Integer memberId,MultipartFile babyCryingAudio) {
 		AnalyzeResult analyzeResult = getAnalyzeResult(babyCryingAudio);
 		String cryReason = getKey(analyzeResult);
-		saveAnalyze(cryReason);
-		addAlarm(memberId, cryReason);
+		// addAlarm(memberId, cryReason);
+		saveAnalyze(memberId, cryReason);
 		return cryReason;
 	}
 
@@ -49,9 +53,11 @@ public class AnalyzeService {
 		return max.getKey();
 	}
 
+
 	//울음 분석 결과 저장
-	private void saveAnalyze(String cryReason) {
-		//TODO
+	protected void saveAnalyze(Integer memberId, String cryReason) {
+		BabyStatus status = new BabyStatus(memberId, cryReason);
+		analyzeRepository.save(status).block();
 	}
 
 	//울음 분석 결과 카프카에 저장
