@@ -73,15 +73,15 @@ public class MemberController {
 
 	@PostMapping("/guardian")
 	public ResponseEntity<Void> addGuardian(@RequestHeader("X-Authorization-Id") Integer memberId,
-		@RequestBody String guardianUid) {
-		memberService.addGuardian(memberId, guardianUid);
+		@RequestBody Integer guestId) {
+		memberService.addGuardian(memberId, guestId);
 		return ResponseEntity.ok().build();
 	}
 
 	@DeleteMapping("/guardian")
 	public ResponseEntity<Void> deleteGuardian(@RequestHeader("X-Authorization-Id") Integer memberId,
-		@RequestBody String guardianUid) {
-		memberService.deleteGuardian(memberId, guardianUid);
+		@RequestBody Integer guardianId) {
+		memberService.deleteGuardian(memberId, guardianId);
 		return ResponseEntity.ok().build();
 	}
 
