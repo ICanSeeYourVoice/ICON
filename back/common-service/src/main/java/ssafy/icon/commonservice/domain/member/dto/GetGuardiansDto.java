@@ -10,5 +10,5 @@ import lombok.Getter;
 public class GetGuardiansDto {
 	private Integer id;
 	private Integer guestId;
-	private Integer hostId;
+	private String name;
 }

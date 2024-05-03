@@ -14,8 +14,9 @@ import ssafy.icon.commonservice.domain.member.entity.Guardian;
 public interface GuardianRepository extends JpaRepository<Guardian, Integer> {
 
 	Optional<Guardian> findByGuestIdAndHostId(Integer guestId, Integer hostId);
+	Optional<Guardian> findByIdAndHostId(Integer guardianId, Integer hostId);
 
-	// @Query("SELECT new ssafy.icon.commonservice.domain.member.dto.GetGuardiansDto(g.id, g.uid, m.name) "
-	// 	+ "FROM Guardian g right JOIN g.member m WHERE m.id = :memberId")
-	// List<GetGuardiansDto> findGuardiansWithMemberName(@Param("memberId") Integer memberId);
+	@Query("SELECT new ssafy.icon.commonservice.domain.member.dto.GetGuardiansDto(g.id, g.guestId, m.name) "
+		+ "FROM Guardian g JOIN Member m on g.guestId= m.id WHERE g.hostId = :memberId")
+	List<GetGuardiansDto> findGuardiansWithMemberName(@Param("memberId") Integer memberId);
 }

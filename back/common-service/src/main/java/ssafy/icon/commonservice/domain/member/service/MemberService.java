@@ -152,12 +152,9 @@ public class MemberService {
 			.orElseThrow(() -> new MemberException(BAD_REQUEST, "존재하지 않은 회원 ID입니다."));
 		log.info("member : {}", member);
 
-		// 예외처리
-		memberRepository.findById(guardianId)
-			.orElseThrow(() -> new MemberException(BAD_REQUEST, "존재하지 않은 보호자 회원 ID입니다."));
-
-		Guardian guardian = guardianRepository.findByGuestIdAndHostId(guardianId, memberId).orElseThrow(
+		Guardian guardian = guardianRepository.findByIdAndHostId(guardianId, memberId).orElseThrow(
 			() -> new MemberException(BAD_REQUEST, "존재하지 않은 보호자입니다."));
+		log.info("guardian : {}", guardian);
 
 		guardianRepository.delete(guardian);
 	}
@@ -167,19 +164,8 @@ public class MemberService {
 			.orElseThrow(() -> new MemberException(BAD_REQUEST, "존재하지 않은 회원 ID입니다."));
 		log.info("member : {}", member);
 
-		// List<Guardian> guardians = guardianRepository.findAllByMemberId(memberId);
+		List<GetGuardiansDto> gDtoList = guardianRepository.findGuardiansWithMemberName(memberId);
 
-		// List<GetGuardiansDto> gDtoList = new ArrayList<>();
-		// List<GetGuardiansDto> gDtoList = guardianRepository.findGuardiansWithMemberName(memberId);
-		// for (Guardian guardian : guardians) {
-		// 	Member m = memberRepository.findByUid(guardian.getUid())
-		// 		.orElseThrow(() -> new MemberException(BAD_REQUEST, "존재하지 않은 보호자 회원 UID입니다."));
-		// 	gDtoList.add(GetGuardiansDto.builder()
-		// 		.uid(guardian.getUid())
-		// 		.name(m.getName()).build());
-		// }
-
-		return null;
-		// return gDtoList;
+		return gDtoList;
 	}
 }
