@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
+import ssafy.icon.commonservice.domain.member.dto.AddGuardianReq;
 import ssafy.icon.commonservice.domain.member.dto.GetGuardiansDto;
 import ssafy.icon.commonservice.domain.member.dto.PostTTSReq;
 import ssafy.icon.commonservice.domain.member.dto.SignUpForm;
@@ -74,8 +75,8 @@ public class MemberController {
 
 	@PostMapping("/guardian")
 	public ResponseEntity<Void> addGuardian(@RequestHeader("X-Authorization-Id") Integer memberId,
-		@RequestBody Integer guestId) {
-		memberService.addGuardian(memberId, guestId);
+		@RequestBody AddGuardianReq req) {
+		memberService.addGuardian(memberId, req);
 		return ResponseEntity.ok().build();
 	}
 
