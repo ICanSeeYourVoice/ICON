@@ -22,6 +22,7 @@ import ResultPage from "../pages/detection/ResultPage";
 import VoiceLayout from "../components/common/layout/VoiceLayout";
 import ClovaVoicePage from "../pages/tts/ClovaVoicePage";
 import SettingRoutinePage from "../pages/setting/smartThings/SettingRoutinePage";
+import ClovaVoiceRegister from "../pages/tts/ClovaVoiceRegister";
 
 const authRoutes = [
   {
@@ -86,7 +87,10 @@ const voiceRoutes = [
   {
     path: "/voice",
     element: <VoiceLayout />,
-    children: [{ index: true, element: <ClovaVoicePage /> }],
+    children: [
+      { index: true, element: <ClovaVoicePage /> },
+      { path: "register", element: <ClovaVoiceRegister /> },
+    ],
   },
 ];
 
