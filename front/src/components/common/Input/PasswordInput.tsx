@@ -17,7 +17,7 @@ const LabelPasswordInput: React.FC<LabelPasswordInputProps> = ({
     <div>
       <div className="text-black text-sm mb-2">{label || ""}</div>
       <div
-        className="w-[16rem] h-[3rem] relative flex-col justify-start 
+        className="w-[15.5rem] h-[3rem] relative flex-col justify-start 
         items-start inline-flex border rounded-[1rem] border-gray-300"
       >
         <input
