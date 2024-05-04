@@ -16,7 +16,7 @@ export const DETECTION = {
     ICON: questionMark,
     COLOR: "#FFA6AF",
   },
-  SLEEPY: {
+  TIRED: {
     ICON: sleepy,
     MESSAGE: "졸려서 ",
     SOLUTION: "5분 가량 안고 걸어주세요",
@@ -28,19 +28,19 @@ export const DETECTION = {
     SOLUTION: "분유를 먹여주세요",
     COLOR: "#FAD92E",
   },
-  UNCOMFORTABLE: {
+  DISCOMFORT: {
     ICON: uncomfortable,
     MESSAGE: "불편해서 ",
     SOLUTION: "아기 자세를 바로해주세요",
     COLOR: "#FF9447",
   },
-  SICK: {
+  PAIN: {
     ICON: sick,
     MESSAGE: "아파서 ",
     SOLUTION: "아기를 데리고 병원에 가세요",
     COLOR: "#FF5D5D",
   },
-  BURT: {
+  BURPING: {
     ICON: burp,
     MESSAGE: "트림하고 싶어서 ",
     SOLUTION: "아기를 트림시켜주세요",
