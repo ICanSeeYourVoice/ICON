@@ -25,6 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
+import ssafy.icon.commonservice.domain.member.dto.AddGuardianReq;
 import ssafy.icon.commonservice.domain.member.dto.GetGuardiansDto;
 import ssafy.icon.commonservice.domain.member.dto.PostTTSReq;
 import ssafy.icon.commonservice.domain.member.dto.SignUpForm;
@@ -128,20 +129,20 @@ public class MemberService {
 		}
 	}
 
-	public void addGuardian(Integer memberId, Integer guestId) {
+	public void addGuardian(Integer memberId, AddGuardianReq req) {
 		Member member = memberRepository.findById(memberId)
 			.orElseThrow(() -> new MemberException(BAD_REQUEST, "존재하지 않은 회원 ID입니다."));
 		log.info("member : {}", member);
 
 		// 예외처리
-		memberRepository.findById(guestId)
+		memberRepository.findById(req.getId())
 			.orElseThrow(() -> new MemberException(BAD_REQUEST, "존재하지 않은 보호자 회원 ID입니다."));
-		if (guardianRepository.findByGuestIdAndHostId(guestId, memberId).isPresent()) {
+		if (guardianRepository.findByGuestIdAndHostId(req.getId(), memberId).isPresent()) {
 			throw new MemberException(BAD_REQUEST, "등록된 보호자입니다.");
 		}
 
 		Guardian guardian = Guardian.builder()
-			.guestId(guestId)
+			.guestId(req.getId())
 			.hostId(memberId)
 			.build();
 		guardianRepository.save(guardian);
