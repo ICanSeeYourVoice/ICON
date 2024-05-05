@@ -35,3 +35,25 @@ export const deleteGuardian = async (id: number) => {
     throw error;
   }
 };
+
+export const getMemberInfo = async () => {
+  try {
+    const response = await api.get("/common-service/members");
+
+    return response.data;
+  } catch (error) {
+    console.error("API에러: ", error);
+    throw error;
+  }
+};
+
+export const getGuardianList = async () => {
+  try {
+    const response = await api.get("/common-service/members/guardian");
+
+    return response.data;
+  } catch (error) {
+    console.error("API에러: ", error);
+    throw error;
+  }
+};
