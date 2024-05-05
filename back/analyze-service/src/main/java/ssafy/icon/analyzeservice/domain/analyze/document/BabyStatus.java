@@ -6,6 +6,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Document(collection = "babyStatus")
 public class BabyStatus {
@@ -17,11 +19,12 @@ public class BabyStatus {
 
 	private String cryReason;
 
-	private String createdAt;
+	private LocalDateTime createdAt;
 
-	public BabyStatus(Integer memberId, String cryReason, String createdAt) {
+	public BabyStatus(Integer memberId, String cryReason, LocalDateTime createdAt) {
 		this.memberId = memberId;
 		this.cryReason = cryReason;
 		this.createdAt = createdAt;
+
 	}
 }
