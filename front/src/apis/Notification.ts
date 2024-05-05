@@ -26,3 +26,12 @@ export const analyzeAlarm = async (recordData: { data: File }) => {
     throw error;
   }
 };
+
+export const deleteGuardian = async (id: number) => {
+  try {
+    await api.delete(`/common-service/members/guardian/${id}`);
+  } catch (error) {
+    console.error("API에러: ", error);
+    throw error;
+  }
+};
