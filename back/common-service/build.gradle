@@ -44,6 +44,8 @@ dependencies {
 	implementation 'com.oracle.oci.sdk:oci-java-sdk-objectstorage:3.39.0'
 	implementation 'com.oracle.oci.sdk:oci-java-sdk-common-httpclient-jersey3:3.39.0'
 
+	implementation 'com.netflix.eureka:eureka-client-jersey3'
+
 	implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.5'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.5'
