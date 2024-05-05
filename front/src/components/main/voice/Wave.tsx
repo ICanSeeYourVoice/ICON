@@ -70,8 +70,7 @@ const WaveSurferComponent: React.FC<WaveSurferComponentProps> = ({
       <div ref={cursorRef} className="cursor">
         🏄
       </div>
-      <div className="mt-10"></div>
-      <div className="controls flex justify-center items-center mt-20">
+      <div className="controls flex justify-center items-center ">
         <button onClick={onPlayPause}>
           {isPlaying ? (
             <img src={StopIcon} alt="stop" />
