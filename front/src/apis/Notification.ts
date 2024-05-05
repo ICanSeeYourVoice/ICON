@@ -36,6 +36,15 @@ export const deleteGuardian = async (id: number) => {
   }
 };
 
+export const createGuardian = async (guardianData: { id: number }) => {
+  try {
+    await api.post("/common-service/members/guardian", guardianData);
+  } catch (error) {
+    console.error("API에러: ", error);
+    throw error;
+  }
+};
+
 export const getMemberInfo = async () => {
   try {
     const response = await api.get("/common-service/members");
