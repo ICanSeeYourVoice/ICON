@@ -5,6 +5,11 @@ pipeline {
         dockerImage = ''
 
         DISCOVERY_SERVER="${env.DISCOVERY_SERVER}" 
+
+        DB_URL="${env.RDB_COMMON_URL}"
+        DB_USER="${env.RDB_USER}"
+        DB_PASSWORD="${env.RDB_PASSWORD}"
+
     }
 
     agent any
@@ -32,14 +37,15 @@ pipeline {
         stage('secret.yml delete') {
             steps {
                 script{
-                    sh 'rm -f /var/jenkins_home/workspace/back-common/back/common-service/src/main/resources/application.yml'
+                    sh 'rm -rf /var/jenkins_home/workspace/back-common/back/common-service/src/main/resources'
 
-                    echo "delete application.yml"
+                    echo "delete resources directory" 
+                    // resources 폴더 새로 생성
+                    sh 'mkdir -p /var/jenkins_home/workspace/back-common/back/common-service/src/main/resources/config'
+                    echo "Recreated resources directory"
 
-                    sh '''cd /var/jenkins_home/workspace/back-common/back/common-service/src/main
-                    mkdir -p resources
-                    ls -al
-                    '''
+                    // 현재 상태 확인
+                    sh 'ls -al /var/jenkins_home/workspace/back-common/back/common-service/src/main/resources'
                 }
             }
         }
@@ -50,6 +56,40 @@ pipeline {
                 	script {
                         echo "download application.yml"
                     	sh 'cp -f $applicationFile /var/jenkins_home/workspace/back-common/back/common-service/src/main/resources/application.yml'
+                    }
+        		}
+            }
+        }
+        
+        // resources/config
+        stage('config download') {
+        	steps {
+            	withCredentials([file(credentialsId: 'back-common-config', variable: 'configFile')]) {
+                	script {
+                        echo "download config"
+                    	sh 'cp -f $configFile /var/jenkins_home/workspace/back-common/back/common-service/src/main/resources/config/config'
+                    }
+        		}
+            }
+        }
+        
+        stage('icon-bucket download') {
+        	steps {
+            	withCredentials([file(credentialsId: 'back-common-bucket', variable: 'bucketFile')]) {
+                	script {
+                        echo "download bucketFile"
+                    	sh 'cp -f $bucketFile /var/jenkins_home/workspace/back-common/back/common-service/src/main/resources/config/icon-bucket.pem'
+                    }
+        		}
+            }
+        }
+
+        stage('icon-bucket-public download') {
+        	steps {
+            	withCredentials([file(credentialsId: 'back-common-bucket-public', variable: 'bucketpublicFile')]) {
+                	script {
+                        echo "download bucket-publicFile"
+                    	sh 'cp -f $bucketpublicFile /var/jenkins_home/workspace/back-common/back/common-service/src/main/resources/config/icon-bucket-public.pem'
                     }
         		}
             }

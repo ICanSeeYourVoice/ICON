@@ -29,6 +29,11 @@ public class AuthService {
 			throw new MemberException(UNAUTHORIZED, "아이디나 비밀번호가 틀립니다.");
 		}
 
+		//token 저장
+		loginMember.updateToken(form.token(), form.isApp());
+		memberRepository.save(loginMember);
+
+
 		return LoginResponse.builder()
 			.accessToken(tokenProvider.issueAccessToken(loginMember.getId()))
 			.build();
