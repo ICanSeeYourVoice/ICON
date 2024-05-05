@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import deleteIcon from "../../../assets/svgs/setting/delete.svg";
 import { deleteGuardian } from "../../../apis/Notification";
 import toast from "react-hot-toast";
@@ -12,9 +12,13 @@ const AccountItem = ({
   name: string;
   userId: string;
 }) => {
+  const queryClient = useQueryClient();
+
   const { mutate } = useMutation({
     mutationFn: deleteGuardian,
-    onSuccess: () => {},
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["guardianList"] });
+    },
     onError: (error) => {
       toast.error(error.message);
     },
