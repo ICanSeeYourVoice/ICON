@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host 0.0.0.0 --port 3000",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
@@ -12,14 +12,22 @@
   "dependencies": {
     "@tanstack/react-query": "^5.29.2",
     "@tanstack/react-query-devtools": "^5.29.2",
+    "@tensorflow/tfjs": "^4.18.0",
+    "@types/react-vertical-timeline-component": "^3.3.6",
     "axios": "^1.6.8",
     "chart.js": "^4.4.2",
     "firebase": "^10.11.0",
+    "qr-scanner": "^1.4.2",
+    "qrcode.react": "^3.1.0",
     "react": "^18.2.0",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.1",
     "react-router-dom": "^6.22.3",
     "react-spinners": "^0.13.8",
+    "react-vertical-timeline-component": "^3.6.0",
+    "wavefile": "^11.0.0",
+    "wavesurfer.js": "^7.7.11",
     "zustand": "^4.5.2"
   },
   "devDependencies": {
