@@ -1,13 +1,16 @@
+import { useMutation } from "@tanstack/react-query";
 import QrScanner from "qr-scanner";
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { createGuardian } from "../../../apis/Notification";
 
 const QRScanPage = () => {
   const navigate = useNavigate();
   const [isScanned, setIsScanned] = useState(false);
   const [data, setData] = useState<{
-    userId: string;
+    id: number;
+    uid: string;
   } | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -19,10 +22,22 @@ const QRScanPage = () => {
 
   const handleQRCodeScan = (result: QrScanner.ScanResult) => {
     const parsedData = JSON.parse(result.data);
+
     setData({
-      userId: parsedData.userId,
+      id: parsedData.id,
+      uid: parsedData.uid,
     });
   };
+
+  const { mutate } = useMutation({
+    mutationFn: createGuardian,
+    onSuccess: () => {
+      toast.success(`${data?.uid}를 보호자 목록에 추가하였습니다.`);
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
 
   useEffect(() => {
     const videoElem = videoRef.current;
@@ -39,13 +54,13 @@ const QRScanPage = () => {
   }, []);
 
   useEffect(() => {
-    if (data?.userId && !isScanned) {
+    if (data?.uid && !isScanned) {
       setIsScanned(true);
 
       toast(
         (t) => (
           <div className="flex flex-col items-center justify-center w-full">
-            <p>{data.userId}(을)를 보호자로 등록하시겠습니까?</p>
+            <p>{data.uid}(을)를 보호자로 등록하시겠습니까?</p>
             <hr />
             <div className="mt-4 flex w-full justify-end text-white">
               <button
@@ -60,9 +75,7 @@ const QRScanPage = () => {
               <button
                 className="bg-primary py-2 px-4 rounded mr-2"
                 onClick={() => {
-                  toast.success(
-                    `${data.userId}를 보호자 목록에 추가하였습니다.`
-                  );
+                  mutate({ id: data.id });
                   setData(null);
                   navigate("/setting/share");
                   toast.dismiss(t.id);

@@ -26,3 +26,43 @@ export const analyzeAlarm = async (recordData: { data: File }) => {
     throw error;
   }
 };
+
+export const deleteGuardian = async (id: number) => {
+  try {
+    await api.delete(`/common-service/members/guardian/${id}`);
+  } catch (error) {
+    console.error("API에러: ", error);
+    throw error;
+  }
+};
+
+export const createGuardian = async (guardianData: { id: number }) => {
+  try {
+    await api.post("/common-service/members/guardian", guardianData);
+  } catch (error) {
+    console.error("API에러: ", error);
+    throw error;
+  }
+};
+
+export const getMemberInfo = async () => {
+  try {
+    const response = await api.get("/common-service/members");
+
+    return response.data;
+  } catch (error) {
+    console.error("API에러: ", error);
+    throw error;
+  }
+};
+
+export const getGuardianList = async () => {
+  try {
+    const response = await api.get("/common-service/members/guardian");
+
+    return response.data;
+  } catch (error) {
+    console.error("API에러: ", error);
+    throw error;
+  }
+};
