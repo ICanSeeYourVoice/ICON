@@ -42,6 +42,7 @@ const RegisterPage = () => {
         value={contentValue}
         onChange={handleContentChange}
       />
+
       <FileUploadInput />
       <div>
         <PostButton label="등록하기" onClick={createDiary} />

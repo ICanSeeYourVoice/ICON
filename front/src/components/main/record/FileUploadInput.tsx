@@ -16,7 +16,7 @@ const FileUploadInput: React.FC = () => {
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (images.imageFiles.length >= 6) {
-      toast("사진은 최대 6장까지 등록 가능합니다", {
+      toast("사진은 최대 6장까지 등록 가능합니다.", {
         icon: "❗❗",
       });
       return;
