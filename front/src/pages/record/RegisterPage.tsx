@@ -4,8 +4,8 @@ import LabelInput from "../../components/common/Input/LabelInput";
 import { useState } from "react";
 import LabelTextInput from "../../components/common/Input/LabelTextInput";
 import PostButton from "../../components/common/button/PostButton";
-import Nav from "../../components/common/Navigator/Nav";
 import { useNavigate } from "react-router-dom";
+import FileUploadInput from "../../components/main/record/FileUploadInput";
 
 const RegisterPage = () => {
   const [titleValue, setTitleValue] = useState("");
@@ -27,7 +27,7 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center h-screen w-screen pt-[3.125rem] pb-[10.3125rem] gap-[1.5rem]">
+    <div className="flex flex-col items-center h-screen w-screen pt-[3.125rem] gap-[0.5rem]">
       <TopBar text="일지 등록" />
       <DateInp />
       <LabelInput
@@ -42,10 +42,11 @@ const RegisterPage = () => {
         value={contentValue}
         onChange={handleContentChange}
       />
-      <div className="mt-14">
+
+      <FileUploadInput />
+      <div>
         <PostButton label="등록하기" onClick={createDiary} />
       </div>
-      <Nav />
     </div>
   );
 };
