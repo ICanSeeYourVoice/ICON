@@ -1,7 +1,9 @@
 package ssafy.icon.analyzeservice.domain.analyze.dto;
 
+import java.time.LocalDateTime;
+
 public record StatisticsTimeline(
 		String type,
-		java.time.LocalDateTime cryingDate
+		LocalDateTime cryingDate
 ) {
 }
