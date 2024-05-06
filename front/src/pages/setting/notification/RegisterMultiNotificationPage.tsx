@@ -22,11 +22,11 @@ const RegisterMultiNotificationPage = () => {
   });
 
   return (
-    <div className="flex flex-col items-center h-screen w-screen pt-[3.125rem] pb-[10.3125rem] gap-[1.5rem] ">
+    <div className="flex flex-col items-center h-screen w-screen">
       <TopBar text="알림 계정 등록" path="setting" />
-      <main className="flex flex-col items-center justify-center w-full">
-        <div className="flex flex-col items-center justify-center w-[15.25rem] gap-[2.3rem]">
-          <div className="flex flex-col items-center justify-center w-full gap-4">
+      <main className="flex flex-col items-center justify-center w-[80%] mt-[6rem]">
+        <div className="flex flex-col items-center justify-center w-full gap-[3rem] mb-[6rem]">
+          <div className="flex flex-col items-center justify-center w-full gap-5">
             <QR
               data={{
                 id: (memberInfo as MemberInfoProps)?.id,
@@ -42,7 +42,7 @@ const RegisterMultiNotificationPage = () => {
 
           <div className="flex flex-col items-start w-full gap-3">
             <p className="text-sub-0 text-[0.875rem]">보호자 목록</p>
-            <div>
+            <div className="w-full">
               {guardianList &&
               Array.isArray(guardianList) &&
               guardianList.length > 0 ? (
