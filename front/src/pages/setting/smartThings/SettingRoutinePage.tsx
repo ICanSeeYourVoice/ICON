@@ -87,7 +87,7 @@ const SettingRoutinePage = () => {
   });
 
   return (
-    <div className="flex flex-col items-center h-screen w-screen pt-[3.125rem] pb-[10.3125rem] gap-[1.5rem] ">
+    <div className="flex flex-col items-center h-screen w-screen">
       <TopBar text="SmartThings" path="setting/things" />
       <main className="flex flex-col items-center justify-center w-full flex-1">
         {isLodding ? (
