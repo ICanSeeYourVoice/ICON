@@ -18,8 +18,8 @@ const TopBar: React.FC<TopBarProps> = ({ text, path }) => {
   };
 
   return (
-    <div className="bg-white z-10 flex flex-col items-center w-[80%] h-[6rem] fixed">
-      <div className="m-auto w-full">
+    <div className="bg-white z-10 flex flex-col items-center w-full h-[6rem] fixed">
+      <div className="m-auto w-[80%]">
         <div className="flex justify-between items-center font-bold">
           <button onClick={handleTopClick}>
             <img src={Vector} alt="Back" />
