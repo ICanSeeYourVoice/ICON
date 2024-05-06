@@ -17,8 +17,8 @@ const SettingPage = () => {
       {settingNavList.map((item, index) => (
         <SettingNavItem key={index} text={item.text} path={item.path} />
       ))}
-      <button className="flex justify-center items-center w-full h-[4.125rem]">
-        <div className="flex justify-between items-center w-[15.25rem] ">
+      <button className="flex justify-center items-center w-full h-[3.5rem]">
+        <div className="flex justify-between items-center w-[80%] ">
           <p className="text-red-0">로그아웃</p>
         </div>
       </button>
