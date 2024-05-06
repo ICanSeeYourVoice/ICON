@@ -1,6 +1,6 @@
 .react-calendar__navigation {
     background: #a5cef9 ;
-    height: 3rem;
+    height: 2.8rem;
     border-radius: 1rem 1rem 0 0;
 
     span {
@@ -33,7 +33,7 @@
 
 
   .react-calendar__month-view {
-    padding: 0rem 1rem;
+    padding: 0 1rem;
   }
 
   .react-calendar__month-view__weekdays {
@@ -72,7 +72,7 @@
 
 .react-calendar__tile {
   text-align: center;
-  height: 3.2rem;
+  height: 3rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -93,7 +93,7 @@
   .react-calendar__navigation button {
     min-width: 2rem;
     background: none;
-    font-size: 2rem;
+    font-size: 1.8rem;
     color :white;
   }
   

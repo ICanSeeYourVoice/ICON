@@ -9,7 +9,9 @@ const DiaryDetailPage = () => {
       <TopBar text=" 일지" />
       <main className="flex flex-col items-center justify-center w-full gap-[1.5rem]">
         <StyledCalendar />
-        <MoveButton path="/record/diary/register" text="일지 추가하기" />
+        <div className="fixed bottom-[5rem] ">
+          <MoveButton path="/record/diary/register" text="일지 추가하기" />
+        </div>
       </main>
       <Nav />
       <div></div>
