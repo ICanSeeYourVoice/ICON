@@ -126,6 +126,7 @@ pipeline {
         stage('Build Common Image') {
             steps {
                 script {
+                    sh 'ls -l /var/jenkins_home/workspace/back-common/back/common-service/build/libs/' // JAR 파일 위치 확인
                     dockerImage = docker.build("${repository}:icon-common_${BUILD_NUMBER}", "--platform linux/amd64 -f back/common-service/Dockerfile ./back/common-service")
                 }
             }
