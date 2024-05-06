@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import QrScanner from "qr-scanner";
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
@@ -7,6 +7,7 @@ import { createGuardian } from "../../../apis/Notification";
 
 const QRScanPage = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [isScanned, setIsScanned] = useState(false);
   const [data, setData] = useState<{
     id: number;
@@ -32,6 +33,7 @@ const QRScanPage = () => {
   const { mutate } = useMutation({
     mutationFn: createGuardian,
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["guardianList"] });
       toast.success(`${data?.uid}를 보호자 목록에 추가하였습니다.`);
     },
     onError: (error) => {

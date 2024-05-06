@@ -33,7 +33,6 @@ const RegisterMultiNotificationPage = () => {
                 uid: (memberInfo as MemberInfoProps)?.uid,
               }}
             />
-            {/* <QR data={{ id: memberInfo?.id, uid: memberInfo?.uid }} /> */}
             <div className="flex flex-col items-center justify-center w-full text-gray-0 text-[0.875rem]">
               <p>추가 보호자를 등록해</p>
               <p>울음감지 동시 알림을 받아보세요</p>

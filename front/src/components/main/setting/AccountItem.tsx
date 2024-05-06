@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import deleteIcon from "../../../assets/svgs/setting/delete.svg";
 import { deleteGuardian } from "../../../apis/Notification";
 import toast from "react-hot-toast";
@@ -12,16 +12,47 @@ const AccountItem = ({
   name: string;
   userId: string;
 }) => {
+  const queryClient = useQueryClient();
+
   const { mutate } = useMutation({
     mutationFn: deleteGuardian,
-    onSuccess: () => {},
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["guardianList"] });
+    },
     onError: (error) => {
       toast.error(error.message);
     },
   });
 
   const handleDeleteClick = () => {
-    mutate(id);
+    toast(
+      (t) => (
+        <div className="flex flex-col items-center justify-center w-full">
+          <p>{name}(을)를 삭제하시겠습니까?</p>
+          <hr />
+          <div className="mt-4 flex w-full justify-end text-white">
+            <button
+              className="bg-gray-1 py-2 px-4 rounded mr-[0.4rem]"
+              onClick={() => {
+                toast.dismiss(t.id);
+              }}
+            >
+              취소
+            </button>
+            <button
+              className="bg-primary py-2 px-4 rounded mr-2"
+              onClick={() => {
+                mutate(id);
+                toast.dismiss(t.id);
+              }}
+            >
+              확인
+            </button>
+          </div>
+        </div>
+      ),
+      { duration: Infinity }
+    );
   };
 
   return (
