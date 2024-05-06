@@ -22,13 +22,16 @@ public class KafkaBabyStatusConsumer {
 
 	@KafkaListener(topics = "baby-status", groupId = "alarm-consumer")
 	public void sendAlarmFromKafka(String message) {
+
 		log.info("message from kafka : {}", message);
-		// try {
-		// 	Map<String, Object> map = objectMapper.readValue(message, new TypeReference<Map<String, Object>>() {
-		// 	});
-		// 	log.info("Processed map from Kafka message: {}", map);
-		// } catch (JsonProcessingException ex) {
-		// 	ex.printStackTrace();
-		// }
+		try {
+			Map<String, Object> map = objectMapper.readValue(message, new TypeReference<Map<String, Object>>() {
+			});
+			log.info("Processed map from Kafka message: {}", map);
+			log.info("Processed map from Kafka message id: {}", map.get("memberId"));
+			log.info("Processed map from Kafka message reason: {}", map.get("cryReason"));
+		} catch (JsonProcessingException ex) {
+			ex.printStackTrace();
+		}
 	}
 }
