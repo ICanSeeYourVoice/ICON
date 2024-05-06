@@ -1,51 +1,51 @@
 @keyframes changeSize3 {
   0% {
-    width: 8.5rem;
-    height: 8.5rem;
+    width: 35%;
+    aspect-ratio: 1 / 1;
   }
 
   50% {
-    width: 11.5rem;
-    height: 11.5rem;
+    width: 80%;
+    aspect-ratio: 1 / 1;
   }
 
   100% {
-    width: 11.5rem;
-    height: 11.5rem;
+    width: 80%;
+    aspect-ratio: 1 / 1;
   }
 }
 
 @keyframes changeSize2 {
   0% {
-    width: 8.5rem;
-    height: 8.5rem;
+    width: 35%;
+    aspect-ratio: 1 / 1;
   }
 
   50% {
-    width: 14.625rem;
-    height: 14.625rem;
+    width: 80%;
+    aspect-ratio: 1 / 1;
   }
 
   100% {
-    width: 14.625rem;
-    height: 14.625rem;
+    width: 80%;
+    aspect-ratio: 1 / 1;
   }
 }
 
 @keyframes changeSize1 {
   0% {
-    width: 8.5rem;
-    height: 8.5rem;
+    width: 35%;
+    aspect-ratio: 1 / 1;
   }
 
   50% {
-    width: 17.75rem;
-    height: 17.75rem;
+    width: 80%;
+    aspect-ratio: 1 / 1;
   }
 
   100% {
-    width: 17.75rem;
-    height: 17.75rem;
+    width: 80%;
+    aspect-ratio: 1 / 1;
   }
 }
 
@@ -53,8 +53,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 17.75rem;
-  width: 100%;
+  aspect-ratio: 1 / 1;
+  width: 80%;
   position: relative;
 }
 

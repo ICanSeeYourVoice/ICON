@@ -35,7 +35,7 @@ const ReactButton = ({ icon, color }: { icon: string; color: string }) => {
           setIsBabyCry(false);
           navigate("/detection");
         }}
-        className="flex justify-center items-center w-[7.5rem] h-[7.5rem] rounded-full absolute"
+        className="flex justify-center items-center w-[35%] aspect-square rounded-full absolute"
         style={{ backgroundColor: color }}
       >
         <img src={icon} alt="" />
