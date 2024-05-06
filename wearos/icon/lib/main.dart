@@ -41,7 +41,6 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   initializeNotification();
-
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     RemoteNotification? notification = message.notification;
 
@@ -62,8 +61,9 @@ void main() async {
     }
   });
   Get.put(HomeController());
-  runApp(const GetMaterialApp(
+  runApp(GetMaterialApp(
     debugShowCheckedModeBanner: false,
+    theme: ThemeData(fontFamily: 'NPSfont'),
     home: HomeView(),
   ));
 }
