@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.extern.slf4j.Slf4j;
 import ssafy.icon.commonservice.domain.member.dto.AddGuardianReq;
 import ssafy.icon.commonservice.domain.member.dto.GetGuardiansDto;
+import ssafy.icon.commonservice.domain.member.dto.GetGuardiansWithTokenDto;
 import ssafy.icon.commonservice.domain.member.dto.PostTTSReq;
 import ssafy.icon.commonservice.domain.member.dto.SignUpForm;
 import ssafy.icon.commonservice.domain.member.entity.Guardian;
@@ -90,6 +91,12 @@ public class MemberController {
 	@GetMapping("/guardian")
 	public ResponseEntity<List<GetGuardiansDto>> getGuardian(@RequestHeader("X-Authorization-Id") Integer memberId) {
 		List<GetGuardiansDto> guardians = memberService.getGuardian(memberId);
+		return ResponseEntity.ok(guardians);
+	}
+
+	@GetMapping("/guardian/token")
+	public ResponseEntity<List<GetGuardiansWithTokenDto>> getGuardianWithToken(@RequestHeader("X-Authorization-Id") Integer memberId) {
+		List<GetGuardiansWithTokenDto> guardians = memberService.getGuardianWithToken(memberId);
 		return ResponseEntity.ok(guardians);
 	}
 }
