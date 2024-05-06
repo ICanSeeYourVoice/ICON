@@ -60,7 +60,7 @@ const FileUploadInput: React.FC = () => {
       <div className="text-sm mb-1">사진 등록</div>
       <button
         onClick={handleClick}
-        className="flex justify-center items-center rounded-[1rem] border border-gray-500 w-[3rem] h-[3rem] bg-gray-200 mb-[0.3rem] ml-[0.3rem]"
+        className="flex justify-center items-center rounded-[1rem] border border-gray-500 w-[3rem] h-[3rem] bg-gray-200 mb-[0.3rem]"
       >
         <img src={CameraIcon} alt="Upload" className="w-[2rem] h-[2rem]" />
       </button>
