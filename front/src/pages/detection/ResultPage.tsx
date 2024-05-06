@@ -31,10 +31,9 @@ const ResultPage = () => {
   } = getCryInfo(cryingType);
 
   return (
-    <div className="flex flex-col items-center justify-center gap-5">
-      <p className="text-gray-1 text-sm ">{RESTART_INFO}</p>
+    <div className="flex flex-col items-center justify-center w-full h-full gap-4">
+      <p className="text-gray-1 text-sm">{RESTART_INFO}</p>
       <ReactButton icon={icon} color={color} />
-
       <div className="flex flex-col items-center justify-center text-gray-0 text-xl">
         <p>아기가</p>
         <p>

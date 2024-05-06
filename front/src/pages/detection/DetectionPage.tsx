@@ -134,7 +134,7 @@ const DetectionPage = () => {
   }, [cryingType]);
 
   return (
-    <div className="flex flex-col items-center justify-center gap-5">
+    <div className="flex flex-col items-center justify-center w-full h-full gap-4">
       <p className="text-gray-1 text-sm ">
         {isBabyCry ? LOADING_INFO : DETECTION_INFO}
       </p>
@@ -153,6 +153,7 @@ const DetectionPage = () => {
           </p>
         </div>
       )}
+      <div className="flex items-center justify-center w-[80%] h-[6rem]"></div>
     </div>
   );
 };
