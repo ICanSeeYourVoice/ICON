@@ -46,7 +46,7 @@ public class Diary extends BaseEntity {
 	@Column(length = 1000)
 	private String content;
 
-	@Column
+	@Column(nullable = false)
 	private LocalDate date;
 
 	@OneToMany(mappedBy = "diary", orphanRemoval = true, cascade = ALL)
