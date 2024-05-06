@@ -20,15 +20,15 @@ public class KafkaBabyStatusConsumer {
 
 	private final ObjectMapper objectMapper = new ObjectMapper();
 
-	@KafkaListener(topics = "baby-status", groupId = "alarm")
+	@KafkaListener(topics = "baby-status", groupId = "alarm-consumer")
 	public void sendAlarmFromKafka(String message) {
 		log.info("message from kafka : {}", message);
-		try {
-			Map<String, Object> map = objectMapper.readValue(message, new TypeReference<Map<String, Object>>() {
-			});
-			log.info("Processed map from Kafka message: {}", map);
-		} catch (JsonProcessingException ex) {
-			ex.printStackTrace();
-		}
+		// try {
+		// 	Map<String, Object> map = objectMapper.readValue(message, new TypeReference<Map<String, Object>>() {
+		// 	});
+		// 	log.info("Processed map from Kafka message: {}", map);
+		// } catch (JsonProcessingException ex) {
+		// 	ex.printStackTrace();
+		// }
 	}
 }
