@@ -1,11 +1,24 @@
 package ssafy.icon.analyzeservice.domain.analyze.repository;
 
-import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
+import java.time.LocalDateTime;
+import java.util.List;
 
-import reactor.core.publisher.Mono;
+import org.springframework.data.mongodb.repository.Aggregation;
+import org.springframework.data.mongodb.repository.MongoRepository;
+
 import ssafy.icon.analyzeservice.domain.analyze.document.BabyStatus;
+import ssafy.icon.analyzeservice.domain.analyze.dto.CryReasonCount;
 
-public interface AnalyzeRepository extends ReactiveMongoRepository<BabyStatus, String> {
+public interface AnalyzeRepository extends MongoRepository<BabyStatus, String> {
+	@Aggregation(pipeline = {
+			"{ $match: { memberId: ?0, createdAt: { $gte: ?1, $lt: ?2 } } }",
+			"{ $group: { _id: '$cryReason', count: { $sum: 1 } } }"
+	})
+	List<CryReasonCount> countByCryReason(Integer memberId, LocalDateTime start, LocalDateTime end);
 
-	Mono<BabyStatus> findByMemberId(Integer memberId);
+	@Aggregation(pipeline = {
+			"{ $match: { memberId: ?0, createdAt: { $gte: ?1, $lt: ?2 } } }",
+			"{ $sort: { createdAt: -1 } }"
+	})
+	List<BabyStatus> findAllByDate(Integer memberId, LocalDateTime start, LocalDateTime end);
 }

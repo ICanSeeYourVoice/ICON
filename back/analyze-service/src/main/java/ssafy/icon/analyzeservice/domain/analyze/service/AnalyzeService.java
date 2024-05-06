@@ -2,6 +2,7 @@ package ssafy.icon.analyzeservice.domain.analyze.service;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Map.Entry;
@@ -45,6 +46,7 @@ public class AnalyzeService {
 		try{
 			analyzeResult = colabApiClient.getAnalyze(babyCryingAudio);
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new AnalyzeException(HttpStatus.BAD_REQUEST, "분석에 실패했습니다.");
 		}
 		return analyzeResult;
@@ -59,12 +61,8 @@ public class AnalyzeService {
 
 	//울음 분석 결과 저장
 	protected void saveAnalyze(Integer memberId, String cryReason) {
-		Date date = new Date();
-		DateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm");
-
 		analyzeRepository
-			.save(new BabyStatus(memberId, cryReason, dateFormat.format(date)))
-			.block();
+			.save(new BabyStatus(memberId, cryReason, LocalDateTime.now()));
 	}
 
 	//울음 분석 결과 카프카에 저장
