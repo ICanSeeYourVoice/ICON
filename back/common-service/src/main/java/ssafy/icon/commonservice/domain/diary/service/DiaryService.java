@@ -1,7 +1,9 @@
 package ssafy.icon.commonservice.domain.diary.service;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
+import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -39,4 +41,14 @@ public class DiaryService {
 
 		diaryRepository.save(diary);
 	}
+
+	@Transactional
+	public void delete(Integer memberId, LocalDate date) {
+		Diary diary = diaryRepository.findByMemberIdAndDate(memberId, date)
+			.orElseThrow(() -> new DiaryException(NOT_FOUND, "해당 날짜에 작성된 성장일지가 없습니다."));
+
+		diaryRepository.delete(diary);
+	}
+
+
 }
