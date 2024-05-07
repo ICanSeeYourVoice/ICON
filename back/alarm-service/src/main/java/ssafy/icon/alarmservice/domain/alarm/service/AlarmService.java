@@ -32,11 +32,6 @@ public class AlarmService {
 
 	// 울음 종류 : CRY, TIRED, HUNGRY, DISCOMFORT, DANGER, PAIN
 	public void sendCryMessage(Integer memberId, String type) {
-		if(type.equals("CRY")){
-			log.info("Service add kafka baby-cry memberId : {}", memberId);
-			kafkaBabyCryProducer.send("baby-cry", new KafkaProducerDto(memberId, type));
-		}
-
 		GetMemberApiRes member = alarmApiClient.getMember(memberId);
 		log.info("GetMemberApiRes : {}", member.toString());
 		if (member.getWebToken().isEmpty()) {
@@ -49,12 +44,12 @@ public class AlarmService {
 		tokens.add(member.getWebToken());
 		for (GetGuardianApiRes guardian : guardians) {
 			log.info("guardian : {}, {}", guardian.getGuestId(), guardian.getToken());
-			if(guardian.getToken() !=null)
+			if (guardian.getToken() != null)
 				tokens.add(guardian.getToken());
 		}
 		log.info("tokens : {}", tokens.size());
 
-		String titleMsg ="울음 분석 완료!";
+		String titleMsg = "울음 분석 완료!";
 		String bodyMsg = "";
 		switch (type) {
 			case "TIRED":
@@ -73,7 +68,7 @@ public class AlarmService {
 				bodyMsg = "아기가 아파요!";
 				break;
 			default:
-				titleMsg ="아기 울음 감지!!";
+				titleMsg = "아기 울음 감지!!";
 				bodyMsg = "아기가 울고있어요";
 				break;
 		}
@@ -105,4 +100,8 @@ public class AlarmService {
 		log.info("sendCryMessage completed for memberId: {}", memberId);
 	}
 
+	public void addKafkaBabyCry(Integer memberId) {
+		log.info("Service add kafka baby-cry memberId : {}", memberId);
+		kafkaBabyCryProducer.send("baby-cry", new KafkaProducerDto(memberId, "CRY"));
+	}
 }

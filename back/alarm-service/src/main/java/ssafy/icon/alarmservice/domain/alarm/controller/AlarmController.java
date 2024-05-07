@@ -20,6 +20,7 @@ public class AlarmController {
 	@PostMapping("/cry")
 	public ResponseEntity<Void> sendCry(@RequestHeader("X-Authorization-Id") Integer memberId) {
 		alarmService.sendCryMessage(memberId,"CRY");
+		alarmService.addKafkaBabyCry(memberId);
 		return ResponseEntity.ok().build();
 	}
 
