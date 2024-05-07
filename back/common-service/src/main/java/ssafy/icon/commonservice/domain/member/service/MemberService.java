@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 import ssafy.icon.commonservice.domain.member.dto.AddGuardianReq;
 import ssafy.icon.commonservice.domain.member.dto.GetGuardiansDto;
+import ssafy.icon.commonservice.domain.member.dto.GetGuardiansWithTokenDto;
 import ssafy.icon.commonservice.domain.member.dto.PostTTSReq;
 import ssafy.icon.commonservice.domain.member.dto.SignUpForm;
 import ssafy.icon.commonservice.domain.member.entity.Guardian;
@@ -167,6 +168,15 @@ public class MemberService {
 
 		List<GetGuardiansDto> gDtoList = guardianRepository.findGuardiansWithMemberName(memberId);
 
+		return gDtoList;
+	}
+
+	public List<GetGuardiansWithTokenDto> getGuardianWithToken(Integer memberId) {
+
+		List<GetGuardiansWithTokenDto> gDtoList = guardianRepository.findGuardiansWithMemberToken(memberId);
+		for (GetGuardiansWithTokenDto dto : gDtoList) {
+			log.info("guardian token : {}", dto.toString() );
+		}
 		return gDtoList;
 	}
 }
