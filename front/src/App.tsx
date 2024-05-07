@@ -1,33 +1,71 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { RouterProvider } from "react-router-dom";
+import router from "./routes/router";
+import { handleAllowNotification } from "./service/notificationPermission";
+import toast, { Toaster } from "react-hot-toast";
+import { useEffect } from "react";
+import { useNotificationStore, useTokenStore } from "./stores/notification";
+import { messageHandler } from "./service/foregroundMessage";
+
+const queryClient = new QueryClient();
 
 function App() {
-  const [count, setCount] = useState(0);
+  const notification = useNotificationStore((state: any) => state.notification);
+  const setNotification = useNotificationStore(
+    (state: any) => state.setNotification
+  );
+
+  const { token, setToken } = useTokenStore();
+
+  /* Notification setting */
+  const notify = () => toast(<ToastDisplay />);
+  const ToastDisplay = () => {
+    const currentTime = new Date().toLocaleTimeString();
+
+    return (
+      <div className="flex flex-col gap-2 text-sm w-full">
+        <div className="flex justify-between">
+          <p>
+            <b>👶 {notification?.title}</b>
+          </p>
+          <span className=" text-gray-1 text-xs ml-[0.5rem]">
+            {currentTime}
+          </span>
+        </div>
+        <div>{notification?.body}</div>
+      </div>
+    );
+  };
+
+  useEffect(() => {
+    if (notification?.title) {
+      notify();
+    }
+  }, [notification]);
+
+  messageHandler(setNotification);
+
+  useEffect(() => {
+    const getTokenAndSet = async () => {
+      const newToken = await handleAllowNotification();
+      if (newToken) {
+        setToken(newToken);
+      }
+    };
+
+    if (!token) {
+      getTokenAndSet();
+    }
+  }, [token, setToken]);
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <QueryClientProvider client={queryClient}>
+        {/* <ReactQueryDevtools /> */}
+        <Toaster />
+        <RouterProvider router={router} />
+      </QueryClientProvider>
     </>
   );
 }

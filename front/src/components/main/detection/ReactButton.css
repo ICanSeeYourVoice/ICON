@@ -1,0 +1,81 @@
+@keyframes changeSize3 {
+  0% {
+    width: 35%;
+    aspect-ratio: 1 / 1;
+  }
+
+  50% {
+    width: 80%;
+    aspect-ratio: 1 / 1;
+  }
+
+  100% {
+    width: 80%;
+    aspect-ratio: 1 / 1;
+  }
+}
+
+@keyframes changeSize2 {
+  0% {
+    width: 35%;
+    aspect-ratio: 1 / 1;
+  }
+
+  50% {
+    width: 80%;
+    aspect-ratio: 1 / 1;
+  }
+
+  100% {
+    width: 80%;
+    aspect-ratio: 1 / 1;
+  }
+}
+
+@keyframes changeSize1 {
+  0% {
+    width: 35%;
+    aspect-ratio: 1 / 1;
+  }
+
+  50% {
+    width: 80%;
+    aspect-ratio: 1 / 1;
+  }
+
+  100% {
+    width: 80%;
+    aspect-ratio: 1 / 1;
+  }
+}
+
+.circle-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  aspect-ratio: 1 / 1;
+  width: 80%;
+  position: relative;
+}
+
+.circle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+  /* background-color: rgba(123, 183, 247, 0.2); */
+}
+
+#circle1 {
+  animation-name: changeSize1;
+}
+
+#circle2 {
+  animation-name: changeSize2;
+}
+
+#circle3 {
+  animation-name: changeSize3;
+}
