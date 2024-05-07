@@ -11,9 +11,9 @@ const SettingNavItem = ({ text, path }: { text: string; path: string }) => {
   return (
     <button
       onClick={handleSettingNavItemClick}
-      className="flex justify-center items-center w-full h-[4.125rem]"
+      className="flex justify-center items-center w-full h-[3.5rem]"
     >
-      <div className="flex justify-between items-center w-[15.25rem] ">
+      <div className="flex justify-between items-center w-[80%] ">
         <p>{text}</p>
         <img src={rightArrow} alt="" />
       </div>

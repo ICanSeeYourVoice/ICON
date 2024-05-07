@@ -23,9 +23,9 @@ const WaveSurferComponent: React.FC<WaveSurferComponentProps> = ({
     if (containerRef.current) {
       wavesurferRef.current = WaveSurfer.create({
         container: containerRef.current,
-        height: 50,
+        height: 1,
         waveColor: "rgb(255, 255, 255)",
-        progressColor: "rgb(98, 161, 243)",
+        progressColor: "rgb(4, 100, 226)",
         plugins: [Timeline.create(), RegionsPlugin.create()],
       });
 
@@ -64,21 +64,26 @@ const WaveSurferComponent: React.FC<WaveSurferComponentProps> = ({
       .join(":");
 
   return (
-    <div className="waveform-container h-[10rem]">
-      <div>말하는 시간 : {formatTime(currentTime)}</div>
-      <div ref={containerRef} className=" w-[16rem] mb-10" />
-      <div ref={cursorRef} className="cursor">
-        🏄
-      </div>
-      <div className="mt-10"></div>
-      <div className="controls flex justify-center items-center mt-20">
-        <button onClick={onPlayPause}>
-          {isPlaying ? (
-            <img src={StopIcon} alt="stop" />
-          ) : (
-            <img src={PlayIcon} alt="play" />
-          )}
-        </button>
+    <div className="waveform-container h-[8rem] border-black border w-[20rem] m-4 rounded-full flex justify-center items-center">
+      <div className="waveform-container h-[8rem]  w-[18rem] ">
+        <div className="flex justify-between p-3">
+          {formatTime(currentTime)}
+          <div className="controls flex justify-center items-center ">
+            <button onClick={onPlayPause}>
+              {isPlaying ? (
+                <img src={StopIcon} alt="stop" />
+              ) : (
+                <img src={PlayIcon} alt="play" />
+              )}
+            </button>
+          </div>
+        </div>
+        <div className="flex  mt-[1rem]">
+          <div ref={containerRef} className=" w-[18rem]" />
+          <div ref={cursorRef} className="cursor">
+            🏄
+          </div>
+        </div>
       </div>
     </div>
   );

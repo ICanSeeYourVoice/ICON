@@ -6,10 +6,10 @@ const AccountPage = () => {
   const { token } = useTokenStore();
 
   return (
-    <div className="flex flex-col items-center h-screen w-screen pt-[3.125rem] pb-[10.3125rem] gap-[1.5rem] ">
+    <div className="flex flex-col items-center h-screen w-screen">
       <TopBar text="계정" path="setting" />
-      <main className="flex flex-col items-center justify-center w-full">
-        <p className="flex flex-col items-center justify-center w-[15.25rem] break-all">
+      <main className="flex flex-col items-center justify-center w-[80%] mt-[6rem]">
+        <p className="flex flex-col items-center justify-center w-full break-all">
           {token}
         </p>
       </main>

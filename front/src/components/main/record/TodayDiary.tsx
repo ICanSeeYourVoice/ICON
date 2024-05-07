@@ -10,19 +10,17 @@ const TodayDiary = () => {
   };
 
   return (
-    <div>
-      <div className="flex justify-between pt-[2rem] w-[14.5rem] text-slate-500 text-xs pb-[0.5rem]">
+    <div className="w-[80%]">
+      <div className="flex justify-between w-full text-sub-0 text-xs pb-[0.5rem]">
         <div>일지</div>
-
         <div onClick={handleDiaryDetail}>+더보기</div>
       </div>
       <div className="w-full flex justify-center">
-        <div className="flex justify-center gap-3 max-w-screen-lg">
-          <div className="flex justify-center items-start flex-1">
-            <div className="self-end "></div>
+        <div className="flex justify-center gap-3 w-full aspect-[6/4]">
+          <div className="flex justify-center items-start h-full aspect-square">
             <SmilePhotoLg />
           </div>
-          <div className="flex flex-col justify-start items-center flex-1 gap-2">
+          <div className="flex flex-col justify-start items-center h-full aspect-[1/2] gap-[0.5rem]">
             <SmilePhotoSm />
             <SmilePhotoSm />
           </div>

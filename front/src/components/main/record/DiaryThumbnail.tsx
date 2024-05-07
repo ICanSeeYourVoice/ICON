@@ -21,7 +21,7 @@ const DiaryThumbnail: React.FC<DiaryThumbnailProps> = ({
       : content || "일지를 작성해주세요";
 
   return (
-    <div className="w-[14.5rem] h-[5rem] bg-white rounded-[0.5rem] shadow border">
+    <div className="w-full h-[5rem] bg-white rounded-[0.5rem] shadow border">
       {notPrompt ? (
         <div className="mx-5 flex items-center justify-center h-full">
           <div className="flex items-center justify-center h-full">

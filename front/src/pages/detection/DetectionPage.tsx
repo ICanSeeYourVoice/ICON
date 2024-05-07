@@ -5,14 +5,127 @@ import {
   DETECTION_INFO,
   LOADING_INFO,
 } from "../../constants/detection";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useDetectionStore } from "../../stores/detection";
 import { useNavigate } from "react-router";
+import { useMutation } from "@tanstack/react-query";
+import { analyzeAlarm, cryAlarm } from "../../apis/Notification";
+import toast from "react-hot-toast";
+import * as tf from "@tensorflow/tfjs";
+import { loadYamnetModel } from "../../utils/cryingClassification";
 
 const DetectionPage = () => {
+  const worker = new Worker("recordingWorker.js");
+
   const navigate = useNavigate();
   const isBabyCry = useDetectionStore((state: any) => state.isBabyCry);
   const cryingType = useDetectionStore((state: any) => state.cryingType);
+  const model = useRef<tf.GraphModel | null>(null);
+  const setIsBabyCry = useDetectionStore((state: any) => state.setIsBabyCry);
+  const setCryingType = useDetectionStore((state: any) => state.setCryingType);
+  const streamRef = useRef<MediaStream | null>(null);
+
+  const { mutate } = useMutation({
+    mutationFn: cryAlarm,
+    onSuccess: () => {},
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
+  const { mutate: analyzeMutate } = useMutation({
+    mutationFn: analyzeAlarm,
+    onSuccess: (res: any) => {
+      console.log(res);
+      setCryingType(res.cryReason);
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
+  useEffect(() => {
+    if (isBabyCry) {
+      mutate();
+    }
+  }, [isBabyCry]);
+
+  useEffect(() => {
+    const fetchDataAndProcess = async () => {
+      let toastId;
+
+      try {
+        if (!streamRef.current) {
+          toastId = toast.loading("아기울음감지를 준비 중입니다.");
+
+          const yamnet = await loadYamnetModel();
+          model.current = yamnet;
+          const constraints = { audio: true };
+
+          const stream = await navigator.mediaDevices.getUserMedia(constraints);
+
+          streamRef.current = stream;
+
+          const audioCtx = new AudioContext({ sampleRate: 16000 });
+          const source = audioCtx.createMediaStreamSource(stream);
+          const scriptNode = audioCtx.createScriptProcessor(8192, 1, 1);
+
+          setInterval(() => {
+            console.log("아기울음녹음시작");
+
+            let audioBuffer: number[] = [];
+
+            scriptNode.onaudioprocess = function (e) {
+              const inputBuffer = e.inputBuffer;
+              let inputData = inputBuffer.getChannelData(0);
+
+              audioBuffer.push(...inputData);
+
+              const [scores] = yamnet.predict(tf.tensor(inputData)) as [any];
+
+              const top5 = tf.topk(scores, 3, true);
+              const classes = top5.indices.dataSync();
+              const probabilities = top5.values.dataSync();
+
+              for (let i = 0; i < 3; i++) {
+                if (classes[i] === 20 && probabilities[i] >= 0.5) {
+                  setIsBabyCry(true);
+                  setTimeout(() => {
+                    worker.postMessage(audioBuffer);
+
+                    worker.onmessage = function (e) {
+                      const sound = e.data;
+                      analyzeMutate({ data: sound });
+                    };
+                  }, 1000);
+                  return;
+                }
+              }
+            };
+          }, 5000);
+
+          source.connect(scriptNode);
+          scriptNode.connect(audioCtx.destination);
+
+          toast.success("울음감지 시작");
+        } else {
+          toast.error("마이크 연결에 실패하였습니다.");
+        }
+      } catch (error) {
+        toast.error("아기울음감지를 준비 중 오류가 발생했습니다.");
+      } finally {
+        toast.dismiss(toastId);
+      }
+    };
+
+    if (!isBabyCry) fetchDataAndProcess(); // 로그인 여부 확인 필요
+
+    // return () => {
+    //   if (streamRef.current) {
+    //     streamRef.current.getTracks().forEach((track) => track.stop());
+    //   }
+    // };
+  }, []);
 
   useEffect(() => {
     if (cryingType !== 0) {
@@ -21,7 +134,7 @@ const DetectionPage = () => {
   }, [cryingType]);
 
   return (
-    <div className="flex flex-col items-center justify-center gap-5">
+    <div className="flex flex-col items-center justify-center w-full h-full gap-4">
       <p className="text-gray-1 text-sm ">
         {isBabyCry ? LOADING_INFO : DETECTION_INFO}
       </p>
@@ -40,6 +153,7 @@ const DetectionPage = () => {
           </p>
         </div>
       )}
+      <div className="flex items-center justify-center w-[80%] h-[6rem]"></div>
     </div>
   );
 };

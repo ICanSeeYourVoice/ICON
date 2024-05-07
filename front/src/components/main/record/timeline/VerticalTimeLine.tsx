@@ -24,11 +24,11 @@ const VerticalTimeLine: React.FC<VerticalTimeLineProps> = (date) => {
     },
   };
   return (
-    <div className="flex-col w-[15rem] h-[15rem] ">
-      <div className="flex justify-start w-[14.5rem] pb-[0.5rem] text-slate-500 text-xs">
+    <div className="flex-col w-full">
+      <div className="flex justify-start pb-[0.5rem] text-slate-500 text-xs">
         타임라인
       </div>
-      <div className="w-[15rem] h-[15rem] overflow-y-scroll no-scrollbar">
+      <div className="h-[15rem] overflow-y-scroll no-scrollbar">
         <VerticalTimeline layout="1-column-left" lineColor="#7BB7F7">
           {res.data_body.timeline.map((val) => {
             return (

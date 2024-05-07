@@ -10,7 +10,7 @@ const SmilePhotoLg: React.FC<SmilePhotoLgProps> = ({ src }) => {
 
   return (
     <div
-      className="w-[9.4rem] h-[9.4rem] bg-zinc-100 rounded-[1rem] bg-cover bg-center bg-no-repeat"
+      className="h-full aspect-square bg-zinc-100 rounded-[1rem] bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: backgroundImage }}
     />
   );

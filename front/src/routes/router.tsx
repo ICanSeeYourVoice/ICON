@@ -5,7 +5,7 @@ import LoginPage from "../pages/user/LoginPage";
 import JoinPage from "../pages/user/JoinPage";
 import AuthLayout from "../pages/user/AuthLayout";
 import SplashPage from "../pages/user/Splash";
-import RecordLayout from "../pages/record/RecordLayout";
+import RecordLayout from "../components/common/layout/RecordLayout";
 import RecordPage from "../pages/record/RecordPage";
 import DiaryDetailPage from "../pages/record/DiaryDetailPage";
 import RegisterPage from "../pages/record/RegisterPage";
