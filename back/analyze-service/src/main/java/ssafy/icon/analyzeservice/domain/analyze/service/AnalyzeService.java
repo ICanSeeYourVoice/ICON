@@ -1,15 +1,11 @@
 package ssafy.icon.analyzeservice.domain.analyze.service;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Map.Entry;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
@@ -35,7 +31,7 @@ public class AnalyzeService {
 	public String getCryReason(Integer memberId, MultipartFile babyCryingAudio) {
 		AnalyzeResult analyzeResult = getAnalyzeResult(babyCryingAudio);
 		String cryReason = getKey(analyzeResult).toUpperCase();
-		addAlarm(memberId, cryReason);
+		// addAlarm(memberId, cryReason);
 		saveAnalyze(memberId, cryReason);
 		return cryReason;
 	}
