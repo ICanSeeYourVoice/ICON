@@ -64,7 +64,7 @@ const WaveSurferComponent: React.FC<WaveSurferComponentProps> = ({
       .join(":");
 
   return (
-    <div className="waveform-container h-[8rem] border-black border w-[20rem] m-4 rounded-full flex justify-center items-center">
+    <div className="waveform-container h-[8rem] border-black border  m-4 rounded-[1rem] flex justify-center items-center">
       <div className="waveform-container h-[8rem]  w-[18rem] ">
         <div className="flex justify-between p-3">
           {formatTime(currentTime)}
