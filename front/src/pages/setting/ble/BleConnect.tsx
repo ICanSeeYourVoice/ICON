@@ -22,133 +22,6 @@ const BleConnect = () => {
     }
     return () => {};
   }, []);
-  // const connectToDevice = async ({
-  //   bleService,
-  //   bleCharacteristic,
-  // }: DeviceOptions) => {
-  //   try {
-  //     navigator.bluetooth
-  //       .requestDevice({
-  //         filters: [
-  //           {
-  //             // 사용자 정의 service uuid기 때문에 앱으로 광고를 게시한 블루투스만 필터링하여 목록 표시
-  //             services: [bleService],
-  //           },
-  //         ],
-  //       })
-  //       .then((device) => {
-  //         // 선택한 device 연결 시도
-  //         console.log("Connecting to GATT Server...");
-  //         return device.gatt?.connect();
-  //       })
-  //       .then((server) => {
-  //         // GATT 서버에 연결 시도
-  //         console.log("Connected to GATT Server");
-  //         return server?.getPrimaryService(bleService);
-  //       })
-  //       .then((service) => {
-  //         // 특정 특성에 접근 시도
-  //         console.log("Connecting to GATT Service characteristic...");
-  //         return service?.getCharacteristic(bleCharacteristic);
-  //       })
-  //       .then(async (characteristic) => {
-  //         console.log("Connected to GATT Service characteristic");
-
-  //         // 알림 설정
-  //         // characteristic?.startNotifications().then(() => {
-  //         //   characteristic?.addEventListener(
-  //         //     "characteristicvaluechanged",
-  //         //     (e) => {
-  //         //       console.log(e);
-  //         //       const target = e.target as BluetoothRemoteGATTCharacteristic;
-  //         //       if (!target.value) {
-  //         //         console.error("Characteristic value is null");
-  //         //         return;
-  //         //       }
-
-  //         //       const value = target.value.buffer;
-  //         //       console.log(
-  //         //         `${bleCharacteristic} changed`,
-  //         //         new TextDecoder().decode(value)
-  //         //       );
-  //         //       setTestValue(new TextDecoder().decode(value));
-  //         //     }
-  //         //   );
-  //         // });
-  //         characteristicGlobal.current = characteristic ?? null;
-  //         characteristic?.startNotifications().then(
-  //           () => {
-  //             console.log("Notifications started");
-  //             characteristic?.addEventListener(
-  //               "characteristicvaluechanged",
-  //               handleCharacteristicValueChanged
-  //             );
-  //           },
-  //           (error) => {
-  //             console.error("Failed to start notifications", error);
-  //           }
-  //         );
-
-  //         function handleCharacteristicValueChanged(event) {
-  //           const characteristic =
-  //             event.target as BluetoothRemoteGATTCharacteristic;
-  //           console.log("Characteristic value changed", characteristic.uuid);
-  //           if (characteristic.value) {
-  //             const value = new TextDecoder().decode(characteristic.value);
-  //             console.log("New value", value);
-  //             setTestValue(value);
-  //           } else {
-  //             console.error("Characteristic value is null");
-  //           }
-  //         }
-
-  //         console.log("Notifications have been started.");
-
-  //         // 데이터 읽기 또는 쓰기
-  //         const valueDataView = await characteristic?.readValue();
-  //         const valueString = new TextDecoder().decode(valueDataView);
-
-  //         console.log("characteristic read value", valueString);
-  //         // console.log("characteristic read value", characteristic?.readValue());
-  //         // console.log(
-  //         // "characteristic read value",
-  //         // new TextDecoder().decode(characteristic?.readValue())
-  //         // );
-
-  //         // 데이터 변화 감지
-  //         // characteristic?.addEventListener(
-  //         //   "characteristicvaluechanged",
-  //         //   (e) => {
-  //         //     const target = e.target as BluetoothRemoteGATTCharacteristic;
-  //         //     if (!target.value) {
-  //         //       console.error("Characteristic value is null");
-  //         //       return;
-  //         //     }
-
-  //         //     const value = target.value.buffer;
-  //         //     console.log(
-  //         //       `${bleCharacteristic} changed`,
-  //         //       new TextDecoder().decode(value)
-  //         //     );
-  //         //     setTestValue(new TextDecoder().decode(value));
-  //         //   }
-  //         // );
-  //         return characteristic?.readValue();
-  //       })
-  //       .then((value) => {
-  //         // 데이터 value 처리
-  //         console.log(value);
-  //         const val = new TextDecoder().decode(value);
-  //         setDeviceValue(val!);
-  //         console.log("Characteristic value:", new TextDecoder().decode(value));
-  //       })
-  //       .catch((error) => {
-  //         console.error("Connection failed", error);
-  //       });
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
   const connectToDevice = async ({
     bleService,
     bleCharacteristic,
@@ -231,7 +104,7 @@ const BleConnect = () => {
       <SmallButton label="연결" onClick={handleScanClick} />
       <SmallButton
         label="워치 알림 테스트"
-        onClick={() => writeCharacteristic("아기가 울고 있어요.")}
+        onClick={() => writeCharacteristic("hungry")}
       />
       {testValue != "" ? <p>변경 값: {testValue}</p> : null}
       {deviceValue != "" ? <p>초기 값: {deviceValue}</p> : null}

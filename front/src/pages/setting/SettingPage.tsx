@@ -10,6 +10,7 @@ const SettingPage = () => {
     { text: "계정", path: "/setting/account" },
     { text: "알림 계정 등록", path: "/setting/share" },
     { text: "SmartThings", path: "/setting/things" },
+    { text: "워치 연결", path: "/setting/ble" },
   ];
 
   return (
