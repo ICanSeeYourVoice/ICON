@@ -1,13 +1,16 @@
 package ssafy.icon.commonservice.domain.diary.service;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ssafy.icon.commonservice.domain.diary.dto.DiaryDetailResponse;
 import ssafy.icon.commonservice.domain.diary.dto.DiaryModifyForm;
 import ssafy.icon.commonservice.domain.diary.dto.DiaryRegisterForm;
 import ssafy.icon.commonservice.domain.diary.entity.Diary;
@@ -70,7 +73,8 @@ public class DiaryService {
 			if (!isExisted) {
 				deletedImages.add(image);
 			}
-		};
+		}
+		;
 
 		diary.getImages().removeAll(deletedImages);
 
@@ -79,6 +83,22 @@ public class DiaryService {
 		}
 
 		diary.modify(form.getContent(), form.getDate());
+	}
+
+	public DiaryDetailResponse queryDetail(Integer memberId, Long diaryId) {
+		Diary diary = diaryRepository.findByIdWithImages(diaryId)
+			.orElseThrow(() -> new DiaryException(NOT_FOUND, "성장일지를 찾을 수 없습니다."));
+
+		if (!diary.getMember().getId().equals(memberId)) {
+			throw new DiaryException(FORBIDDEN, "권한이 없습니다.");
+		}
+
+		return DiaryDetailResponse.of(diary);
+	}
+
+	public List<DiaryDetailResponse> queryPeriod(Integer memberId, LocalDate start, LocalDate end) {
+		return diaryRepository.findAllByPeriod(memberId, start, end).stream()
+			.map(DiaryDetailResponse::of).toList();
 	}
 
 

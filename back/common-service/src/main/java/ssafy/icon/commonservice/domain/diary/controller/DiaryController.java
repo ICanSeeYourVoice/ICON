@@ -2,9 +2,11 @@ package ssafy.icon.commonservice.domain.diary.controller;
 
 import jakarta.validation.Valid;
 import java.time.LocalDate;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ssafy.icon.commonservice.domain.diary.dto.DiaryDetailResponse;
 import ssafy.icon.commonservice.domain.diary.dto.DiaryModifyForm;
 import ssafy.icon.commonservice.domain.diary.dto.DiaryRegisterForm;
 import ssafy.icon.commonservice.domain.diary.service.DiaryService;
@@ -52,5 +55,21 @@ public class DiaryController {
 		return ResponseEntity.ok().build();
 	}
 
+	@GetMapping("/{diaryId}")
+	public ResponseEntity<DiaryDetailResponse> queryDetail(
+		@RequestHeader("X-Authorization-Id") Integer memberId,
+		@PathVariable("diaryId") Long diaryId
+	) {
+		return ResponseEntity.ok(diaryService.queryDetail(memberId, diaryId));
+	}
+
+	@GetMapping
+	public ResponseEntity<List<DiaryDetailResponse>> queryPeriod(
+		@RequestHeader("X-Authorization-Id") Integer memberId,
+		@RequestParam("start") LocalDate start,
+		@RequestParam("end") LocalDate end
+	) {
+		return ResponseEntity.ok(diaryService.queryPeriod(memberId, start, end));
+	}
 }
 
