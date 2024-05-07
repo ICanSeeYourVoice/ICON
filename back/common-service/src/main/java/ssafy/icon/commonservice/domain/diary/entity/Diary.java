@@ -64,5 +64,9 @@ public class Diary extends BaseEntity {
 		image.connectDiary(this);
 	}
 
+	public void modify(String content, LocalDate date) {
+		this.content = content;
+		this.date = date;
+	}
 
 }
