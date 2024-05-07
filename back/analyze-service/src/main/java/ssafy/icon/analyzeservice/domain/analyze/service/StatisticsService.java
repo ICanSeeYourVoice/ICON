@@ -67,7 +67,7 @@ public class StatisticsService {
 		log.info("조회 끝: " + endDateTime);
 		log.info("memberId : " + memberId);
 		//UTC 시간 + 9시간 = 서울 시간
-		List<BabyStatus> babyStatusList = analyzeRepository.findAllByDate(memberId, startDateTime.plusHours(9), endDateTime.plusHours(9));
+		List<BabyStatus> babyStatusList = analyzeRepository.findAllByDate(memberId, startDateTime, endDateTime);
 		List<StatisticsTimeline> timelines = new ArrayList<>();
 
 		int hungryCount = 0, tiredCount = 0, painCount = 0, discomfortCount = 0;
