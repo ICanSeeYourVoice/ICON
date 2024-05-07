@@ -31,7 +31,7 @@ public class AnalyzeService {
 	public String getCryReason(Integer memberId, MultipartFile babyCryingAudio) {
 		AnalyzeResult analyzeResult = getAnalyzeResult(babyCryingAudio);
 		String cryReason = getKey(analyzeResult).toUpperCase();
-		addAlarm(memberId, cryReason);
+		// addAlarm(memberId, cryReason);
 		saveAnalyze(memberId, cryReason);
 		return cryReason;
 	}
