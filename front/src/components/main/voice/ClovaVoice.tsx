@@ -16,6 +16,7 @@ const ClovaVoice = () => {
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [gender, setGender] = useState("female");
 
+  // naver clova voice API
   const { mutate: fetchVoice } = useMutation({
     mutationFn: clovaVoice,
     onSuccess: (data) => {
@@ -54,47 +55,62 @@ const ClovaVoice = () => {
       toast.error("텍스트를 입력해주세요");
       return;
     }
+    const speakerId = gender === "male" ? "njonghyeok" : "nara";
     const voiceData = {
       text: text,
-      speaker: gender === "male" ? "njonghyeok" : "nara ",
+      speaker: speakerId,
     };
     fetchVoice(voiceData);
   };
 
   const handleGenderChange = (newGender: string) => {
-    setGender(newGender);
+    newGender === "male" ? "njonghyeok" : "nara";
+    const speakerId = newGender;
+    setGender(speakerId);
   };
 
-  const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+  const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setText(event.target.value);
+  };
 
   const handleFirstVoice = (voiceText: string) => {
-    const voiceData = { text: voiceText, speaker: "njonghyeok" };
+    const speakerId = gender === "male" ? "njonghyeok" : "nara";
+    const voiceData = { text: voiceText, speaker: speakerId };
+    console.log(speakerId);
     fetchVoice(voiceData);
   };
 
   return (
     <div className="flex flex-col items-center justify-center mt-[6rem]">
-      <div className="flex justify-start w-[18rem]">
+      {/* 남자 여자 토글 */}
+      <div className="flex justify-start w-[18rem] mb-[1rem]">
         <button
-          className={`p-2 ${gender === "male" ? "bg-blue-500" : "bg-gray-300"}`}
+          className={`p-2 rounded-l ${
+            gender === "male"
+              ? "bg-primary border border-t border-b border-l"
+              : "bg-gray-200"
+          }`}
           onClick={() => handleGenderChange("male")}
         >
           남자
         </button>
         <button
-          className={`p-2 ${
-            gender === "female" ? "bg-blue-500" : "bg-gray-300"
+          className={`p-2 rounded-r ${
+            gender === "female"
+              ? "bg-primary border border-t border-b border-r"
+              : "bg-gray-200"
           }`}
           onClick={() => handleGenderChange("female")}
         >
           여자
         </button>
       </div>
-      <div className="flex justify-between w-[20rem] h-[7rem] border-b border-t p-3">
+
+      {/* 텍스트 인풋 */}
+      <div className="flex justify-between w-[20rem] h-[7.5rem] border-b-[0.1rem] border-t-[0.1rem] p-3">
         <div>
-          <input
-            type="text"
+          <textarea
+            rows={4}
             placeholder="아기에게 말해보세요"
             value={text}
             onChange={handleTextChange}
@@ -111,7 +127,7 @@ const ClovaVoice = () => {
           </button>
         </div>
       </div>
-      <div className="mt-[0.8rem]">
+      <div>
         {!audioUrl && (
           <div>
             <WaveSurferComponent />
@@ -120,9 +136,10 @@ const ClovaVoice = () => {
         {audioUrl && <WaveSurferComponent audioUrl={audioUrl} />}
       </div>
 
+      {/* 즐겨찾기 문구 */}
       <div className="fixed bottom-0 left-0 right-0 p-3 bg-white shadow-xl">
-        <div className="gap-1 mb-[3rem]">
-          <div className="text-gray-500 mb-[0.2rem] text-[1.2rem]">
+        <div className="gap-1 mb-[4rem]">
+          <div className="text-gray-500 mb-[0.5rem] text-[1.2rem]">
             즐겨찾기 문구
           </div>
           {buttons.map((button, index) => (

@@ -21,10 +21,10 @@ const Button = () => {
           onChange={handleChange}
           className="mt-1 text-sx w-full p-1"
         />
-        <div className="flex justify-between mt-2">
+        <div className="flex justify-between">
           <div></div>
           <div
-            className="w-[4rem] h-[2rem] bg-gray-400 flex justify-center items-center text-white text-sm rounded-full cursor-pointer"
+            className="w-[3rem] h-[2rem] bg-gray-400 flex justify-center items-center text-white text-sm rounded-full cursor-pointer"
             onClick={handleSubmit}
           >
             등록
