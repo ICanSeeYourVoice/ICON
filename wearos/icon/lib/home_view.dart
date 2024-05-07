@@ -1,10 +1,12 @@
 import 'package:ble_peripheral/ble_peripheral.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wear/wear.dart';
 import 'home_controller.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:vibration/vibration.dart';
+
 class HomeView extends GetView<HomeController> {
   const HomeView({Key? key}) : super(key: key);
 
@@ -129,6 +131,11 @@ class HomeView extends GetView<HomeController> {
       await Permission.bluetoothConnect.request();
     }
   }
+
+  void OnVibration() {
+    Vibration.vibrate(duration: 1000); //1000 = 1초
+  }
+
   void setStatus(String status) {
     controller.status.value = status;
 
@@ -139,6 +146,21 @@ class HomeView extends GetView<HomeController> {
         controller.addServices();
       }
       controller.getAllServices();
+    }
+    if(status != 'init' && status != 'normal') {
+      print('진동진동');
+      Vibration.vibrate(
+          duration: 3000,
+          pattern: [100, 50, 200, 30, 1000, 2000]
+      );
+      // Vibration.vibrate(duration: 1000);
+      // HapticFeedback.vibrate();
+      // HapticFeedback.heavyImpact();
+      HapticFeedback.vibrate();
+      HapticFeedback.heavyImpact();
+      HapticFeedback.mediumImpact();
+      HapticFeedback.lightImpact();
+      HapticFeedback.selectionClick();
     }
   }
 
@@ -165,10 +187,28 @@ class HomeView extends GetView<HomeController> {
         ),
         ElevatedButton(
             onPressed: () {
+              // controller.updateCharacteristic(controller.devices[0]);
               setStatus('normal');
             },
             child: const Text('switc main'),
           ),
+    //     const Center(child: Text("Devices")),
+    // Padding(
+    //   padding: const EdgeInsets.all(8.0),
+    //   child: Obx(() => SizedBox(
+    //     height: 200,
+    //     child: ListView.builder(
+    //     itemCount: controller.devices.length,
+    //     itemBuilder: (BuildContext context, int index) {
+    //       return Card(
+    //         child: ListTile(
+    //           title: Text(controller.devices[index]),
+    //         ),
+    //       );
+    //     },
+    //   ),
+    //   ),
+    // )),
       ],
     ));
   }
@@ -264,6 +304,7 @@ class HomeView extends GetView<HomeController> {
             child: TextButton(
               child: Text('닫기'),
               onPressed: () async {
+                print(controller.devices[0]);
                 controller.updateCharacteristic(controller.devices[0]);
                 setStatus('normal');
               },

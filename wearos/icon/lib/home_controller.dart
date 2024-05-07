@@ -5,6 +5,9 @@ import 'dart:convert';
 import 'package:ble_peripheral/ble_peripheral.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:vibration/vibration.dart';
+import 'package:flutter/services.dart';
+
 
 class HomeController extends GetxController {
   RxBool isAdvertising = false.obs;
@@ -14,6 +17,17 @@ class HomeController extends GetxController {
 
   void updateStatus(String newStatus) {
     status.value = newStatus;
+    if(newStatus != 'init' && newStatus != 'normal') {
+      Vibration.vibrate(
+          duration: 3000,
+          pattern: [100, 50, 200, 30, 1000, 2000]
+      );
+      // HapticFeedback.vibrate();
+      // HapticFeedback.heavyImpact();
+      // HapticFeedback.mediumImpact();
+      // HapticFeedback.lightImpact();
+      // HapticFeedback.selectionClick();
+    }
     print(status.value);
   }
 
@@ -90,7 +104,8 @@ class HomeController extends GetxController {
     BlePeripheral.setWriteRequestCallback(
             (deviceId, characteristicId, offset, value) {
           String receivedData = utf8.decode(value as Uint8List);
-          status.value = receivedData;  // update ui
+          // status.value = receivedData;  // update ui
+          updateStatus(receivedData);
           Get.log("WriteRequest: $deviceId $characteristicId : $offset : $value : $receivedData");
           // return WriteRequestResult(status: 144);
           // /////
@@ -217,7 +232,6 @@ class HomeController extends GetxController {
       // BlePeripheral.updateCharacteristic()로 특정 characteristic의 값 업데이트
       await BlePeripheral.updateCharacteristic(
         // 업데이트할 characteristic의 식별자
-        // characteristicId: characteristicBatteryLevel,
         characteristicId: characteristicMessage,
         // 전달할 데이터로 사용
         value: utf8.encode("reset"),
