@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ssafy.icon.commonservice.global.entity.BaseEntity;
@@ -32,6 +33,13 @@ public class DiaryImage extends BaseEntity {
 	private String url;
 
 	public DiaryImage(String url) {
+		this.url = url;
+	}
+
+	@Builder
+	public DiaryImage(Long id, Diary diary, String url) {
+		this.id = id;
+		this.diary = diary;
 		this.url = url;
 	}
 
