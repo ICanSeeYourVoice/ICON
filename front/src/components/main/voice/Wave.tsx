@@ -24,8 +24,8 @@ const WaveSurferComponent: React.FC<WaveSurferComponentProps> = ({
       wavesurferRef.current = WaveSurfer.create({
         container: containerRef.current,
         height: 1,
-        waveColor: "rgb(4, 100, 226)",
-        progressColor: "rgb(4, 100, 226)",
+        waveColor: "rgb(124, 175, 243)",
+        progressColor: "rgb(8, 85, 186)",
         plugins: [Timeline.create(), RegionsPlugin.create()],
       });
 

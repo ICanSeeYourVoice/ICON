@@ -4,11 +4,14 @@ import "react-calendar/dist/Calendar.css";
 import "./StyledCalender.css";
 import moment from "moment";
 import MoveButton from "../../common/button/MoveButton";
+import { useQuery } from "@tanstack/react-query";
+import { diaryList } from "../../../apis/Diary";
 
 interface DiaryEntryProps {
-  diaryDate: string;
+  diary_id: number;
+  date: string;
   content: string;
-  diaryImages: string[];
+  image_urls: string[];
 }
 
 const ReactCalendar = () => {
@@ -17,47 +20,28 @@ const ReactCalendar = () => {
     null
   );
 
-  const dayList: DiaryEntryProps[] = [
-    {
-      diaryDate: "2024-03-10",
-      content: "오늘 우리 아기가 활짝 웃었다",
-      diaryImages: ["경로", "경로2", "경로3"],
-    },
-    {
-      diaryDate: "2024-04-20",
-      content: "오늘 우리 아기가 날씨를 보고 활짝 웃었다",
-      diaryImages: ["경로", "경로2", "경로3"],
-    },
-    {
-      diaryDate: "2024-05-05",
-      content: "오늘 우리 아기가 아팠나보다 울더라",
-      diaryImages: ["경로", "경로2", "경로3"],
-    },
-    {
-      diaryDate: "2024-05-06",
-      content:
-        "밖에 비가오는데도 활짝 웃었다밖에 비가오는데도 활짝 웃었다밖에 비가오는데도 활짝 웃었다밖에 비가오는데도 활짝 웃었다밖에 비가오는데도 활짝 웃었다밖에 비가오는데도 활짝 웃었다",
-      diaryImages: ["경로", "경로2"],
-    },
-    {
-      diaryDate: "2024-05-02",
-      content: "오늘 우리 아기가 옆집 아기와 함께 활짝 웃었다",
-      diaryImages: ["경로", "경로2", "경로3", "경로4", "경로5", "경로6"],
-    },
-  ];
+  // 달의 첫날과 마지막날로 데이터 조회
+  const startOfMonth = moment(value).startOf("month").format("YYYY-MM-DD");
+  const endOfMonth = moment(value).endOf("month").format("YYYY-MM-DD");
+
+  const { data: dayList = [] } = useQuery<DiaryEntryProps[]>({
+    queryKey: ["DiaryList", "2024-04-01", "2024-04-30"],
+    queryFn: () => diaryList({ startId: startOfMonth, endId: endOfMonth }),
+  });
+
   const handleChange: CalendarProps["onChange"] = (newValue) => {
     if (newValue instanceof Date) {
       setValue(newValue);
       const dateStr: string = moment(newValue).format("YYYY-MM-DD");
       const diaryEntry: DiaryEntryProps | undefined = dayList.find(
-        (entry) => entry.diaryDate === dateStr
+        (entry) => entry.date === dateStr
       );
       setSelectedDiary(diaryEntry || null);
     } else if (Array.isArray(newValue) && newValue[0] instanceof Date) {
       setValue(newValue[0]);
       const dateStr: string = moment(newValue[0]).format("YYYY-MM-DD");
       const diaryEntry: DiaryEntryProps | undefined = dayList.find(
-        (entry) => entry.diaryDate === dateStr
+        (entry) => entry.date === dateStr
       );
       setSelectedDiary(diaryEntry || null);
     } else {
@@ -69,7 +53,7 @@ const ReactCalendar = () => {
   const addContent = ({ date }: { date: Date }) => {
     const dateStr: string = moment(date).format("YYYY-MM-DD");
     const diaryEntry: DiaryEntryProps | undefined = dayList.find(
-      (entry) => entry.diaryDate === dateStr
+      (entry) => entry.date === dateStr
     );
 
     if (diaryEntry) {
@@ -91,7 +75,7 @@ const ReactCalendar = () => {
     <div>
       <div className="flex justify-center items-center">
         <Calendar
-          locale="kr"
+          locale="en-US"
           onChange={handleChange}
           value={value}
           next2Label={null}
@@ -101,8 +85,8 @@ const ReactCalendar = () => {
           showNeighboringMonth={false}
         />
       </div>
-      <div className="mt-[0.5rem] ">
-        <div className="flex mb-[0.3rem]">
+      <div className="mt-[0.5rem] border rounded-[1rem] bg-blue-200">
+        <div className="flex mb-[0.3rem] p-2 ">
           <div className="ml-[1rem] mr-[1rem] justify-center items-center flex">
             😎
           </div>
@@ -113,9 +97,9 @@ const ReactCalendar = () => {
         </div>
         <div className="w-[21rem] h-[9rem] ">
           {selectedDiary ? (
-            <div className="justify-center items-center bg-blue-100 rounded-[1rem] overflow-auto p-1">
+            <div className="justify-center items-center bg-blue-100 rounded-b-[1rem] overflow-auto p-1">
               <div className="flex overflow-x-auto space-x-3 p-3">
-                {selectedDiary.diaryImages.slice(0, 6).map((image, index) => (
+                {selectedDiary.image_urls.slice(0, 6).map((image, index) => (
                   <img
                     key={index}
                     src={image}
@@ -129,7 +113,7 @@ const ReactCalendar = () => {
               </div>
             </div>
           ) : (
-            <div className="h-[9rem] flex justify-center items-center bg-blue-100 rounded-lg">
+            <div className="h-[9rem] flex justify-center items-center rounded-b-[1rem]  bg-blue-100 ">
               <div className="text-lg text-blue-300 animate-pulse">
                 일지가 없어요. 일지를 작성해주세요.
               </div>
