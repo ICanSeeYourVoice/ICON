@@ -3,6 +3,7 @@ package ssafy.icon.analyzeservice.domain.analyze.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,7 +73,7 @@ public class StatisticsService {
 
 		int hungryCount = 0, tiredCount = 0, painCount = 0, discomfortCount = 0;
 		for (BabyStatus babyStatus : babyStatusList) {
-			timelines.add(new StatisticsTimeline(babyStatus.getCryReason(), babyStatus.getCreatedAt()));
+			timelines.add(new StatisticsTimeline(babyStatus.getCryReason(), babyStatus.getCreatedAt().format(DateTimeFormatter.ofPattern("a hh:mm"))));
 			switch (babyStatus.getCryReason()) {
 				case "HUNGRY":
 					hungryCount ++;
