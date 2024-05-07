@@ -24,6 +24,7 @@ const DetectionPage = () => {
   const setIsBabyCry = useDetectionStore((state: any) => state.setIsBabyCry);
   const setCryingType = useDetectionStore((state: any) => state.setCryingType);
   const streamRef = useRef<MediaStream | null>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const { mutate } = useMutation({
     mutationFn: cryAlarm,
@@ -39,8 +40,12 @@ const DetectionPage = () => {
       console.log(res);
       setCryingType(res.cryReason);
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast.error(error.message);
+      if (error.response.status === 500) {
+        setIsBabyCry(false);
+        setCryingType(0);
+      }
     },
   });
 
@@ -70,39 +75,54 @@ const DetectionPage = () => {
           const source = audioCtx.createMediaStreamSource(stream);
           const scriptNode = audioCtx.createScriptProcessor(8192, 1, 1);
 
-          setInterval(() => {
-            console.log("아기울음녹음시작");
+          let audioBuffer: number[] = [];
 
-            let audioBuffer: number[] = [];
+          intervalRef.current = setInterval(() => {
+            audioBuffer = [];
+          }, 4000);
 
-            scriptNode.onaudioprocess = function (e) {
-              const inputBuffer = e.inputBuffer;
-              let inputData = inputBuffer.getChannelData(0);
+          let isCry = false;
+          let cnt = 0;
 
-              audioBuffer.push(...inputData);
+          scriptNode.onaudioprocess = function (e) {
+            if (isCry) cnt++;
 
-              const [scores] = yamnet.predict(tf.tensor(inputData)) as [any];
+            const inputBuffer = e.inputBuffer;
+            let inputData = inputBuffer.getChannelData(0);
 
-              const top5 = tf.topk(scores, 3, true);
-              const classes = top5.indices.dataSync();
-              const probabilities = top5.values.dataSync();
+            audioBuffer.push(...inputData);
 
+            const [scores] = yamnet.predict(tf.tensor(inputData)) as [any];
+            const top5 = tf.topk(scores, 3, true);
+            const classes = top5.indices.dataSync();
+            const probabilities = top5.values.dataSync();
+
+            if (cnt == 0) {
               for (let i = 0; i < 3; i++) {
                 if (classes[i] === 20 && probabilities[i] >= 0.5) {
+                  isCry = true;
                   setIsBabyCry(true);
-                  setTimeout(() => {
-                    worker.postMessage(audioBuffer);
 
-                    worker.onmessage = function (e) {
-                      const sound = e.data;
-                      analyzeMutate({ data: sound });
-                    };
-                  }, 1000);
+                  clearInterval(intervalRef.current!);
+
                   return;
                 }
               }
-            };
-          }, 5000);
+            } else {
+              if (cnt >= 4) {
+                streamRef.current!.getTracks().forEach((track) => track.stop());
+
+                worker.postMessage(audioBuffer);
+                worker.onmessage = function (e) {
+                  const sound = e.data;
+                  analyzeMutate({ data: sound });
+                  source.disconnect();
+                  scriptNode.disconnect();
+                  audioCtx.close();
+                };
+              }
+            }
+          };
 
           source.connect(scriptNode);
           scriptNode.connect(audioCtx.destination);
