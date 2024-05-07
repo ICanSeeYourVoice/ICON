@@ -1,14 +1,23 @@
+import { useMutation } from "@tanstack/react-query";
 import { ChangeEvent, useState } from "react";
+import { CreateVoice } from "../../../apis/Voice";
 
 const Button = () => {
   const [text, setText] = useState("");
+  const { mutate: createVoice } = useMutation({
+    mutationFn: CreateVoice,
+    onSuccess: () => {},
+    onError: (error) => {
+      console.error("Delete error:", error);
+    },
+  });
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setText(event.target.value);
   };
 
   const handleSubmit = () => {
-    console.log("Submitted text:", text);
+    createVoice(text);
   };
 
   return (
