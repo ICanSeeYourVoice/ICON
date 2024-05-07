@@ -4,9 +4,9 @@ import BleConnect from "./BleConnect";
 
 const BlePage = () => {
   return (
-    <div className="flex flex-col items-center h-screen w-screen pt-[3.125rem] pb-[10.3125rem] gap-[1.5rem] ">
+    <div className="flex flex-col items-center h-screen w-screen">
       <TopBar text="워치 연결" path="setting" />
-      <main className="flex flex-col items-center justify-center w-full">
+      <main className="flex flex-col items-center justify-center w-full flex-1">
         <BleConnect />
       </main>
       <Nav />

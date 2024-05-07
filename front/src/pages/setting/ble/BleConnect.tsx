@@ -56,7 +56,7 @@ const BleConnect = () => {
         }
       );
 
-      const handleCharacteristicValueChanged = (event) => {
+      const handleCharacteristicValueChanged = (event: Event) => {
         const characteristic =
           event.target as BluetoothRemoteGATTCharacteristic;
         console.log("Characteristic value changed", characteristic.uuid);
@@ -99,7 +99,7 @@ const BleConnect = () => {
   };
 
   return (
-    <div className="flex flex-col text-gray-1 text-[1rem] w-[15.25rem] justify-center items-center gap-[1.2rem]">
+    <div className="flex flex-col items-center mb-[1rem] gap-[1rem]">
       <p>워치랑 연결하고 알림을 받아보세요.</p>
       <SmallButton label="연결" onClick={handleScanClick} />
       <SmallButton
