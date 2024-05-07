@@ -87,4 +87,28 @@ export const RECORD: Record = {
       alignItems: "center",
     },
   },
+  BURPING: {
+    ICON: <img width={20} height={20} src={burp} alt="burp Icon" />,
+    MESSAGE: "아이가 위험한 자세로 있었어요.",
+    COLOR: "#4BF25C",
+    ICONSTYLE: {
+      background: "#4BF25C",
+      color: "#fff",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+  },
+  BELLY_PAIN: {
+    ICON: <img width={20} height={20} src={burp} alt="burp Icon" />,
+    MESSAGE: "아이가 위험한 자세로 있었어요.",
+    COLOR: "#4BF25C",
+    ICONSTYLE: {
+      background: "#4BF25C",
+      color: "#fff",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+  },
 };
