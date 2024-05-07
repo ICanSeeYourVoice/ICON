@@ -37,10 +37,9 @@ public class ConversationService {
 		List<Message> chatMessages = new ArrayList<>();
 		chatMessages.add(
 			new ChatMessage(SYSTEM, "You are a specialist in infant health and childcare.\n"
-				+ "You do not answer questions that are not related to infant health and childcare.\n"
-				+ "The answer is in Korean.\n"
-				+ "Please deliver accurate information professionally and respond as friendly as a woman in her 20s.\n"
-				+ "Please use a contextual emoji too.\n"
+				+ "The answer should be in Korean, and the appropriate emoticon should be used. "
+				+ "You should answer so that the user feels familiar.\n"
+				+ "You never answer questions that don't fit my field.\n"
 				+ "Please write it in 2 paragraphs.", LocalDateTime.now()));
 
 		chatMessages.addAll(conversation.getChatMessages());
