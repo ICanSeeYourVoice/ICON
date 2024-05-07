@@ -84,58 +84,63 @@ const ClovaVoice = () => {
   const handleFirstVoice = (voiceText: string) => {
     const speakerId = gender === "male" ? "njonghyeok" : "nara";
     const voiceData = { text: voiceText, speaker: speakerId };
-    console.log(speakerId);
     fetchVoice(voiceData);
   };
 
   return (
-    <div className="flex flex-col items-center justify-center mt-[6rem]">
-      {/* 텍스트 인풋 */}
-      <div className="w-[22rem] h-[21rem] border-[0.3rem] border-primary rounded-[1rem]  justify-center items-center">
+    <div className="flex flex-col border-[0.3rem] rounded-[1rem] items-center justify-center mt-[6rem]">
+      <div className="w-[22rem] h-[23rem] border-[0.1rem] border-blue-100 bg-blue-100 rounded-lg shadow-lg flex flex-col justify-center items-center p-4">
         {/* 남자 여자 토글 */}
-        <div className="flex justify-start w-[18rem] mb-[1rem] p-1">
+        <div className="flex justify-start w-full mb-4">
           <button
-            className={`p-2 rounded-l ${
+            className={`flex-1 p-2 transition-colors duration-300 ease-in-out ${
               gender === "male"
-                ? "bg-primary border border-t border-b border-l"
-                : "bg-gray-200"
-            }`}
+                ? "bg-blue-300 text-white shadow-lg"
+                : "bg-gray-200 hover:bg-gray-300"
+            } rounded-l-lg`}
             onClick={() => handleGenderChange("male")}
           >
             남자
           </button>
+          {/* 텍스트 인풋 */}
           <button
-            className={`p-2 rounded-r ${
+            className={`flex-1 p-2 transition-colors duration-300 ease-in-out ${
               gender === "female"
-                ? "bg-primary border border-t border-b border-r"
-                : "bg-gray-200"
-            }`}
+                ? "bg-blue-300 text-white shadow-lg"
+                : "bg-gray-200 hover:bg-gray-300"
+            } rounded-r-lg`}
             onClick={() => handleGenderChange("female")}
           >
             여자
           </button>
         </div>
-        <div>
+        <div className="flex flex-col justify-center items-center w-full">
           {!audioUrl && (
-            <div>
+            <div className="w-full flex justify-center">
               <WaveSurferComponent />
             </div>
           )}
-          {audioUrl && <WaveSurferComponent audioUrl={audioUrl} />}
+          {audioUrl && (
+            <div className="w-full flex justify-center">
+              <WaveSurferComponent audioUrl={audioUrl} />
+            </div>
+          )}
         </div>
-        <div className="flex justify-between items-center h-[7.5rem] border-b-[0.1rem] border-t-[0.1rem] p-3">
-          <div>
+        <div className="flex justify-between items-center w-full">
+          <div className="w-full mr-2">
             <textarea
               rows={4}
               placeholder="아기에게 말해보세요"
               value={text}
               onChange={handleTextChange}
+              className="w-full h-full p-2 bg-blue-200 rounded-[1rem] focus:outline-none focus:ring-2
+               focus:ring-blue-300 transition-shadow ease-in-out duration-300 "
             />
           </div>
           <div>
             <button
               onClick={handleSubmit}
-              className={`w-[2rem] h-[2rem] flex items-center  rounded-full p-2 ${
+              className={`w-[2rem] h-[2rem] flex items-center justify-center rounded-full p-2 transition-transform duration-300 ease-out transform hover:scale-110 ${
                 audioUrl ? "bg-blue-500" : "bg-blue-300"
               }`}
             >
@@ -148,7 +153,7 @@ const ClovaVoice = () => {
       {/* 즐겨찾기 문구 */}
       <div className="fixed bottom-0 left-0 right-0 p-3 bg-white shadow-xl">
         <div className="gap-1 mb-[4rem]">
-          <div className="text-gray-500 mb-[0.5rem] text-[1.2rem]">
+          <div className="text-gray-500 mb-[0.5rem] text-[1.2rem] ml-[1rem]">
             즐겨찾기 문구
           </div>
           {voices.length > 0 && voices.length < 3 ? (

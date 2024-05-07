@@ -2,7 +2,7 @@ import React from "react";
 import Volume from "../../../assets/svgs/voice/volume.svg";
 import Trash from "../../../assets/svgs/voice/Trash.svg";
 import { DeleteVoice } from "../../../apis/Voice";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface ButtonProps {
   label: string;
@@ -11,15 +11,20 @@ interface ButtonProps {
 }
 
 const Button: React.FC<ButtonProps> = ({ label, onClick, id }) => {
+  const queryClient = useQueryClient();
   const { mutate: deleteVoice } = useMutation({
     mutationFn: DeleteVoice,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["voiceList"],
+      });
+    },
     onError: (error) => {
       console.error("삭제 실패:", error);
     },
   });
 
   const handleDelete = (id: number) => {
-    console.log("id:", id);
     deleteVoice(id);
   };
 
