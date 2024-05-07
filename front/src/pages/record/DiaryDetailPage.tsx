@@ -5,9 +5,9 @@ import StyledCalendar from "../../components/main/record/Calendar";
 
 const DiaryDetailPage = () => {
   return (
-    <div className="flex flex-col items-center h-screen w-screen pt-[3.125rem] pb-[10.3125rem] gap-[1.5rem]">
+    <div className="flex flex-col items-center h-screen w-screen ">
       <TopBar text=" 일지" />
-      <main className="flex flex-col items-center justify-center w-full gap-[1.5rem]">
+      <main className="flex flex-col items-center justify-center w-full  mt-[6rem]">
         <StyledCalendar />
         <div className="fixed bottom-[5rem] ">
           <MoveButton path="/record/diary/register" text="일지 추가하기" />

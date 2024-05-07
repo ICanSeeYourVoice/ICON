@@ -99,20 +99,22 @@ const ReactCalendar = () => {
 
   return (
     <div>
-      <Calendar
-        locale="kr"
-        onChange={handleChange}
-        value={value}
-        next2Label={null}
-        prev2Label={null}
-        formatDay={(_, date) => moment(date).format("D")}
-        tileContent={addContent}
-        showNeighboringMonth={false}
-        onActiveStartDateChange={({ activeStartDate }) =>
-          getActiveMonth(activeStartDate)
-        }
-      />
-      <div className="mt-[1rem]">
+      <div className="flex justify-center items-center">
+        <Calendar
+          locale="kr"
+          onChange={handleChange}
+          value={value}
+          next2Label={null}
+          prev2Label={null}
+          formatDay={(_, date) => moment(date).format("D")}
+          tileContent={addContent}
+          showNeighboringMonth={false}
+          onActiveStartDateChange={({ activeStartDate }) =>
+            getActiveMonth(activeStartDate)
+          }
+        />
+      </div>
+      <div className="mt-[1rem] ">
         <div className="flex mb-[0.5rem]">
           <div className="mr-[1rem] justify-center items-center flex">😎</div>
           <div className="text-[0.8rem]">
@@ -120,7 +122,7 @@ const ReactCalendar = () => {
             <div>요일</div>
           </div>
         </div>
-        <div className="w-[22rem]">
+        <div className="w-[21rem]">
           {selectedDiary ? (
             <div className="h-[9rem] justify-center items-center bg-blue-100 rounded-lg overflow-auto p-3">
               <div className="font-bold">{selectedDiary.title}</div>

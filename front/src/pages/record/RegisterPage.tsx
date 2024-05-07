@@ -27,7 +27,7 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center h-screen w-screen pt-[3.125rem] gap-[0.5rem]">
+    <div className="flex flex-col items-center h-screen w-screen gap-[1rem]">
       <TopBar text="일지 등록" />
       <DateInp />
       <LabelInput
