@@ -30,5 +30,8 @@ messaging.onBackgroundMessage((payload) => {
     body: payload.body,
     // icon: payload.icon
   };
-  self.registration.showNotification(notificationTitle, notificationOptions);
+
+  if (notificationTitle && notificationOptions.body) {
+    self.registration.showNotification(notificationTitle, notificationOptions);
+  }
 });
