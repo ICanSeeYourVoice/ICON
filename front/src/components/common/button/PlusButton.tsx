@@ -1,12 +1,17 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ChangeEvent, useState } from "react";
 import { CreateVoice } from "../../../apis/Voice";
 
 const Button = () => {
   const [text, setText] = useState("");
+  const queryClient = useQueryClient();
   const { mutate: createVoice } = useMutation({
     mutationFn: CreateVoice,
-    onSuccess: () => {},
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["voiceList"],
+      });
+    },
     onError: (error) => {
       console.error("Delete error:", error);
     },

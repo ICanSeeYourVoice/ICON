@@ -1,29 +1,65 @@
 import TopBar from "../../components/common/Navigator/TopBar";
-import DateInp from "../../components/common/Input/DateInput";
 import { useState } from "react";
 import LabelTextInput from "../../components/common/Input/LabelTextInput";
 import PostButton from "../../components/common/button/PostButton";
 import { useNavigate } from "react-router-dom";
 import FileUploadInput from "../../components/main/record/FileUploadInput";
+import { useDateStore, useImageStore } from "../../stores/diary";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { diaryRegister } from "../../apis/Diary";
+import moment from "moment";
+import toast from "react-hot-toast";
 
 const RegisterPage = () => {
+  const selectedDate = useDateStore((state) => state.selectedDate); // zustand
+  const { previewUrls } = useImageStore(); // zustand 이미지 경로
   const [contentValue, setContentValue] = useState("");
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  // 일지 등록
+  const { mutate: registerDiary } = useMutation({
+    mutationFn: diaryRegister,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["DiaryList"],
+      });
+      navigate("/record/detail/diary");
+    },
+    onError: (error) => {
+      console.error("일지 등록 실패: error", error);
+    },
+  });
 
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContentValue(e.target.value);
-    console.log(e.target.value);
   };
 
   const createDiary = () => {
-    navigate("/record");
+    if (!selectedDate || contentValue === "") {
+      toast.error("일지 등록을 위해 모든 필드를 채워주세요");
+      return;
+    }
+    const formattedDate = moment(selectedDate).format("YYYY-MM-DD");
+
+    registerDiary({
+      content: contentValue,
+      date: formattedDate,
+      image_urls: previewUrls,
+    });
   };
 
   return (
     <div className="flex flex-col items-center h-screen w-screen gap-[2rem]">
       <TopBar text="일지 등록" />
-      <div className="mt-[1rem]">
-        <DateInp />
+      <div className="mt-[8rem]">
+        {selectedDate ? (
+          <div className="text-lg font-semibold">
+            {selectedDate.toLocaleDateString()}
+          </div>
+        ) : (
+          <div className="text-lg font-semibold">날짜를 선택해주세요.</div>
+        )}
       </div>
       <div>
         <LabelTextInput
