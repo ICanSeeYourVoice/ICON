@@ -13,6 +13,7 @@ import { analyzeAlarm, cryAlarm } from "../../apis/Notification";
 import toast from "react-hot-toast";
 import * as tf from "@tensorflow/tfjs";
 import { loadYamnetModel } from "../../utils/cryingClassification";
+import useBleStore from "../../stores/bluetooth";
 
 const DetectionPage = () => {
   const worker = new Worker("recordingWorker.js");
@@ -25,6 +26,7 @@ const DetectionPage = () => {
   const setCryingType = useDetectionStore((state: any) => state.setCryingType);
   const streamRef = useRef<MediaStream | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const { writeCharacteristic } = useBleStore();
 
   const { mutate } = useMutation({
     mutationFn: cryAlarm,
@@ -45,6 +47,7 @@ const DetectionPage = () => {
       if (error.response.status === 500) {
         setIsBabyCry(false);
         setCryingType(0);
+        writeCharacteristic("normal");
       }
     },
   });

@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router";
 import "./ReactButton.css";
 import { useDetectionStore } from "../../../stores/detection";
+import useBleStore from "../../../stores/bluetooth";
 
 const ReactButton = ({ icon, color }: { icon: string; color: string }) => {
   const navigate = useNavigate();
@@ -10,6 +11,13 @@ const ReactButton = ({ icon, color }: { icon: string; color: string }) => {
   // const cryingType = useDetectionStore((state: any) => state.cryingType);
   const setCryingType = useDetectionStore((state: any) => state.setCryingType);
 
+  const { isChange, writeCharacteristic } = useBleStore();
+
+  if (isChange) {
+    useBleStore.setState({ isChange: false });
+    writeCharacteristic("normal");
+    navigate("/detection");
+  }
   return (
     <div className="circle-container">
       <div
@@ -33,6 +41,7 @@ const ReactButton = ({ icon, color }: { icon: string; color: string }) => {
         onClick={() => {
           setCryingType(0);
           setIsBabyCry(false);
+          writeCharacteristic("normal");
           navigate("/detection");
         }}
         className="flex justify-center items-center w-[35%] aspect-square rounded-full absolute max-w-[7.5rem] max-h-[7.5rem]"
