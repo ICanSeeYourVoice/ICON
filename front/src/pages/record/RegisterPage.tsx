@@ -12,7 +12,7 @@ import toast from "react-hot-toast";
 
 const RegisterPage = () => {
   const selectedDate = useDateStore((state) => state.selectedDate); // zustand
-  const { previewUrls } = useImageStore(); // zustand 이미지 경로
+  const { previewUrls, clearImages } = useImageStore(); // zustand 이미지 경로
   const [contentValue, setContentValue] = useState("");
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -24,6 +24,7 @@ const RegisterPage = () => {
       queryClient.invalidateQueries({
         queryKey: ["DiaryList"],
       });
+      clearImages();
       navigate("/record/detail/diary");
     },
     onError: (error) => {

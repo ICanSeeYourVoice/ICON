@@ -32,6 +32,7 @@ const ClovaVoice = () => {
       } else {
         console.error("데이터 타입 :", data);
       }
+      setText("");
     },
     onError: (error: unknown) => {
       if (axios.isAxiosError(error)) {
@@ -156,7 +157,7 @@ const ClovaVoice = () => {
           <div className="text-gray-500 mb-[0.5rem] text-[1.2rem] ml-[1rem]">
             즐겨찾기 문구
           </div>
-          {voices.length > 0 && voices.length < 3 ? (
+          {voices.length >= 0 && voices.length < 3 ? (
             <>
               {voices.map((voice, index) => (
                 <PriButton
