@@ -9,7 +9,7 @@ import { diaryList, diaryDelete } from "../../../apis/Diary";
 import { useDateStore } from "../../../stores/diary";
 import Trash from "../../../assets/svgs/voice/trash.svg";
 import toast from "react-hot-toast";
-import Clude from "../../../assets/svgs/record/clude.png";
+import Clude from "../../../assets/svgs/record/blueClude.png";
 
 interface DiaryEntryProps {
   diary_id: number;
@@ -119,7 +119,8 @@ const ReactCalendar = () => {
 
   return (
     <div>
-      <div className="flex justify-center items-center">
+      <div className="flex justify-center items-center  border-gray-200 rounded-[1.3rem] shadow-2xl">
+        {/* <div className="flex justify-center items-center border-[0.3rem] border-gray-200 rounded-[1.3rem] shadow-strong"> */}
         <Calendar
           locale="en-US"
           onChange={handleChange}
@@ -155,7 +156,7 @@ const ReactCalendar = () => {
             <div></div>
           )}
         </div>
-        <div className="w-[21rem] h-[9rem] ">
+        <div className="w-[22.1rem] h-[9rem] ">
           {selectedDiary ? (
             <div className="justify-center items-center bg-blue-100 rounded-b-[1rem] overflow-auto p-1">
               <div className="flex overflow-x-auto space-x-3 p-3">

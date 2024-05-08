@@ -33,7 +33,7 @@ export const useDateStore = create<DateState>((set) => ({
       const newURLs = state.previewUrls.filter((_, i) => i !== index);
       return { imageFiles: newFiles, previewUrls: newURLs };
     }),
-    clearImages: () => set(() => ({ // 초기 상태로 리셋
+    clearImages: () => set(() => ({ 
       imageFiles: [],
       previewUrls: []
     }))

@@ -27,7 +27,7 @@ const FileUploadInput: React.FC = () => {
   };
 
   return (
-    <div className="w-[15rem]">
+    <div className="w-full">
       <input
         ref={fileInputRef}
         type="file"
@@ -39,15 +39,15 @@ const FileUploadInput: React.FC = () => {
       <div className="text-sm mb-1">사진 등록</div>
       <button
         onClick={handleClick}
-        className="flex justify-center items-center rounded-[1rem] border border-gray-500 w-[3rem] h-[3rem] bg-gray-200 mb-[0.3rem]"
+        className="flex justify-center items-center rounded-[1rem] border border-gray-500 w-[3rem] h-[3rem] bg-gray-200 mb-[0.5rem]"
       >
         <img src={CameraIcon} alt="Upload" className="w-[2rem] h-[2rem]" />
       </button>
-      <div className="image-preview flex flex-wrap gap-x-5 gap-y-2 w-[15rem] h-[7rem] justify-center mb-[0.2rem]">
+      <div className="image-preview flex flex-wrap gap-x-5 gap-y-5 w-[18rem] h-[12rem] justify-center mb-[0.2rem]">
         {previewUrls.map((url, index) => (
           <div
             key={index}
-            className="w-[3.5rem] h-[3.5rem] p-1 relative overflow-hidden"
+            className="w-[5rem] h-[5rem] p-1 relative overflow-hidden"
           >
             <img
               src={url}

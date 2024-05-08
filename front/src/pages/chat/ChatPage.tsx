@@ -5,7 +5,6 @@ import BotChat from "../../components/main/chat/BotChat";
 import ChatDate from "../../components/main/chat/ChatDate";
 import MyChat from "../../components/main/chat/MyChat";
 import ChatInput from "../../components/main/chat/ChatInput";
-import MoveButton from "../../components/common/button/MoveButton";
 import { useChatStore } from "../../stores/chat";
 import { PulseLoader } from "react-spinners";
 
@@ -123,7 +122,7 @@ const ChatPage: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-[1rem] p-[2rem]">
-      <div className="flex flex-col-reverse overflow-auto h-[60vh]">
+      <div className="flex flex-col-reverse overflow-auto h-[70vh]">
         {messages.map((message, index, arr) => {
           const isFirstMessageOfDay =
             index === arr.length - 1 ||
@@ -157,9 +156,6 @@ const ChatPage: React.FC = () => {
       )}
 
       <div className="mt-auto">
-        <div className="flex justify-center pb-5">
-          <MoveButton text="메인으로 돌아가기" path="/detection" />
-        </div>
         <ChatInput onSendMessage={handleSendMessage} />
       </div>
     </div>
