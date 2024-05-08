@@ -22,6 +22,7 @@ import ResultPage from "../pages/detection/ResultPage";
 import VoiceLayout from "../components/common/layout/VoiceLayout";
 import ClovaVoicePage from "../pages/tts/ClovaVoicePage";
 import SettingRoutinePage from "../pages/setting/smartThings/SettingRoutinePage";
+import PosePage from "../pages/detection/PosePage";
 
 const authRoutes = [
   {
@@ -88,6 +89,17 @@ const voiceRoutes = [
     element: <VoiceLayout />,
     children: [{ index: true, element: <ClovaVoicePage /> }],
   },
+]; 
+
+const poseRoutes = [
+  {
+    path: "/pose",
+    element: <DarkCommonLayout title="자세감지" />,
+    children: [
+      { index: true, element: <PosePage /> },
+      // { path: "/detection/result", element: <PoseResultPage /> },
+    ],
+  },
 ];
 
 const routes = [
@@ -98,6 +110,7 @@ const routes = [
   ...settingRoutes,
   ...settingNavRoutes,
   ...voiceRoutes,
+  ...poseRoutes,
 ];
 
 const router = createBrowserRouter(routes);

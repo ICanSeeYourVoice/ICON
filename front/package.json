@@ -16,6 +16,7 @@
     "@types/react-vertical-timeline-component": "^3.3.6",
     "axios": "^1.6.8",
     "chart.js": "^4.4.2",
+    "face-api.js": "^0.22.2",
     "firebase": "^10.11.0",
     "moment": "^2.30.1",
     "qr-scanner": "^1.4.2",
@@ -28,6 +29,7 @@
     "react-router-dom": "^6.22.3",
     "react-spinners": "^0.13.8",
     "react-vertical-timeline-component": "^3.6.0",
+    "stores": "^1.0.0",
     "wavefile": "^11.0.0",
     "wavesurfer.js": "^7.7.11",
     "zustand": "^4.5.2"
