@@ -8,7 +8,7 @@ const ReactButton = ({ icon, color }: { icon: string; color: string }) => {
   // const isBabyCry = useDetectionStore((state: any) => state.isBabyCry);
   const setIsBabyCry = useDetectionStore((state: any) => state.setIsBabyCry);
 
-  // const cryingType = useDetectionStore((state: any) => state.cryingType);
+  const cryingType = useDetectionStore((state: any) => state.cryingType);
   const setCryingType = useDetectionStore((state: any) => state.setCryingType);
 
   const { isChange, writeCharacteristic } = useBleStore();
@@ -39,10 +39,12 @@ const ReactButton = ({ icon, color }: { icon: string; color: string }) => {
       </div>
       <button
         onClick={() => {
-          setCryingType(0);
-          setIsBabyCry(false);
-          writeCharacteristic("normal");
-          navigate("/detection");
+          if (cryingType !== "FAILED" && cryingType !== "LOADING") {
+            setCryingType(0);
+            setIsBabyCry(false);
+            writeCharacteristic("normal");
+            navigate("/detection");
+          }
         }}
         className="flex justify-center items-center w-[35%] aspect-square rounded-full absolute max-w-[7.5rem] max-h-[7.5rem]"
         style={{ backgroundColor: color }}
