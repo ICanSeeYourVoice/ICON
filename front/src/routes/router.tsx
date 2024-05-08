@@ -81,6 +81,7 @@ const settingNavRoutes = [
   { path: "/setting/scan", element: <QRScanPage /> },
   { path: "/setting/things", element: <SmartThingsPage /> },
   { path: "/setting/things/routine", element: <SettingRoutinePage /> },
+  { path: "/setting/ble", element: <BlePage /> },
 ];
 
 const voiceRoutes = [
