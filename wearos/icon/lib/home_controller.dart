@@ -13,6 +13,7 @@ class HomeController extends GetxController {
   RxBool isAdvertising = false.obs;
   RxBool isBleOn = false.obs;
   RxList<String> devices = <String>[].obs;
+  RxString devicesId = ''.obs;
   RxString status = 'init'.obs;
 
   void updateStatus(String newStatus) {
@@ -28,7 +29,7 @@ class HomeController extends GetxController {
       // HapticFeedback.lightImpact();
       // HapticFeedback.selectionClick();
     }
-    print(status.value);
+    print("updateStatus: ${status.value}");
   }
 
   String get deviceName => switch (defaultTargetPlatform) {
@@ -74,6 +75,7 @@ class HomeController extends GetxController {
       Get.log("OnDeviceAvailabilityChange: $deviceId : $isAvailable");
       if (isAvailable) {
         if (!devices.any((element) => element == deviceId)) {
+          devicesId.value = deviceId;
           devices.add(deviceId);
           Get.log("$deviceId adding");
         } else {
