@@ -6,6 +6,7 @@ import moment from "moment";
 import MoveButton from "../../common/button/MoveButton";
 import { useQuery } from "@tanstack/react-query";
 import { diaryList } from "../../../apis/Diary";
+import { useDateStore } from "../../../stores/diary";
 
 interface DiaryEntryProps {
   diary_id: number;
@@ -16,22 +17,24 @@ interface DiaryEntryProps {
 
 const ReactCalendar = () => {
   const [value, setValue] = useState<Date>(new Date());
+  const setSelectedDate = useDateStore((state) => state.setSelectedDate); // zustand
   const [selectedDiary, setSelectedDiary] = useState<DiaryEntryProps | null>(
     null
   );
 
-  // 달의 첫날과 마지막날로 데이터 조회
-  const startOfMonth = moment(value).startOf("month").format("YYYY-MM-DD");
-  const endOfMonth = moment(value).endOf("month").format("YYYY-MM-DD");
+  // 00월 00일 00요일 로 변환
+  const getMonthName = (date: Date) => moment(date).format("MM-DD");
+  const getDayName = (date: Date) => moment(date).format("dddd");
 
   const { data: dayList = [] } = useQuery<DiaryEntryProps[]>({
-    queryKey: ["DiaryList", "2024-04-01", "2024-04-30"],
-    queryFn: () => diaryList({ startId: startOfMonth, endId: endOfMonth }),
+    queryKey: ["DiaryList"],
+    queryFn: () => diaryList({ startId: "2024-01-01", endId: "2024-12-31" }),
   });
 
   const handleChange: CalendarProps["onChange"] = (newValue) => {
     if (newValue instanceof Date) {
       setValue(newValue);
+      setSelectedDate(newValue); // zustand
       const dateStr: string = moment(newValue).format("YYYY-MM-DD");
       const diaryEntry: DiaryEntryProps | undefined = dayList.find(
         (entry) => entry.date === dateStr
@@ -39,6 +42,7 @@ const ReactCalendar = () => {
       setSelectedDiary(diaryEntry || null);
     } else if (Array.isArray(newValue) && newValue[0] instanceof Date) {
       setValue(newValue[0]);
+      setSelectedDate(newValue[0]); // zustand
       const dateStr: string = moment(newValue[0]).format("YYYY-MM-DD");
       const diaryEntry: DiaryEntryProps | undefined = dayList.find(
         (entry) => entry.date === dateStr
@@ -46,9 +50,12 @@ const ReactCalendar = () => {
       setSelectedDiary(diaryEntry || null);
     } else {
       setValue(new Date());
+      setSelectedDate(new Date()); // zustand
       setSelectedDiary(null);
     }
   };
+
+  // 일지 작성한 날 이모지로 체크
 
   const addContent = ({ date }: { date: Date }) => {
     const dateStr: string = moment(date).format("YYYY-MM-DD");
@@ -67,9 +74,6 @@ const ReactCalendar = () => {
     }
     return <div />;
   };
-
-  const getDayName = (date: Date) => moment(date).format("dddd");
-  const getMonthName = (date: Date) => moment(date).format("MM-DD");
 
   return (
     <div>

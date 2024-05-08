@@ -6,8 +6,13 @@ interface DiaryEntryProps {
     content: string;
     image_urls: string[];
   }
+
+  interface CreateDiaryProps {
+    content : string;
+    date: string;
+    image_urls : string[];
+  }
   
-  // API 호출 결과를 DiaryEntryProps 배열로 반환하도록 명시
   export const diaryList = async ({ startId, endId }: { startId: string; endId: string }): Promise<DiaryEntryProps[]> => {
     try {
       const response = await api.get(`/common-service/diaries?start=${startId}&end=${endId}`);
@@ -17,3 +22,15 @@ interface DiaryEntryProps {
       throw error;
     }
   };
+
+
+
+  export const diaryRegister = async (diaryCreateData: CreateDiaryProps) => {
+    try {
+      const response = await api.post("/common-service/diaries", diaryCreateData);
+      return response.data
+    } catch (error) {
+      console.error("API error: ", error);
+      throw error;
+    }
+  }

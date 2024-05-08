@@ -10,6 +10,7 @@ interface ButtonProps {
   id: number;
 }
 
+// 자주 사용하는 문구 삭제
 const Button: React.FC<ButtonProps> = ({ label, onClick, id }) => {
   const queryClient = useQueryClient();
   const { mutate: deleteVoice } = useMutation({
