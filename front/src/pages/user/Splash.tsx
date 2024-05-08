@@ -1,10 +1,19 @@
 import Logo from "../../assets/svgs/auth/Logo.svg";
 import PostButton from "../../components/common/button/PostButton";
 import { useNavigate } from "react-router-dom";
+import { useTokenStore } from "../../stores/notification";
+import toast from "react-hot-toast";
 
 const SplashPage = () => {
+  const { token } = useTokenStore();
   const navigate = useNavigate();
   const handleLoginClick = () => {
+    if (!token) {
+      toast.error("알림 권한을 허용해주세요");
+
+      return;
+    }
+
     navigate("/login");
   };
   return (
