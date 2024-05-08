@@ -1,6 +1,6 @@
 import React from "react";
 import Volume from "../../../assets/svgs/voice/volume.svg";
-import Trash from "../../../assets/svgs/voice/Trash.svg";
+import Trash from "../../../assets/svgs/voice/graytrash.svg";
 import { DeleteVoice } from "../../../apis/Voice";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 

@@ -10,6 +10,7 @@ interface ImageUploadState {
     previewUrls: string[];
     addImages: (newFiles: File[]) => void;
     removeImage: (index: number) => void;
+    clearImages: () => void;  
   }
   
 
@@ -31,5 +32,9 @@ export const useDateStore = create<DateState>((set) => ({
       const newFiles = state.imageFiles.filter((_, i) => i !== index);
       const newURLs = state.previewUrls.filter((_, i) => i !== index);
       return { imageFiles: newFiles, previewUrls: newURLs };
-    })
+    }),
+    clearImages: () => set(() => ({ 
+      imageFiles: [],
+      previewUrls: []
+    }))
   }));

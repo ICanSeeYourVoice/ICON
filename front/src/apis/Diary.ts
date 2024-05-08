@@ -11,6 +11,7 @@ interface DiaryEntryProps {
     content : string;
     date: string;
     image_urls : string[];
+    
   }
   
   export const diaryList = async ({ startId, endId }: { startId: string; endId: string }): Promise<DiaryEntryProps[]> => {
@@ -28,6 +29,18 @@ interface DiaryEntryProps {
   export const diaryRegister = async (diaryCreateData: CreateDiaryProps) => {
     try {
       const response = await api.post("/common-service/diaries", diaryCreateData);
+      return response.data
+    } catch (error) {
+      console.error("API error: ", error);
+      throw error;
+    }
+  }
+
+
+
+  export const diaryDelete = async (diaryId: number) => {
+    try {
+      const response = await api.delete(`/common-service/diaries/${diaryId}`);
       return response.data
     } catch (error) {
       console.error("API error: ", error);

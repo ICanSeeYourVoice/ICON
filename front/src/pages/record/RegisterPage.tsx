@@ -12,7 +12,7 @@ import toast from "react-hot-toast";
 
 const RegisterPage = () => {
   const selectedDate = useDateStore((state) => state.selectedDate); // zustand
-  const { previewUrls } = useImageStore(); // zustand 이미지 경로
+  const { previewUrls, clearImages } = useImageStore(); // zustand 이미지 경로
   const [contentValue, setContentValue] = useState("");
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -24,6 +24,7 @@ const RegisterPage = () => {
       queryClient.invalidateQueries({
         queryKey: ["DiaryList"],
       });
+      clearImages();
       navigate("/record/detail/diary");
     },
     onError: (error) => {
@@ -54,11 +55,16 @@ const RegisterPage = () => {
       <TopBar text="일지 등록" />
       <div className="mt-[8rem]">
         {selectedDate ? (
-          <div className="text-lg font-semibold">
-            {selectedDate.toLocaleDateString()}
+          <div>
+            <span className="text-[1.5rem] font-semibold text-blue-500">
+              {selectedDate.toLocaleDateString()}
+            </span>
+            <span className="ml-[0.3rem]"> 일지 작성하기</span>
           </div>
         ) : (
-          <div className="text-lg font-semibold">날짜를 선택해주세요.</div>
+          <div className="text-[1.3rem] text-red-500 font-semibold">
+            날짜를 선택해주세요
+          </div>
         )}
       </div>
       <div>
@@ -71,9 +77,9 @@ const RegisterPage = () => {
       </div>
       <div>
         <FileUploadInput />
-        <div className="fixed bottom-[4rem]">
-          <PostButton label="등록하기" onClick={createDiary} />
-        </div>
+      </div>
+      <div className="fixed bottom-[4rem]">
+        <PostButton label="등록하기" onClick={createDiary} />
       </div>
     </div>
   );
