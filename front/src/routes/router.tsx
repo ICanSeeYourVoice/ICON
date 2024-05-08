@@ -23,6 +23,7 @@ import VoiceLayout from "../components/common/layout/VoiceLayout";
 import ClovaVoicePage from "../pages/tts/ClovaVoicePage";
 import SettingRoutinePage from "../pages/setting/smartThings/SettingRoutinePage";
 import PosePage from "../pages/detection/PosePage";
+import BlePage from "../pages/setting/ble/BlePage";
 
 const authRoutes = [
   {

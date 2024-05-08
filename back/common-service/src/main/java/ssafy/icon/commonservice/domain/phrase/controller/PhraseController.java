@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -15,7 +16,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ssafy.icon.commonservice.domain.phrase.dto.AddPhraseReq;
-import ssafy.icon.commonservice.domain.phrase.dto.DelPhraseReq;
 import ssafy.icon.commonservice.domain.phrase.dto.GetPhraseRes;
 import ssafy.icon.commonservice.domain.phrase.service.PhraseService;
 
@@ -39,10 +39,10 @@ public class PhraseController {
 		return ResponseEntity.ok(res);
 	}
 
-	@DeleteMapping
+	@DeleteMapping("/{phraseId}")
 	public ResponseEntity<Void> deletePhrase(@RequestHeader("X-Authorization-Id") Integer memberId,
-		@RequestBody @Valid DelPhraseReq req){
-		phraseService.deletePhrase(memberId, req);
+		@PathVariable Integer phraseId){
+		phraseService.deletePhrase(memberId, phraseId);
 		return ResponseEntity.ok().build();
 	}
 }

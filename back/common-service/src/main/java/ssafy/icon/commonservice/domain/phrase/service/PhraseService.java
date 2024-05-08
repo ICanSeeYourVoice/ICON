@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import ssafy.icon.commonservice.domain.member.entity.Member;
 import ssafy.icon.commonservice.domain.member.repository.MemberRepository;
 import ssafy.icon.commonservice.domain.phrase.dto.AddPhraseReq;
-import ssafy.icon.commonservice.domain.phrase.dto.DelPhraseReq;
 import ssafy.icon.commonservice.domain.phrase.dto.GetPhraseRes;
 import ssafy.icon.commonservice.domain.phrase.entity.Phrase;
 import ssafy.icon.commonservice.domain.phrase.repository.PhraseRepository;
@@ -61,10 +60,15 @@ public class PhraseService {
 		return res;
 	}
 
-	public void deletePhrase(Integer memberId, DelPhraseReq req) {
-		Phrase phrase = phraseRepository.findById(req.getId()).orElseThrow(
+	public void deletePhrase(Integer memberId, Integer phraseId) {
+		Phrase phrase = phraseRepository.findById(phraseId).orElseThrow(
 			() -> new PhraseException(BAD_REQUEST, "존재하지 않는 문구입니다."));
 		log.info("phrase : {}", phrase);
+
+		if(phrase.getMember().getId() != memberId){
+			throw new PhraseException(BAD_REQUEST, "회원 ID가 일치하지 않습니다.");
+		}
+
 		phraseRepository.delete(phrase);
 	}
 }

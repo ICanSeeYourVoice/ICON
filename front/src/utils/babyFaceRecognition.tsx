@@ -1,22 +1,30 @@
 import { useEffect, useRef } from "react";
 import { toast } from "react-hot-toast";
-import * as faceapi from "face-api.js";
+// import * as faceapi from "face-api.js";
 
-interface aa { hasEyes:boolean; hasNose:boolean; hasMouth:boolean;}
+import tf from '@tensorflow/tfjs-node';
+import faceapi from '@vladmandic/face-api';
 
-const FaceRecognizerCam = ( onFeaturesDetected : aa ) => {
+interface DetectedFeatures {
+    hasEyes: boolean;
+    hasNose: boolean;
+    hasMouth: boolean;
+}
+
+console.log(faceapi.nets);
+interface Props {
+    onFeaturesDetected: (features: DetectedFeatures) => void;
+}
+
+
+const FaceRecognizerCam : React.FC<Props> = ({ onFeaturesDetected }) => {
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const camMediaStream = useRef<MediaStream | null>(null);
-    const intervalDetection = useRef<NodeJS.Timer | null>(null);
+    // const intervalDetection = useRef<NodeJS.Timer | null>(null);
+    const intervalDetection = useRef<number | null>(null); // 타입을 number로 선언
+
 
     useEffect(() => {
-        toast.dismiss();
-        toast(
-            "A detecção de expressões demanda mais recursos, o que pode causar travamentos em celulares e outros dispositivos mais limitados.",
-            {
-                duration: 8000
-            }
-        );
 
         if (faceapi.nets.faceLandmark68Net.isLoaded && faceapi.nets.faceLandmark68TinyNet.isLoaded) {
             startVideo();
@@ -24,9 +32,17 @@ const FaceRecognizerCam = ( onFeaturesDetected : aa ) => {
         }
 
         const loadModels = async () => {
-            const MODEL_URL = "/model";
+            const MODEL_URL =  "src/model";
             try {
+                // faceapi.loadFaceLandmarkModel(MODEL_URL).then(() => {
+                    //     console.log("Completed loading Face model");
+                    // });
+                    // faceapi.loadFaceLandmarkTinyModel(MODEL_URL).then(() => {
+                        //     console.log("Completed loading Landmark model");
+                        // });
+                    
                 await Promise.all([
+                    faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
                     faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
                     faceapi.nets.faceLandmark68TinyNet.loadFromUri(MODEL_URL),
                 ]);
@@ -34,11 +50,7 @@ const FaceRecognizerCam = ( onFeaturesDetected : aa ) => {
             } catch (error) {
                 console.error("Model loading failed", error);
                 toast.error("Failed to load face detection models.");
-            }
-            // Promise.all([
-            //     faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
-            //     faceapi.nets.faceLandmark68TinyNet.loadFromUri(MODEL_URL),
-            // ]).then(startVideo);
+            } 
         };
 
         loadModels();
@@ -105,7 +117,7 @@ const FaceRecognizerCam = ( onFeaturesDetected : aa ) => {
                 // Pass detected features to parent component
                 onFeaturesDetected({ hasEyes, hasNose, hasMouth });
             }
-        }, 100);
+        }, 100) as unknown as number; // NodeJS.Timer를 number로 강제 변환
     };
 
     return (
@@ -116,5 +128,4 @@ const FaceRecognizerCam = ( onFeaturesDetected : aa ) => {
         
         );
 }
-
-export default FaceRecognizerCam;
+export { FaceRecognizerCam };
