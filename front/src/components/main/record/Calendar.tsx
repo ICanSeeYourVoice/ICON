@@ -7,7 +7,7 @@ import MoveButton from "../../common/button/MoveButton";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { diaryList, diaryDelete } from "../../../apis/Diary";
 import { useDateStore } from "../../../stores/diary";
-import Trash from "../../../assets/svgs/voice/trash.svg";
+import Trash from "../../../assets/svgs/voice/delete.svg";
 import toast from "react-hot-toast";
 import Clude from "../../../assets/svgs/record/blueClude.png";
 
