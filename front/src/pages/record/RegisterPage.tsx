@@ -42,7 +42,6 @@ const RegisterPage = () => {
     }
     const formattedDate = moment(selectedDate).format("YYYY-MM-DD");
 
-    console.log(formattedDate, "오늘날짜");
     registerDiary({
       content: contentValue,
       date: formattedDate,
