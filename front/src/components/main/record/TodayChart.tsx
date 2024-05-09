@@ -22,7 +22,7 @@ const TodayChart = () => {
   }, [date]);
 
   return (
-    <div className="h-full w-[80%] mb-[6rem]">
+    <div className="h-full w-[80%] mb-[3rem]">
       <div className="flex justify-between pt-[2rem] w-full text-slate-500 text-xs pb-[0.5rem]">
         <div>통계</div>
 

@@ -5,11 +5,21 @@ import {
   getDatasetAtEvent,
   getElementAtEvent,
 } from "react-chartjs-2";
+import { useQuery } from "@tanstack/react-query";
+import { GetChartData } from "../../../../apis/Chart";
+import { PulseLoader } from "react-spinners";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface DoughnutChartProps {
   date: string;
+}
+interface ChartData {
+  total: number;
+  HUNGRY: number;
+  TIRED: number;
+  PAIN: number;
+  DISCOMFORT: number;
 }
 
 const DoughnutChart: React.FC<DoughnutChartProps> = (date) => {
@@ -38,16 +48,12 @@ const DoughnutChart: React.FC<DoughnutChartProps> = (date) => {
       data.datasets[0].data[index]
     );
   };
-  // 임시 데이터
-  const res = {
-    data_body: {
-      total: 21,
-      hungry: 12,
-      tired: 5,
-      discomfrot: 3,
-      cold: 1,
-    },
-  };
+
+  const { data: chartData, isLoading: isLoadingChartData } =
+    useQuery<ChartData>({
+      queryFn: () => GetChartData({ statisticsDate: date.date }),
+      queryKey: ["chartData"],
+    });
 
   const data = {
     labels: ["배고파요", "졸려요", "불편해요", "아파요"],
@@ -55,10 +61,10 @@ const DoughnutChart: React.FC<DoughnutChartProps> = (date) => {
       {
         label: "횟수",
         data: [
-          res.data_body.hungry,
-          res.data_body.tired,
-          res.data_body.discomfrot,
-          res.data_body.cold,
+          chartData?.HUNGRY,
+          chartData?.TIRED,
+          chartData?.DISCOMFORT,
+          chartData?.PAIN,
         ],
         backgroundColor: [
           "rgba(250, 217, 46, 1)",
@@ -90,8 +96,15 @@ const DoughnutChart: React.FC<DoughnutChartProps> = (date) => {
 
   return (
     <>
-      {res.data_body.total == 0 && <div>오늘은 아기가 울지 않았어요!</div>}
-      {res.data_body.total != 0 && (
+      {isLoadingChartData ? (
+        <div className="flex items-center justify-center w-full h-full">
+          <PulseLoader color="#c8c8c8" />
+        </div>
+      ) : chartData && chartData.total === 0 ? (
+        <div className="flex items-center justify-center w-full h-full">
+          <div>오늘은 아기가 울지 않았어요😊</div>
+        </div>
+      ) : (
         <Doughnut
           ref={chartRef}
           data={data}
