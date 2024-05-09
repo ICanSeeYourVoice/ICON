@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,22 +35,22 @@ public class DiaryController {
 		return ResponseEntity.ok().build();
 	}
 
-	@DeleteMapping("/{diaryId}")
+	@DeleteMapping
 	public ResponseEntity<Void> delete(
 		@RequestHeader("X-Authorization-Id") Integer memberId,
-		@PathVariable("diaryId") Long diaryId
+		@RequestParam("date") LocalDate date
 	) {
-		diaryService.delete(memberId, diaryId);
+		diaryService.delete(memberId, date);
 		return ResponseEntity.ok().build();
 	}
 
-	@PutMapping("/{diaryId}")
+	@PutMapping
 	public ResponseEntity<Void> modify(
 		@RequestHeader("X-Authorization-Id") Integer memberId,
-		@PathVariable("diaryId") Long diaryId,
+		@RequestParam("date") LocalDate date,
 		@RequestBody @Valid DiaryModifyForm form
 	) {
-		diaryService.modify(memberId, diaryId, form);
+		diaryService.modify(memberId, date, form);
 		return ResponseEntity.ok().build();
 	}
 
@@ -63,7 +62,7 @@ public class DiaryController {
 		return ResponseEntity.ok(diaryService.queryDetail(memberId, date));
 	}
 
-	@GetMapping
+	@GetMapping("/calendar")
 	public ResponseEntity<List<DiaryDetailResponse>> queryPeriod(
 		@RequestHeader("X-Authorization-Id") Integer memberId,
 		@RequestParam("start") LocalDate start,

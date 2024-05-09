@@ -1,9 +1,7 @@
 package ssafy.icon.commonservice.domain.diary.service;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -52,20 +50,20 @@ public class DiaryService {
 	}
 
 	@Transactional
-	public void delete(Integer memberId, Long diaryId) {
-		Diary diary = diaryRepository.findByIdWithImages(diaryId)
+	public void delete(Integer memberId, LocalDate date) {
+		Diary diary = diaryRepository.findByMemberIdAndDate(memberId,date)
 			.orElseThrow(() -> new DiaryException(NOT_FOUND, "성장일지를 찾을 수 없습니다."));
 
 		diaryRepository.delete(diary);
 	}
 
 	@Transactional
-	public void modify(Integer memberId, Long diaryId, DiaryModifyForm form) {
-		Diary diary = diaryRepository.findByIdWithImages(diaryId)
+	public void modify(Integer memberId, LocalDate date, DiaryModifyForm form) {
+		Diary diary = diaryRepository.findByMemberIdAndDate(memberId, date)
 			.orElseThrow(() -> new DiaryException(NOT_FOUND, "성장일지를 찾을 수 없습니다."));
 
-		if (!diary.getMember().getId().equals(memberId)) {
-			throw new DiaryException(FORBIDDEN, "해당 일지에 대한 권한이 없습니다.");
+		if (diaryRepository.existsByMemberIdAndDate(memberId, form.getDate())) {
+			throw new DiaryException(BAD_REQUEST, "해당 날짜에 이미 작성한 일지가 있습니다.");
 		}
 
 		ArrayList<DiaryImage> deletedImages = new ArrayList<>();
@@ -83,8 +81,7 @@ public class DiaryService {
 			if (!isExisted) {
 				deletedImages.add(image);
 			}
-		}
-		;
+		};
 
 		diary.getImages().removeAll(deletedImages);
 
@@ -96,7 +93,7 @@ public class DiaryService {
 	}
 
 	public DiaryDetailResponse queryDetail(Integer memberId, LocalDate date) {
-		Diary diary = diaryRepository.findByMemberIdAndDate(memberId,date)
+		Diary diary = diaryRepository.findByMemberIdAndDate(memberId, date)
 			.orElseThrow(() -> new DiaryException(NOT_FOUND, "성장일지를 찾을 수 없습니다."));
 
 		return DiaryDetailResponse.of(diary);
