@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { loadYamnetModel } from "../utils/cryingClassification";
 
 export const useDetectionStore = create((set) => ({
   isBabyCry: false,
@@ -15,4 +16,14 @@ type LoadingState = {
 export const useLoading = create<LoadingState>((set) => ({
   isLoading: false,
   setLoading: (isLoading) => set({ isLoading }),
+}));
+
+type ModelState = {
+  yamnetModel: any;
+  setModel: (yamnetModel: any) => void;
+};
+
+export const useYamnetStore = create<ModelState>((set) => ({
+  yamnetModel: null,
+  setModel: (yamnetModel) => set({ yamnetModel }),
 }));

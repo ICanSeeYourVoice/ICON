@@ -7,7 +7,11 @@ import {
   LOADING_INFO,
 } from "../../constants/detection";
 import { useEffect, useRef } from "react";
-import { useDetectionStore, useLoading } from "../../stores/detection";
+import {
+  useDetectionStore,
+  useLoading,
+  useYamnetStore,
+} from "../../stores/detection";
 import { useNavigate } from "react-router";
 import { useMutation } from "@tanstack/react-query";
 import { analyzeAlarm, cryAlarm } from "../../apis/Notification";
@@ -18,11 +22,11 @@ import useBleStore from "../../stores/bluetooth";
 
 const DetectionPage = () => {
   const worker = new Worker("recordingWorker.js");
+  const { yamnetModel, setModel } = useYamnetStore.getState();
 
   const navigate = useNavigate();
   const isBabyCry = useDetectionStore((state: any) => state.isBabyCry);
   const cryingType = useDetectionStore((state: any) => state.cryingType);
-  const modelRef = useRef<tf.GraphModel | null>(null);
   const setIsBabyCry = useDetectionStore((state: any) => state.setIsBabyCry);
   const setCryingType = useDetectionStore((state: any) => state.setCryingType);
   const streamRef = useRef<MediaStream | null>(null);
@@ -62,12 +66,19 @@ const DetectionPage = () => {
   let audioCtx: AudioContext | null = null;
   let scriptNode: ScriptProcessorNode | null = null;
   let source: any = null;
+  let gainNode: any = null;
 
   const fetchDataAndProcess = async () => {
     setLoading(true);
     try {
-      const yamnet = await loadYamnetModel();
-      modelRef.current = yamnet;
+      let yamnet: any;
+
+      if (!yamnetModel) {
+        yamnet = await loadYamnetModel();
+        setModel(yamnet);
+      } else {
+        yamnet = yamnetModel;
+      }
 
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: true,
@@ -77,9 +88,12 @@ const DetectionPage = () => {
 
       audioCtx = new AudioContext({ sampleRate: 16000 });
       source = audioCtx.createMediaStreamSource(stream);
+      gainNode = audioCtx.createGain();
       scriptNode = audioCtx.createScriptProcessor(8192, 1, 1);
 
-      source.connect(scriptNode);
+      gainNode.gain.value = 4;
+      source.connect(gainNode);
+      gainNode.connect(scriptNode);
       scriptNode.connect(audioCtx.destination);
 
       let audioBuffer: number[] = [];
@@ -126,7 +140,6 @@ const DetectionPage = () => {
             clearInterval(intervalRef.current!);
             // console.log(intervalRef.current! + " 해제(cnt)");
 
-            modelRef.current = null;
             streamRef.current = null;
 
             worker.postMessage(audioBuffer);
@@ -162,7 +175,6 @@ const DetectionPage = () => {
       source?.disconnect();
       scriptNode?.disconnect();
 
-      modelRef.current = null;
       streamRef.current = null;
     };
   }, []);
