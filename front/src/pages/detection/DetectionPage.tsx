@@ -3,6 +3,7 @@ import ReactButton from "../../components/main/detection/ReactButton";
 import {
   DETECTION,
   DETECTION_INFO,
+  FAILED_INFO,
   LOADING_INFO,
 } from "../../constants/detection";
 import { useEffect, useRef } from "react";
@@ -13,6 +14,7 @@ import { analyzeAlarm, cryAlarm } from "../../apis/Notification";
 import toast from "react-hot-toast";
 import * as tf from "@tensorflow/tfjs";
 import { loadYamnetModel } from "../../utils/cryingClassification";
+import useBleStore from "../../stores/bluetooth";
 
 const DetectionPage = () => {
   const worker = new Worker("recordingWorker.js");
@@ -24,6 +26,8 @@ const DetectionPage = () => {
   const setIsBabyCry = useDetectionStore((state: any) => state.setIsBabyCry);
   const setCryingType = useDetectionStore((state: any) => state.setCryingType);
   const streamRef = useRef<MediaStream | null>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const { writeCharacteristic } = useBleStore();
 
   const { mutate } = useMutation({
     mutationFn: cryAlarm,
@@ -39,16 +43,15 @@ const DetectionPage = () => {
       console.log(res);
       setCryingType(res.cryReason);
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast.error(error.message);
+      if (error.response.status === 500) {
+        setIsBabyCry(false);
+        setCryingType(0);
+        writeCharacteristic("normal");
+      }
     },
   });
-
-  useEffect(() => {
-    if (isBabyCry) {
-      mutate();
-    }
-  }, [isBabyCry]);
 
   useEffect(() => {
     const fetchDataAndProcess = async () => {
@@ -60,9 +63,10 @@ const DetectionPage = () => {
 
           const yamnet = await loadYamnetModel();
           model.current = yamnet;
-          const constraints = { audio: true };
 
-          const stream = await navigator.mediaDevices.getUserMedia(constraints);
+          const stream = await navigator.mediaDevices.getUserMedia({
+            audio: true,
+          });
 
           streamRef.current = stream;
 
@@ -70,39 +74,56 @@ const DetectionPage = () => {
           const source = audioCtx.createMediaStreamSource(stream);
           const scriptNode = audioCtx.createScriptProcessor(8192, 1, 1);
 
-          setInterval(() => {
-            console.log("아기울음녹음시작");
+          let audioBuffer: number[] = [];
 
-            let audioBuffer: number[] = [];
+          intervalRef.current = setInterval(() => {
+            console.log("녹음 초기화");
+            audioBuffer = [];
+          }, 4000);
 
-            scriptNode.onaudioprocess = function (e) {
-              const inputBuffer = e.inputBuffer;
-              let inputData = inputBuffer.getChannelData(0);
+          let isCry = false;
+          let cnt = 0;
 
-              audioBuffer.push(...inputData);
+          scriptNode.onaudioprocess = function (e) {
+            if (isCry) cnt++;
 
-              const [scores] = yamnet.predict(tf.tensor(inputData)) as [any];
+            const inputBuffer = e.inputBuffer;
+            let inputData = inputBuffer.getChannelData(0);
 
-              const top5 = tf.topk(scores, 3, true);
-              const classes = top5.indices.dataSync();
-              const probabilities = top5.values.dataSync();
+            audioBuffer.push(...inputData);
 
+            const [scores] = yamnet.predict(tf.tensor(inputData)) as [any];
+            const top5 = tf.topk(scores, 3, true);
+            const classes = top5.indices.dataSync();
+            const probabilities = top5.values.dataSync();
+
+            if (cnt == 0) {
               for (let i = 0; i < 3; i++) {
                 if (classes[i] === 20 && probabilities[i] >= 0.5) {
+                  isCry = true;
                   setIsBabyCry(true);
-                  setTimeout(() => {
-                    worker.postMessage(audioBuffer);
+                  setCryingType("LOADING");
+                  mutate();
+                  clearInterval(intervalRef.current!);
 
-                    worker.onmessage = function (e) {
-                      const sound = e.data;
-                      analyzeMutate({ data: sound });
-                    };
-                  }, 1000);
                   return;
                 }
               }
-            };
-          }, 5000);
+            } else {
+              if (cnt >= 4) {
+                streamRef.current!.getTracks().forEach((track) => track.stop());
+
+                worker.postMessage(audioBuffer);
+                worker.onmessage = function (e) {
+                  const sound = e.data;
+                  analyzeMutate({ data: sound });
+                  source.disconnect();
+                  scriptNode.disconnect();
+                  audioCtx.close();
+                };
+              }
+            }
+          };
 
           source.connect(scriptNode);
           scriptNode.connect(audioCtx.destination);
@@ -112,7 +133,10 @@ const DetectionPage = () => {
           toast.error("마이크 연결에 실패하였습니다.");
         }
       } catch (error) {
-        toast.error("아기울음감지를 준비 중 오류가 발생했습니다.");
+        toast.error(
+          "울음감지 준비 중 오류가 발생했습니다.\n 마이크를 허용하고 다시 시작해주세요."
+        );
+        setCryingType("FAILED");
       } finally {
         toast.dismiss(toastId);
       }
@@ -128,7 +152,11 @@ const DetectionPage = () => {
   }, []);
 
   useEffect(() => {
-    if (cryingType !== 0) {
+    if (
+      cryingType !== "LOADING" &&
+      cryingType !== "FAILED" &&
+      cryingType !== 0
+    ) {
       navigate("/detection/result");
     }
   }, [cryingType]);
@@ -136,13 +164,29 @@ const DetectionPage = () => {
   return (
     <div className="flex flex-col items-center justify-center w-full h-full gap-4">
       <p className="text-gray-1 text-sm ">
-        {isBabyCry ? LOADING_INFO : DETECTION_INFO}
+        {cryingType === "FAILED"
+          ? FAILED_INFO
+          : cryingType === "LOADING"
+          ? LOADING_INFO
+          : DETECTION_INFO}
       </p>
       <ReactButton
-        icon={isBabyCry ? DETECTION.LOADING.ICON : DETECTION.NORMAL.ICON}
-        color={isBabyCry ? DETECTION.LOADING.COLOR : DETECTION.NORMAL.COLOR}
+        icon={
+          cryingType === "LOADING"
+            ? DETECTION.LOADING.ICON
+            : cryingType === "FAILED"
+            ? DETECTION.FAILED.ICON
+            : DETECTION.NORMAL.ICON
+        }
+        color={
+          cryingType === "LOADING"
+            ? DETECTION.LOADING.COLOR
+            : cryingType === "FAILED"
+            ? DETECTION.FAILED.COLOR
+            : DETECTION.NORMAL.COLOR
+        }
       />
-      {isBabyCry ? (
+      {cryingType ? (
         <PulseLoader color="#c8c8c8" />
       ) : (
         <div className="flex flex-col items-center justify-center text-gray-0 text-xl">

@@ -24,8 +24,8 @@ const WaveSurferComponent: React.FC<WaveSurferComponentProps> = ({
       wavesurferRef.current = WaveSurfer.create({
         container: containerRef.current,
         height: 1,
-        waveColor: "rgb(255, 255, 255)",
-        progressColor: "rgb(4, 100, 226)",
+        waveColor: "rgb(124, 175, 243)",
+        progressColor: "rgb(8, 85, 186)",
         plugins: [Timeline.create(), RegionsPlugin.create()],
       });
 
@@ -64,7 +64,7 @@ const WaveSurferComponent: React.FC<WaveSurferComponentProps> = ({
       .join(":");
 
   return (
-    <div className="waveform-container h-[8rem] border-black border w-[20rem] m-4 rounded-full flex justify-center items-center">
+    <div className="waveform-container h-[8rem]  m-4 rounded-[1rem] flex justify-center items-center">
       <div className="waveform-container h-[8rem]  w-[18rem] ">
         <div className="flex justify-between p-3">
           {formatTime(currentTime)}

@@ -10,10 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-three/drei": "^9.105.6",
+    "@react-three/fiber": "^8.16.4",
     "@tanstack/react-query": "^5.29.2",
     "@tanstack/react-query-devtools": "^5.29.2",
     "@tensorflow/tfjs": "^4.18.0",
     "@types/react-vertical-timeline-component": "^3.3.6",
+    "@types/three": "^0.164.0",
     "@types/web-bluetooth": "^0.0.20",
     "axios": "^1.6.8",
     "chart.js": "^4.4.2",
@@ -29,6 +32,7 @@
     "react-router-dom": "^6.22.3",
     "react-spinners": "^0.13.8",
     "react-vertical-timeline-component": "^3.6.0",
+    "three": "^0.164.1",
     "wavefile": "^11.0.0",
     "wavesurfer.js": "^7.7.11",
     "zustand": "^4.5.2"

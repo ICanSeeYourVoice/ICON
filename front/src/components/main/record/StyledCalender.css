@@ -11,7 +11,7 @@
   }
 
   .react-calendar {
-    width: 21rem;
+    width: 22.1rem;
     max-width: 100%;
     background: rgb(241, 242, 255);
     border-radius: 1rem ;
@@ -38,7 +38,7 @@
 
   .react-calendar__month-view__weekdays {
     abbr {
-      font-size: 0.8rem;
+      font-size: 0.6rem;
       font-weight: 900;
     }
   }
@@ -91,13 +91,9 @@
   }
 
   .react-calendar__navigation button {
-    min-width: 2rem;
     background: none;
     font-size: 1.8rem;
     color :white;
   }
   
 
-
-
- 

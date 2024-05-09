@@ -1,5 +1,6 @@
 import baby from "../assets/svgs/detection/baby.svg";
 import questionMark from "../assets/svgs/detection/questionMark.svg";
+import exclamationMark from "../assets/svgs/detection/exclamationMark.svg";
 import sleepy from "../assets/svgs/detection/sleepy.svg";
 import hungry from "../assets/svgs/detection/hungry.svg";
 import uncomfortable from "../assets/svgs/detection/uncomfortable.svg";
@@ -15,6 +16,10 @@ export const DETECTION = {
   LOADING: {
     ICON: questionMark,
     COLOR: "#FFA6AF",
+  },
+  FAILED: {
+    ICON: exclamationMark,
+    COLOR: "#c8c8c8",
   },
   TIRED: {
     ICON: sleepy,
@@ -51,5 +56,7 @@ export const DETECTION = {
 export const DETECTION_INFO = "아기가 우는지 감지하고 있어요";
 
 export const LOADING_INFO = "아기가 왜 우는지 분석 중이에요";
+
+export const FAILED_INFO = "마이크 권한을 확인해주세요";
 
 export const RESTART_INFO = "가운데 버튼을 눌러 재시작해주세요";
