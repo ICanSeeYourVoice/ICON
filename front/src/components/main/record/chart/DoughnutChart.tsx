@@ -23,7 +23,6 @@ interface ChartData {
 }
 
 const DoughnutChart: React.FC<DoughnutChartProps> = (date) => {
-  console.log("DoughnutChart SelectDate(Today): ", date.date);
   const chartRef = useRef(null);
 
   // dougnutchart onclick test code
@@ -52,7 +51,8 @@ const DoughnutChart: React.FC<DoughnutChartProps> = (date) => {
   const { data: chartData, isLoading: isLoadingChartData } =
     useQuery<ChartData>({
       queryFn: () => GetChartData({ statisticsDate: date.date }),
-      queryKey: ["chartData"],
+      queryKey: ["chartData", date],
+      enabled: !!date.date,
     });
 
   const data = {

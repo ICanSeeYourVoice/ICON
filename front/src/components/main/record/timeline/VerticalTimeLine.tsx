@@ -30,13 +30,11 @@ interface ChartDetailDatas {
   timeline: TimelineData[];
 }
 const VerticalTimeLine: React.FC<VerticalTimeLineProps> = (date) => {
-  console.log("VerticalTimeLine SelectDate: ", date.date);
   const { data: chartDetailData, isLoading: isLoadingChartDetailData } =
     useQuery<ChartDetailDatas>({
       queryFn: () => GetChartDetailData({ statisticsDate: date.date }),
       queryKey: ["chartDetailData", date],
     });
-  console.log(chartDetailData);
 
   return (
     <div className="flex-col w-full">
@@ -59,10 +57,11 @@ const VerticalTimeLine: React.FC<VerticalTimeLineProps> = (date) => {
         <div className="h-[60vh] overflow-y-scroll no-scrollbar">
           <VerticalTimeline layout="1-column-left" lineColor="#7BB7F7">
             {chartDetailData &&
-              chartDetailData.timeline.map((val) => {
+              chartDetailData.timeline.map((val, index) => {
                 return (
                   <VerticalTimelineElement
                     className=""
+                    key={index}
                     contentStyle={{
                       background: "rgb(33, 150, 243)",
                       color: "#fff",
