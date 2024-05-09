@@ -11,7 +11,7 @@ export const cryAlarm = async () => {
 
 export const poseAlarm = async () => {
   try {
-    await api.post("/alarm-service/alarms", { type: "POSE" });
+    await api.post("/alarm-service/alarms", { type: "DANGER" });
   } catch (error) {
     console.error("API에러: ", error);
     throw error;
