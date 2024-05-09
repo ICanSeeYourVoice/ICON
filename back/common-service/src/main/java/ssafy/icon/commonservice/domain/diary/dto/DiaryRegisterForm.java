@@ -15,7 +15,8 @@ public record DiaryRegisterForm(
 	@NotNull
 	LocalDate date,
 	@Size(min = 1, max = 6, message = "사진은 최소 1장에서 최대 6장까지 등록 가능합니다.")
-	List<String> imageUrls
+	List<String> imageUrls,
+	String emoji
 ) {
 
 }

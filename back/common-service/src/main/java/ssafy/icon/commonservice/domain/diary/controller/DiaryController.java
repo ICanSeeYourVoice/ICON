@@ -55,12 +55,12 @@ public class DiaryController {
 		return ResponseEntity.ok().build();
 	}
 
-	@GetMapping("/{diaryId}")
+	@GetMapping
 	public ResponseEntity<DiaryDetailResponse> queryDetail(
 		@RequestHeader("X-Authorization-Id") Integer memberId,
-		@PathVariable("diaryId") Long diaryId
+		@RequestParam("date") LocalDate date
 	) {
-		return ResponseEntity.ok(diaryService.queryDetail(memberId, diaryId));
+		return ResponseEntity.ok(diaryService.queryDetail(memberId, date));
 	}
 
 	@GetMapping

@@ -15,6 +15,7 @@ public record DiaryDetailResponse(
 	Long diaryId,
 	String content,
 	LocalDate date,
+	String emoji,
 	List<String> imageUrls
 ) {
 
@@ -23,6 +24,7 @@ public record DiaryDetailResponse(
 			diary.getId(),
 			diary.getContent(),
 			diary.getDate(),
+			diary.getEmoji(),
 			diary.getImages().stream().map(DiaryImage::getUrl).toList()
 		);
 	}

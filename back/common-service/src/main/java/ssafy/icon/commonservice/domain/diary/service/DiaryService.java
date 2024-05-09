@@ -3,6 +3,7 @@ package ssafy.icon.commonservice.domain.diary.service;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -38,7 +39,12 @@ public class DiaryService {
 		List<DiaryImage> images = diaryRegisterForm.imageUrls().stream()
 			.map(DiaryImage::new).toList();
 
-		Diary diary = new Diary(member, diaryRegisterForm.content(), diaryRegisterForm.date());
+		Diary diary = Diary.builder()
+			.member(member)
+			.content(diaryRegisterForm.content())
+			.date(diaryRegisterForm.date())
+			.emoji(diaryRegisterForm.emoji())
+			.build();
 
 		images.forEach(diary::addImage);
 
@@ -57,6 +63,10 @@ public class DiaryService {
 	public void modify(Integer memberId, Long diaryId, DiaryModifyForm form) {
 		Diary diary = diaryRepository.findByIdWithImages(diaryId)
 			.orElseThrow(() -> new DiaryException(NOT_FOUND, "성장일지를 찾을 수 없습니다."));
+
+		if (!diary.getMember().getId().equals(memberId)) {
+			throw new DiaryException(FORBIDDEN, "해당 일지에 대한 권한이 없습니다.");
+		}
 
 		ArrayList<DiaryImage> deletedImages = new ArrayList<>();
 
@@ -82,16 +92,12 @@ public class DiaryService {
 			diary.addImage(new DiaryImage(imageUrl));
 		}
 
-		diary.modify(form.getContent(), form.getDate());
+		diary.modify(form.getContent(), form.getDate(), form.getEmoji());
 	}
 
-	public DiaryDetailResponse queryDetail(Integer memberId, Long diaryId) {
-		Diary diary = diaryRepository.findByIdWithImages(diaryId)
+	public DiaryDetailResponse queryDetail(Integer memberId, LocalDate date) {
+		Diary diary = diaryRepository.findByMemberIdAndDate(memberId,date)
 			.orElseThrow(() -> new DiaryException(NOT_FOUND, "성장일지를 찾을 수 없습니다."));
-
-		if (!diary.getMember().getId().equals(memberId)) {
-			throw new DiaryException(FORBIDDEN, "권한이 없습니다.");
-		}
 
 		return DiaryDetailResponse.of(diary);
 	}
