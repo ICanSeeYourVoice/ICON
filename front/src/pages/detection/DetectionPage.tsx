@@ -50,6 +50,10 @@ const DetectionPage = () => {
         setIsBabyCry(false);
         setCryingType(0);
         writeCharacteristic("normal");
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       }
     },
   });
