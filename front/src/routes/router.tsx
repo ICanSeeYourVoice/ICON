@@ -8,6 +8,7 @@ import SplashPage from "../pages/user/Splash";
 import RecordLayout from "../components/common/layout/RecordLayout";
 import RecordPage from "../pages/record/RecordPage";
 import DiaryCalendarPage from "../pages/record/DiaryCalendarPage";
+import DetailDiaryPage from "../pages/record/DetailDiaryPage";
 import RegisterPage from "../pages/record/RegisterPage";
 import ChartPage from "../pages/record/ChartPage";
 import ChatLayout from "../pages/chat/ChatLayout";
@@ -53,6 +54,7 @@ const recordRoutes = [
     children: [
       { index: true, element: <RecordPage /> },
       { path: "diary", element: <DiaryCalendarPage /> },
+      { path: "diary/detail", element: <DetailDiaryPage /> },
       { path: "diary/register", element: <RegisterPage /> },
       { path: ":chart", element: <ChartPage /> },
     ],
