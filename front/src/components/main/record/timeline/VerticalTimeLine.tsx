@@ -53,6 +53,7 @@ const VerticalTimeLine: React.FC<VerticalTimeLineProps> = (date) => {
       ) : !chartDetailData ? (
         <div className="flex items-center justify-center w-full h-full">
           <div>데이터를 불러오는데 실패했어요😢</div>
+          <div>다시 시도해주세요.</div>
         </div>
       ) : (
         <div className="h-[60vh] overflow-y-scroll no-scrollbar">
