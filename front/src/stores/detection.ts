@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { loadYamnetModel } from "../utils/cryingClassification";
+// import { loadYamnetModel } from "../utils/cryingClassification";
 
 export const useDetectionStore = create((set) => ({
   isBabyCry: false,
