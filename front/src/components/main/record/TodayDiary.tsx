@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 const TodayDiary = () => {
   const navigate = useNavigate();
   const handleDiaryDetail = () => {
-    navigate("/record/detail/diary");
+    navigate("/record/diary");
   };
 
   return (

@@ -18,7 +18,7 @@ interface DiaryEntryProps {
   image_urls: string[];
 }
 
-const ReactCalendar = () => {
+const DiaryCalendar = () => {
   const [value, setValue] = useState<Date>(new Date());
   const queryClient = useQueryClient();
   const setSelectedDate = useDateStore((state) => state.setSelectedDate); // zustand
@@ -192,4 +192,4 @@ const ReactCalendar = () => {
   );
 };
 
-export default ReactCalendar;
+export default DiaryCalendar;

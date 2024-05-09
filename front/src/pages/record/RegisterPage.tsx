@@ -25,7 +25,7 @@ const RegisterPage = () => {
         queryKey: ["DiaryList"],
       });
       clearImages();
-      navigate("/record/detail/diary");
+      navigate("/record/diary");
     },
     onError: (error) => {
       console.error("일지 등록 실패: error", error);
