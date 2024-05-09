@@ -61,11 +61,12 @@ public class AlarmService {
 			case "DISCOMFORT":
 				bodyMsg = "아기가 불편해요!";
 				break;
-			case "DANGER":
-				bodyMsg = "아기가 위험해요!";
-				break;
 			case "PAIN":
 				bodyMsg = "아기가 아파요!";
+				break;
+			case "DANGER":
+				titleMsg = "아기 자세 감지!!";
+				bodyMsg = "아기가 엎드려있어요!";
 				break;
 			default:
 				titleMsg = "아기 울음 감지!!";
@@ -78,19 +79,12 @@ public class AlarmService {
 			.setBody(bodyMsg)
 			.build();
 
-		// Message msg = Message.builder()
-		// 	.setToken(member.getWebToken())
-		// 	.setNotification(noti)
-		// 	.build();
-
 		MulticastMessage msg = MulticastMessage.builder()
 			.setNotification(noti)
 			.addAllTokens(tokens)
 			.build();
 
 		try {
-			// String response = FirebaseMessaging.getInstance().send(msg);
-			// log.info("Notification sent successfully: {}", response);
 			BatchResponse response = FirebaseMessaging.getInstance().sendMulticast(msg);
 			log.info("Notification sent successfully: {}", response.getSuccessCount());
 		} catch (FirebaseMessagingException e) {
@@ -100,8 +94,8 @@ public class AlarmService {
 		log.info("sendCryMessage completed for memberId: {}", memberId);
 	}
 
-	public void addKafkaBabyCry(Integer memberId) {
-		log.info("Service add kafka baby-cry memberId : {}", memberId);
-		kafkaBabyCryProducer.send("baby-cry", new KafkaProducerDto(memberId, "CRY"));
+	public void addKafkaBabyCry(Integer memberId, String type) {
+		log.info("Service add kafka baby-cry memberId : {}, {}", memberId, type);
+		kafkaBabyCryProducer.send("baby-cry", new KafkaProducerDto(memberId, type));
 	}
 }
