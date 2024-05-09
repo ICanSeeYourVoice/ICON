@@ -1,11 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "react-hot-toast";
-// import tf from '@tensorflow/tfjs-node';
 import * as faceapi from "@vladmandic/face-api";
 import { DETECTION_POSE_INFO } from "../../constants/detectionPose";
 import { useDetectionPoseStore } from "../../stores/detectionPose";
-// import { poseAlarm } from "../../apis/Notification";
 import { poseAlarm } from "../../apis/Notification";
 import { useMutation } from "@tanstack/react-query";
 
@@ -16,7 +14,6 @@ const PosePage = () => {
   const [modelsLoaded, setModelsLoaded] = useState(false);
 
   const navigate = useNavigate();
-  const isBabyFace = useDetectionPoseStore((state: any) => state.isBabyFace);
   const setIsBabyFace = useDetectionPoseStore(
     (state: any) => state.setIsBabyFace
   );

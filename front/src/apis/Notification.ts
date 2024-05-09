@@ -2,7 +2,16 @@ import { api } from "./Base";
 
 export const cryAlarm = async () => {
   try {
-    await api.post("/alarm-service/alarms", {type:"CRY"});
+    await api.post("/alarm-service/alarms", { type: "CRY" });
+  } catch (error) {
+    console.error("API에러: ", error);
+    throw error;
+  }
+};
+
+export const poseAlarm = async () => {
+  try {
+    await api.post("/alarm-service/alarms", { type: "POSE" });
   } catch (error) {
     console.error("API에러: ", error);
     throw error;
@@ -25,17 +34,7 @@ export const analyzeAlarm = async (recordData: { data: File }) => {
     console.error("API에러: ", error);
     throw error;
   }
-};
-
-export const poseAlarm = async () => {
-  try {
-    await api.post("/alarm-service/alarms", {type:"CRY"});
-  } catch (error) {
-    console.error("API에러: ", error);
-    throw error;
-  }
-};
-
+}; 
 
 export const deleteGuardian = async (id: number) => {
   try {
