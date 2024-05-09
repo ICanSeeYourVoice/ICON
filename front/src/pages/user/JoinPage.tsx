@@ -56,37 +56,39 @@ const JoinPage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center h-screen w-screen pt-[3.125rem] pb-[10.3125rem] gap-[1.5rem]">
+    <div className="flex flex-col items-center h-screen w-screen">
       <TopBar text="회원 가입" />
-      <div className="flex flex-col items-center gap-[1.6rem] mt-10">
-        <LabelInput
-          label="이름"
-          placeholder="이름"
-          value={nameValue}
-          onChange={nameChange}
-        />
-        <LabelInput
-          label="아이디"
-          placeholder="아이디"
-          value={idValue}
-          onChange={idChange}
-        />
-        <PasswordInput
-          placeholder="비밀번호"
-          label="비밀번호"
-          onChange={passwordChange}
-          value={passwordValue}
-        />
-        <PasswordInput
-          placeholder="비밀번호 확인"
-          label="비밀번호 확인"
-          onChange={passwordCorChange}
-          value={passwordCorValue}
-        />
-        <div className="mt-14">
+      <main className="flex flex-col items-center justify-between w-[80%] h-full mt-[6rem]">
+        <div className="grid gap-[1.8rem] mt-[1.5rem]">
+          <LabelInput
+            label="이름"
+            placeholder="이름"
+            value={nameValue}
+            onChange={nameChange}
+          />
+          <LabelInput
+            label="아이디"
+            placeholder="아이디"
+            value={idValue}
+            onChange={idChange}
+          />
+          <PasswordInput
+            placeholder="비밀번호"
+            label="비밀번호"
+            onChange={passwordChange}
+            value={passwordValue}
+          />
+          <PasswordInput
+            placeholder="비밀번호 확인"
+            label="비밀번호 확인"
+            onChange={passwordCorChange}
+            value={passwordCorValue}
+          />
+        </div>
+        <div className="mb-[3rem]">
           <PostButton label="확인" onClick={handleConfirmClick} />
         </div>
-      </div>
+      </main>
     </div>
   );
 };

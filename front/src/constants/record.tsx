@@ -87,4 +87,71 @@ export const RECORD: Record = {
       alignItems: "center",
     },
   },
+  BURPING: {
+    ICON: <img width={20} height={20} src={burp} alt="burp Icon" />,
+    MESSAGE: "아이가 트름으로 울었어요.",
+    COLOR: "#4BF25C",
+    ICONSTYLE: {
+      background: "#4BF25C",
+      color: "#fff",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+  },
+  BELLY_PAIN: {
+    ICON: <img width={15} height={15} src={sick} alt="sick Icon" />,
+    MESSAGE: "아이가 복통으로 울었어요.",
+    COLOR: "#FF5D5D",
+    ICONSTYLE: {
+      background: "#FF5D5D",
+      color: "#fff",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+  },
+  TIRED: {
+    ICON: <img width={15} height={15} src={sleepy} alt="sleepy Icon" />,
+    MESSAGE: "아기가 졸려서 울었어요.",
+    COLOR: "#E3A6FF",
+    ICONSTYLE: {
+      background: "#E3A6FF",
+      color: "#fff",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+  },
+  PAIN: {
+    ICON: <img width={15} height={15} src={sick} alt="sick Icon" />,
+    MESSAGE: "아이가 복통으로 울었어요.",
+    COLOR: "#FF5D5D",
+    ICONSTYLE: {
+      background: "#FF5D5D",
+      color: "#fff",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+  },
+  DISCOMFORT: {
+    ICON: (
+      <img
+        width={15}
+        height={15}
+        src={uncomfortable}
+        alt="uncomfortable Icon"
+      />
+    ),
+    MESSAGE: "아이가 불편해서 울었어요.",
+    COLOR: "#FF9447",
+    ICONSTYLE: {
+      background: "#FF9447",
+      color: "#fff",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+  },
 };

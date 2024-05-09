@@ -17,7 +17,7 @@ const LabelTextInput: React.FC<LabelTextInputProps> = ({
     <div>
       <div className="text-black text-sm mb-2">{label || "제목"}</div>
       <div
-        className="w-[16rem] h-[8.3rem] relative flex-col justify-start 
+        className="w-[18rem] h-[8.3rem] relative flex-col justify-start 
         items-start inline-flex  border rounded-[15px] border-gray-300"
       >
         <textarea

@@ -156,11 +156,11 @@ class HomeView extends GetView<HomeController> {
       // Vibration.vibrate(duration: 1000);
       // HapticFeedback.vibrate();
       // HapticFeedback.heavyImpact();
-      HapticFeedback.vibrate();
-      HapticFeedback.heavyImpact();
-      HapticFeedback.mediumImpact();
-      HapticFeedback.lightImpact();
-      HapticFeedback.selectionClick();
+      // HapticFeedback.vibrate();
+      // HapticFeedback.heavyImpact();
+      // HapticFeedback.mediumImpact();
+      // HapticFeedback.lightImpact();
+      // HapticFeedback.selectionClick();
     }
   }
 
@@ -304,8 +304,9 @@ class HomeView extends GetView<HomeController> {
             child: TextButton(
               child: Text('닫기'),
               onPressed: () async {
-                print(controller.devices[0]);
-                controller.updateCharacteristic(controller.devices[0]);
+                print("devices list: ${controller.devices[0]}");
+                print("device id: ${controller.devicesId.value}");
+                controller.updateCharacteristic(controller.devicesId.value);
                 setStatus('normal');
               },
               style: TextButton.styleFrom(foregroundColor: Colors.white),
@@ -438,7 +439,7 @@ class HomeView extends GetView<HomeController> {
             child: TextButton(
               child: Text('닫기'),
               onPressed: () async {
-                controller.updateCharacteristic(controller.devices[0]);
+                controller.updateCharacteristic(controller.devicesId.value);
                 setStatus('normal');
               },
             ),

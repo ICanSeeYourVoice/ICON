@@ -1,14 +1,23 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ChangeEvent, useState } from "react";
 import { CreateVoice } from "../../../apis/Voice";
+import toast from "react-hot-toast";
 
 const Button = () => {
   const [text, setText] = useState("");
+  const queryClient = useQueryClient();
+
+  // 자주 사용하는 문구 등록
   const { mutate: createVoice } = useMutation({
     mutationFn: CreateVoice,
-    onSuccess: () => {},
-    onError: (error) => {
-      console.error("Delete error:", error);
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["voiceList"],
+      });
+      setText("");
+    },
+    onError: () => {
+      toast.error("정확한 문구를 작성해주세요");
     },
   });
 
