@@ -93,22 +93,22 @@ const PosePage = () => {
       if (!videoRef.current) return;
 
       intervalDetection.current = window.setInterval(async () => {
-        const detections = await faceapi
-          .detectSingleFace(videoRef.current, optionsSSDMobileNet)
-          .withFaceLandmarks();
+        if (videoRef.current) {
+          const detections = await faceapi
+            .detectSingleFace(videoRef.current, optionsSSDMobileNet)
+            .withFaceLandmarks();
 
-        if (!detections) { 
-          noFaceCnt++;
-          console.log("no face");
-        }
+          noFaceCnt = detections ? 0 : noFaceCnt + 1;
 
-        if (noFaceCnt > 1) {
-          noFaceCnt = 0;
-          console.log("no face cnt");
-          setIsBabyFace(false);
-          clearInterval(intervalDetection.current);
-          mutate();
-          navigate("/pose/result");
+          if (noFaceCnt > 1) {
+            noFaceCnt = 0;
+            setIsBabyFace(false);
+            if (intervalDetection.current !== null) {
+              clearInterval(intervalDetection.current);
+            }
+            mutate();
+            navigate("/pose/result");
+          }
         }
       }, 1000);
     };
@@ -116,7 +116,9 @@ const PosePage = () => {
     detectFaceFeatures();
 
     return () => {
-      if (intervalDetection.current) clearInterval(intervalDetection.current);
+      if (intervalDetection.current !== null) {
+        clearInterval(intervalDetection.current);
+      }
     };
   }, [videoRef.current]);
 
