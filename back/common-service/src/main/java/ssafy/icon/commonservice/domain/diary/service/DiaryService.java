@@ -95,13 +95,9 @@ public class DiaryService {
 		diary.modify(form.getContent(), form.getDate(), form.getEmoji());
 	}
 
-	public DiaryDetailResponse queryDetail(Integer memberId, Long diaryId) {
-		Diary diary = diaryRepository.findByIdWithImages(diaryId)
+	public DiaryDetailResponse queryDetail(Integer memberId, LocalDate date) {
+		Diary diary = diaryRepository.findByMemberIdAndDate(memberId,date)
 			.orElseThrow(() -> new DiaryException(NOT_FOUND, "성장일지를 찾을 수 없습니다."));
-
-		if (!diary.getMember().getId().equals(memberId)) {
-			throw new DiaryException(FORBIDDEN, "권한이 없습니다.");
-		}
 
 		return DiaryDetailResponse.of(diary);
 	}
