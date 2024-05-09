@@ -24,6 +24,7 @@ import ClovaVoicePage from "../pages/tts/ClovaVoicePage";
 import SettingRoutinePage from "../pages/setting/smartThings/SettingRoutinePage";
 import PosePage from "../pages/detection/PosePage";
 import BlePage from "../pages/setting/ble/BlePage";
+import PoseResultPage from "../pages/detection/PoseResultPage";
 
 const authRoutes = [
   {
@@ -99,10 +100,10 @@ const poseRoutes = [
     element: <DarkCommonLayout title="자세감지" />,
     children: [
       { index: true, element: <PosePage /> },
-      // { path: "/detection/result", element: <PoseResultPage /> },
+      { path: "/pose/result", element: <PoseResultPage /> },
     ],
   },
-];
+]; 
 
 const routes = [
   ...authRoutes,
