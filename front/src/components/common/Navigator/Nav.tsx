@@ -9,7 +9,8 @@ import diaryClicked from "../../../assets/svgs/nav/diaryClicked.svg";
 import voiceClicked from "../../../assets/svgs/nav/voiceClicked.svg";
 import heartClicked from "../../../assets/svgs/nav/heartClicked.svg";
 import chatClicked from "../../../assets/svgs/nav/chatClicked.svg";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useNavStore } from "../../../stores/nav";
 
 interface NavItemProps {
   text: string;
@@ -22,7 +23,8 @@ interface NavItemProps {
 const Nav = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [selected, setSelected] = useState(2);
+  const selected = useNavStore((state) => state.selected);
+  const setSelected = useNavStore((state) => state.setSelected);
 
   const navList: NavItemProps[] = [
     {
@@ -63,8 +65,8 @@ const Nav = () => {
   ];
 
   useEffect(() => {
-    const selectedItem = navList.find(
-      (item) => item.path === location.pathname
+    const selectedItem = navList.find((item) =>
+      location.pathname.startsWith(item.path)
     );
     if (selectedItem) {
       setSelected(selectedItem.index);
@@ -77,7 +79,7 @@ const Nav = () => {
   };
 
   return (
-    <nav className="bg-white w-full h-[3.3125rem] flex justify-around items-center px-4 shadow-nav fixed bottom-0 left-0 z-10">
+    <nav className="bg-white w-full h-[3.3125rem] flex justify-around items-center px-4 shadow-nav fixed bottom-0 left-0 z-7">
       {navList.map((item) => (
         <button
           key={item.index}

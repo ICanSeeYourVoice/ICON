@@ -7,7 +7,7 @@ import {
   LOADING_INFO,
 } from "../../constants/detection";
 import { useEffect, useRef } from "react";
-import { useDetectionStore } from "../../stores/detection";
+import { useDetectionStore, useLoading } from "../../stores/detection";
 import { useNavigate } from "react-router";
 import { useMutation } from "@tanstack/react-query";
 import { analyzeAlarm, cryAlarm } from "../../apis/Notification";
@@ -22,12 +22,13 @@ const DetectionPage = () => {
   const navigate = useNavigate();
   const isBabyCry = useDetectionStore((state: any) => state.isBabyCry);
   const cryingType = useDetectionStore((state: any) => state.cryingType);
-  const model = useRef<tf.GraphModel | null>(null);
+  const modelRef = useRef<tf.GraphModel | null>(null);
   const setIsBabyCry = useDetectionStore((state: any) => state.setIsBabyCry);
   const setCryingType = useDetectionStore((state: any) => state.setCryingType);
   const streamRef = useRef<MediaStream | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const { writeCharacteristic } = useBleStore();
+  const setLoading = useLoading((state) => state.setLoading);
 
   const { mutate } = useMutation({
     mutationFn: cryAlarm,
@@ -45,110 +46,125 @@ const DetectionPage = () => {
     },
     onError: (error: any) => {
       toast.error(error.message);
+
       if (error.response.status === 500) {
         setIsBabyCry(false);
         setCryingType(0);
         writeCharacteristic("normal");
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       }
     },
   });
 
-  useEffect(() => {
-    const fetchDataAndProcess = async () => {
-      let toastId;
+  let audioCtx: AudioContext | null = null;
+  let scriptNode: ScriptProcessorNode | null = null;
+  let source: any = null;
 
-      try {
-        if (!streamRef.current) {
-          toastId = toast.loading("아기울음감지를 준비 중입니다.");
+  const fetchDataAndProcess = async () => {
+    setLoading(true);
+    try {
+      const yamnet = await loadYamnetModel();
+      modelRef.current = yamnet;
 
-          const yamnet = await loadYamnetModel();
-          model.current = yamnet;
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+      });
 
-          const stream = await navigator.mediaDevices.getUserMedia({
-            audio: true,
-          });
+      streamRef.current = stream;
 
-          streamRef.current = stream;
+      audioCtx = new AudioContext({ sampleRate: 16000 });
+      source = audioCtx.createMediaStreamSource(stream);
+      scriptNode = audioCtx.createScriptProcessor(8192, 1, 1);
 
-          const audioCtx = new AudioContext({ sampleRate: 16000 });
-          const source = audioCtx.createMediaStreamSource(stream);
-          const scriptNode = audioCtx.createScriptProcessor(8192, 1, 1);
+      source.connect(scriptNode);
+      scriptNode.connect(audioCtx.destination);
 
-          let audioBuffer: number[] = [];
+      let audioBuffer: number[] = [];
 
-          intervalRef.current = setInterval(() => {
-            console.log("녹음 초기화");
-            audioBuffer = [];
-          }, 4000);
+      intervalRef.current = setInterval(() => {
+        console.log("녹음 초기화 " + intervalRef.current);
+        audioBuffer = [];
+      }, 4000);
 
-          let isCry = false;
-          let cnt = 0;
+      let isCry = false;
+      let cnt = 0;
 
-          scriptNode.onaudioprocess = function (e) {
-            if (isCry) cnt++;
+      scriptNode.onaudioprocess = function (e) {
+        // console.log(cnt);
+        if (isCry) cnt++;
 
-            const inputBuffer = e.inputBuffer;
-            let inputData = inputBuffer.getChannelData(0);
+        const inputBuffer = e.inputBuffer;
+        let inputData = inputBuffer.getChannelData(0);
 
-            audioBuffer.push(...inputData);
+        audioBuffer.push(...inputData);
 
-            const [scores] = yamnet.predict(tf.tensor(inputData)) as [any];
-            const top5 = tf.topk(scores, 3, true);
-            const classes = top5.indices.dataSync();
-            const probabilities = top5.values.dataSync();
+        const [scores] = yamnet.predict(tf.tensor(inputData)) as [any];
+        const top5 = tf.topk(scores, 3, true);
+        const classes = top5.indices.dataSync();
+        const probabilities = top5.values.dataSync();
 
-            if (cnt == 0) {
-              for (let i = 0; i < 3; i++) {
-                if (classes[i] === 20 && probabilities[i] >= 0.5) {
-                  isCry = true;
-                  setIsBabyCry(true);
-                  setCryingType("LOADING");
-                  mutate();
-                  clearInterval(intervalRef.current!);
+        if (cnt == 0) {
+          for (let i = 0; i < 3; i++) {
+            if (classes[i] === 20 && probabilities[i] >= 0.5) {
+              isCry = true;
+              setIsBabyCry(true);
+              setCryingType("LOADING");
+              mutate();
+              clearInterval(intervalRef.current!);
 
-                  return;
-                }
-              }
-            } else {
-              if (cnt >= 4) {
-                streamRef.current!.getTracks().forEach((track) => track.stop());
-
-                worker.postMessage(audioBuffer);
-                worker.onmessage = function (e) {
-                  const sound = e.data;
-                  analyzeMutate({ data: sound });
-                  source.disconnect();
-                  scriptNode.disconnect();
-                  audioCtx.close();
-                };
-              }
+              return;
             }
-          };
-
-          source.connect(scriptNode);
-          scriptNode.connect(audioCtx.destination);
-
-          toast.success("울음감지 시작");
+          }
         } else {
-          toast.error("마이크 연결에 실패하였습니다.");
+          if (cnt >= 4) {
+            streamRef.current!.getTracks().forEach((track) => track.stop());
+            source?.disconnect();
+            scriptNode?.disconnect();
+            clearInterval(intervalRef.current!);
+            // console.log(intervalRef.current! + " 해제(cnt)");
+
+            modelRef.current = null;
+            streamRef.current = null;
+
+            worker.postMessage(audioBuffer);
+            worker.onmessage = function (e) {
+              const sound = e.data;
+              analyzeMutate({ data: sound });
+            };
+
+            return;
+          }
         }
-      } catch (error) {
-        toast.error(
-          "울음감지 준비 중 오류가 발생했습니다.\n 마이크를 허용하고 다시 시작해주세요."
-        );
-        setCryingType("FAILED");
-      } finally {
-        toast.dismiss(toastId);
-      }
+      };
+    } catch (error) {
+      toast.error(
+        "울음감지 준비 중 오류가 발생했습니다.\n 마이크를 허용하고 다시 시작해주세요."
+      );
+      setCryingType("FAILED");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!isBabyCry) {
+      fetchDataAndProcess();
+    }
+
+    return () => {
+      streamRef.current?.getTracks().forEach((track) => track.stop());
+      clearInterval(intervalRef.current!);
+      // console.log(intervalRef.current! + " 해제 콜백");
+
+      source?.disconnect();
+      scriptNode?.disconnect();
+
+      modelRef.current = null;
+      streamRef.current = null;
     };
-
-    if (!isBabyCry) fetchDataAndProcess(); // 로그인 여부 확인 필요
-
-    // return () => {
-    //   if (streamRef.current) {
-    //     streamRef.current.getTracks().forEach((track) => track.stop());
-    //   }
-    // };
   }, []);
 
   useEffect(() => {
