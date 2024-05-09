@@ -31,6 +31,7 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 	implementation 'org.springframework.kafka:spring-kafka'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	testImplementation 'org.springframework.kafka:spring-kafka-test'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -39,6 +40,7 @@ dependencies {
 	implementation group: 'io.github.openfeign.form', name: 'feign-form', version: '3.8.0'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+	runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
 }
 
 dependencyManagement {
