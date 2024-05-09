@@ -79,7 +79,7 @@ const Nav = () => {
   };
 
   return (
-    <nav className="bg-white w-full h-[3.3125rem] flex justify-around items-center px-4 shadow-nav fixed bottom-0 left-0 z-10">
+    <nav className="bg-white w-full h-[3.3125rem] flex justify-around items-center px-4 shadow-nav fixed bottom-0 left-0 z-7">
       {navList.map((item) => (
         <button
           key={item.index}

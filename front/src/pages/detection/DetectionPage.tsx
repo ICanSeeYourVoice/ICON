@@ -7,7 +7,7 @@ import {
   LOADING_INFO,
 } from "../../constants/detection";
 import { useEffect, useRef } from "react";
-import { useDetectionStore } from "../../stores/detection";
+import { useDetectionStore, useLoading } from "../../stores/detection";
 import { useNavigate } from "react-router";
 import { useMutation } from "@tanstack/react-query";
 import { analyzeAlarm, cryAlarm } from "../../apis/Notification";
@@ -28,6 +28,7 @@ const DetectionPage = () => {
   const streamRef = useRef<MediaStream | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const { writeCharacteristic } = useBleStore();
+  const setLoading = useLoading((state) => state.setLoading);
 
   const { mutate } = useMutation({
     mutationFn: cryAlarm,
@@ -58,14 +59,12 @@ const DetectionPage = () => {
     },
   });
 
-  let toastId: any;
   let audioCtx: AudioContext | null = null;
   let scriptNode: ScriptProcessorNode | null = null;
   let source: any = null;
 
   const fetchDataAndProcess = async () => {
-    toastId = toast.loading("아기울음감지를 준비 중입니다.");
-
+    setLoading(true);
     try {
       const yamnet = await loadYamnetModel();
       modelRef.current = yamnet;
@@ -146,7 +145,7 @@ const DetectionPage = () => {
       );
       setCryingType("FAILED");
     } finally {
-      toast.dismiss(toastId);
+      setLoading(false);
     }
   };
 
@@ -158,16 +157,13 @@ const DetectionPage = () => {
     return () => {
       streamRef.current?.getTracks().forEach((track) => track.stop());
       clearInterval(intervalRef.current!);
-      console.log(intervalRef.current! + " 해제");
+      console.log(intervalRef.current! + " 해제 콜백");
 
       source?.disconnect();
       scriptNode?.disconnect();
 
       modelRef.current = null;
       streamRef.current = null;
-
-      toast.dismiss(toastId);
-      toastId = null;
     };
   }, []);
 
