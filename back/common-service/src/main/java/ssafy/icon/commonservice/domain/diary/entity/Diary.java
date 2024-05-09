@@ -49,24 +49,31 @@ public class Diary extends BaseEntity {
 	@Column(nullable = false)
 	private LocalDate date;
 
+	@Column(nullable = false)
+	private String emoji;
+
 	@OneToMany(mappedBy = "diary", orphanRemoval = true, cascade = ALL)
 	private List<DiaryImage> images = new ArrayList<>();
 
 	@Builder
-	public Diary(Member member, String content, LocalDate date) {
+	public Diary(Member member, String content, LocalDate date, String emoji) {
 		this.member = member;
 		this.content = content;
 		this.date = date;
+		this.emoji = emoji;
 	}
+
+
 
 	public void addImage(DiaryImage image) {
 		this.images.add(image);
 		image.connectDiary(this);
 	}
 
-	public void modify(String content, LocalDate date) {
+	public void modify(String content, LocalDate date, String emoji) {
 		this.content = content;
 		this.date = date;
+		this.emoji = emoji;
 	}
 
 }

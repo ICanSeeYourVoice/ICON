@@ -38,7 +38,12 @@ public class DiaryService {
 		List<DiaryImage> images = diaryRegisterForm.imageUrls().stream()
 			.map(DiaryImage::new).toList();
 
-		Diary diary = new Diary(member, diaryRegisterForm.content(), diaryRegisterForm.date());
+		Diary diary = Diary.builder()
+			.member(member)
+			.content(diaryRegisterForm.content())
+			.date(diaryRegisterForm.date())
+			.emoji(diaryRegisterForm.emoji())
+			.build();
 
 		images.forEach(diary::addImage);
 
