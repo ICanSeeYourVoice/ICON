@@ -93,7 +93,7 @@ const DetectionPage = () => {
       let cnt = 0;
 
       scriptNode.onaudioprocess = function (e) {
-        console.log(cnt);
+        // console.log(cnt);
         if (isCry) cnt++;
 
         const inputBuffer = e.inputBuffer;
@@ -124,7 +124,7 @@ const DetectionPage = () => {
             source?.disconnect();
             scriptNode?.disconnect();
             clearInterval(intervalRef.current!);
-            console.log(intervalRef.current! + " 해제(cnt)");
+            // console.log(intervalRef.current! + " 해제(cnt)");
 
             modelRef.current = null;
             streamRef.current = null;
@@ -157,7 +157,7 @@ const DetectionPage = () => {
     return () => {
       streamRef.current?.getTracks().forEach((track) => track.stop());
       clearInterval(intervalRef.current!);
-      console.log(intervalRef.current! + " 해제 콜백");
+      // console.log(intervalRef.current! + " 해제 콜백");
 
       source?.disconnect();
       scriptNode?.disconnect();
