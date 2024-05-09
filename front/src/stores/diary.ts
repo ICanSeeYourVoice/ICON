@@ -12,6 +12,13 @@ interface ImageUploadState {
     removeImage: (index: number) => void;
     clearImages: () => void;  
   }
+
+
+
+  interface EmojiState {
+    selectedEmojiId: string | null;
+    setSelectedEmojiId: (id: string | null) => void;
+  }
   
 
 export const useDateStore = create<DateState>((set) => ({
@@ -38,3 +45,11 @@ export const useDateStore = create<DateState>((set) => ({
       previewUrls: []
     }))
   }));
+
+
+ 
+  export const useEmojiStore = create<EmojiState>((set) => ({
+    selectedEmojiId: null,
+    setSelectedEmojiId: (id) => set({ selectedEmojiId: id }),
+  }));
+  
