@@ -34,7 +34,7 @@ export const analyzeAlarm = async (recordData: { data: File }) => {
     console.error("API에러: ", error);
     throw error;
   }
-}; 
+};
 
 export const deleteGuardian = async (id: number) => {
   try {
