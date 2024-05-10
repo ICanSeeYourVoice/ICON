@@ -1,17 +1,11 @@
 import ReactButton from "../../components/main/detection/ReactButton";
 import { DETECTION_POSE, RESTART_INFO } from "../../constants/detectionPose";
 import InfoMessage from "../../components/main/detection/InfoMessage";
-import { useDetectionPoseStore } from "../../stores/detectionPose"; 
 
 const PoseResultPage = () => {
-  const isBabyFace = useDetectionPoseStore((state: any) => state.isBabyFace);
 
-  const getIsBabyFace = (isBabyFace: boolean) => {
-    if(isBabyFace){
-      return DETECTION_POSE.NOFACE;
-    }else{
-      return DETECTION_POSE.NOFACE;
-    }
+  const getIsBabyFace = () => { 
+    return DETECTION_POSE.NOFACE;
   };
 
   const {
@@ -19,7 +13,7 @@ const PoseResultPage = () => {
     COLOR: color,
     MESSAGE: message,
     SOLUTION: solution,
-  } = getIsBabyFace(isBabyFace);
+  } = getIsBabyFace();
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-full gap-4">
