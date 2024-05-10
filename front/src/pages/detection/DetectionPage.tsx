@@ -142,7 +142,7 @@ const DetectionPage = () => {
               probability: probabilities[i].toFixed(3),
             });
 
-            if (classes[i] === 20 && probabilities[i] >= 0.5) {
+            if (classes[i] === 20) {
               isCry = true;
               setIsBabyCry(true);
               setCryingType("LOADING");
