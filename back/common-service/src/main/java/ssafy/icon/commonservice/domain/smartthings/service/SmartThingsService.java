@@ -74,6 +74,7 @@ public class SmartThingsService {
 
 	@Transactional
 	public void registerRoutine(RegisterRoutineRequest request, Integer memberId) {
+
 		Member member = memberRepository.findById(memberId)
 			.orElseThrow(() -> new MemberException(BAD_REQUEST, "존재하지 않는 회원입니다."));
 
@@ -81,12 +82,20 @@ public class SmartThingsService {
 			smartthingsRoutineRepository.findByTriggerTypeAndMemberId(request.trigger(), memberId);
 
 		if (optionalRoutine.isEmpty()) {
-			SmartthingsRoutine routine = new SmartthingsRoutine(member,
-				request.trigger(), request.sceneId());
+			if (request.sceneId().isEmpty()) {
+				return;
+			} else {
+				SmartthingsRoutine routine = new SmartthingsRoutine(member,
+					request.trigger(), request.sceneId());
 
-			smartthingsRoutineRepository.save(routine);
+				smartthingsRoutineRepository.save(routine);
+			}
 		} else {
-			optionalRoutine.get().changeScene(request.sceneId());
+			if (request.sceneId().isEmpty()) {
+				smartthingsRoutineRepository.delete(optionalRoutine.get());
+			} else {
+				optionalRoutine.get().changeScene(request.sceneId());
+			}
 		}
 	}
 

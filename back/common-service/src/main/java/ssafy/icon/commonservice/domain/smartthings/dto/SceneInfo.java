@@ -18,14 +18,12 @@ import ssafy.icon.commonservice.domain.smartthings.client.dto.GetScenesApiRespon
 public class SceneInfo {
 
 	private String name;
-	private LocalDateTime executedTime;
 	private String sceneId;
 
 	public static List<SceneInfo> ofList(GetScenesApiResponse scenes) {
 		return scenes.getItems().stream().map(scene ->
 			SceneInfo.builder()
 				.name(scene.getSceneName())
-				.executedTime(convertEpochTime(scene.getLastExecutedDate()))
 				.sceneId(scene.getSceneId())
 				.build()
 		).toList();
