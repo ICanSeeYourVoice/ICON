@@ -13,7 +13,8 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
 
 	boolean existsByMemberIdAndDate(Integer memberId, LocalDate date);
 
-	Optional<Diary> findByMemberIdAndDate(Integer memberId, LocalDate date);
+	@Query("select distinct d from Diary d join fetch d.images where d.member.id = :memberId and d.date = :date")
+	Optional<Diary> findByMemberIdAndDate(@Param("memberId") Integer memberId, @Param("date") LocalDate date);
 
 	@Query("select distinct d from Diary d join fetch d.images where d.id = :id")
 	Optional<Diary> findByIdWithImages(@Param("id") Long id);
