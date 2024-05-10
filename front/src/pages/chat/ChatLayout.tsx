@@ -4,9 +4,10 @@ import { ClearChat } from "../../apis/Chat";
 import { useMutation } from "@tanstack/react-query";
 import { useChatStore } from "../../stores/chat";
 import Vector from "../../assets/svgs/nav/Vector.svg";
-import toast from "react-hot-toast";
+import { useState } from "react";
 
 const ChatLayout = () => {
+  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
 
   // 채팅 초기화
@@ -26,31 +27,7 @@ const ChatLayout = () => {
   };
 
   const hanlDeleteClick = () => {
-    toast((t) => (
-      <div className="flex flex-col items-center justify-center w-full">
-        <p>일지를 삭제하시겠습니까?</p>
-        <hr />
-        <div className="mt-4 flex w-full justify-end text-white">
-          <button
-            className="bg-gray-1 py-2 px-4 rounded mr-[0.4rem]"
-            onClick={() => {
-              toast.dismiss(t.id);
-            }}
-          >
-            취소
-          </button>
-          <button
-            className="bg-primary py-2 px-4 rounded mr-2"
-            onClick={() => {
-              clearChat();
-              toast.dismiss(t.id);
-            }}
-          >
-            확인
-          </button>
-        </div>
-      </div>
-    ));
+    setShowModal(true);
   };
 
   return (
@@ -62,15 +39,43 @@ const ChatLayout = () => {
               <img src={Vector} alt="Back" />
             </button>
             <div>상담 챗봇</div>
-            <div>
+            <div className="w-[2rem] h-[2rem]">
               <button
                 onClick={hanlDeleteClick}
-                className=" w-[2rem] h-[2rem] bg-blue-400 rounded-lg"
+                className=" bg-primary rounded-full"
               >
                 <img src={Refresh} alt="chatClear" />
               </button>
             </div>
           </div>
+          {showModal && (
+            <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center">
+              <div className="bg-gray-100 rounded-[1rem] shadow-lg p-5 ">
+                <div className="flex justify-center items-center mb-[1rem] text-sm p-2">
+                  정말로 채팅을 초기화 하시겠습니까?
+                </div>
+                <div className="flex justify-center">
+                  <div className="w-[11rem] flex justify-between ">
+                    <button
+                      className="bg-primary text-white w-[5rem] py-1 rounded-[1rem] hover:bg-blue-400"
+                      onClick={() => {
+                        clearChat();
+                        setShowModal(false);
+                      }}
+                    >
+                      확인
+                    </button>
+                    <button
+                      className=" bg-gray-400 text-white w-[5rem] py-1  rounded-[1rem] hover:bg-gray-500"
+                      onClick={() => setShowModal(false)}
+                    >
+                      취소
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
