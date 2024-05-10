@@ -6,7 +6,7 @@ import {
   FAILED_INFO,
   LOADING_INFO,
 } from "../../constants/detection";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   useDetectionStore,
   useLoading,
@@ -19,6 +19,13 @@ import toast from "react-hot-toast";
 import * as tf from "@tensorflow/tfjs";
 import { loadYamnetModel } from "../../utils/cryingClassification";
 import useBleStore from "../../stores/bluetooth";
+import classmap from "../../model/yamnet-class-map.json";
+
+// test code
+type Result = {
+  label: any;
+  probability: any;
+};
 
 const DetectionPage = () => {
   const worker = new Worker("recordingWorker.js");
@@ -32,6 +39,8 @@ const DetectionPage = () => {
   const streamRef = useRef<MediaStream | null>(null);
   const { writeCharacteristic } = useBleStore();
   const setLoading = useLoading((state) => state.setLoading);
+
+  const [results, setResults] = useState<Result[]>([]); // test위한 코드
 
   const { mutate } = useMutation({
     mutationFn: cryAlarm,
@@ -120,21 +129,29 @@ const DetectionPage = () => {
         audioBuffer.push(...inputData);
 
         const [scores] = yamnet.predict(tf.tensor(inputData)) as [any];
-        const top5 = tf.topk(scores, 3, true);
+        const top5 = tf.topk(scores, 5, true);
         const classes = top5.indices.dataSync();
         const probabilities = top5.values.dataSync();
 
+        const updatedResults: any[] = []; // test를 위한 코드
         if (cnt == 0) {
-          for (let i = 0; i < 3; i++) {
+          for (let i = 0; i < 5; i++) {
+            // test를 위한 코드
+            updatedResults.push({
+              label: (classmap as any)[classes[i]].display_name,
+              probability: probabilities[i].toFixed(3),
+            });
+
             if (classes[i] === 20 && probabilities[i] >= 0.5) {
               isCry = true;
               setIsBabyCry(true);
               setCryingType("LOADING");
               mutate();
-
               return;
             }
           }
+
+          setResults(updatedResults); // test를 위한 코드
         } else {
           if (cnt >= 4) {
             streamRef.current!.getTracks().forEach((track) => track.stop());
@@ -213,7 +230,7 @@ const DetectionPage = () => {
             : DETECTION.NORMAL.COLOR
         }
       />
-      {cryingType ? (
+      {/* {cryingType ? (
         <PulseLoader color="#c8c8c8" />
       ) : (
         <div className="flex flex-col items-center justify-center text-gray-0 text-xl">
@@ -222,6 +239,26 @@ const DetectionPage = () => {
             <span className="text-white">{DETECTION.NORMAL.MESSAGE}</span>
             상태에요
           </p>
+        </div>
+      )} */}
+      {cryingType ? (
+        <PulseLoader color="#c8c8c8" />
+      ) : (
+        <div className="flex flex-col items-center justify-center text-white text-xs">
+          {results.map((result, i) => (
+            <div
+              key={i}
+              style={{
+                display: "flex",
+                width: "18.5rem",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <p>{result.label} </p>
+              <p> : ({result.probability}) </p>
+            </div>
+          ))}
         </div>
       )}
       <div className="flex items-center justify-center w-[80%] h-[6rem]"></div>
