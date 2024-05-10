@@ -5,25 +5,23 @@ interface DiaryEntryProps {
     date: string;
     content: string;
     image_urls: string[];
+    emoji:string;
   }
 
   interface CreateDiaryProps {
-    content : string;
     date: string;
-    image_urls : string[];
     
   }
   
   export const diaryList = async ({ startId, endId }: { startId: string; endId: string }): Promise<DiaryEntryProps[]> => {
     try {
-      const response = await api.get(`/common-service/diaries?start=${startId}&end=${endId}`);
+      const response = await api.get(`/common-service/diaries/calendar?start=${startId}&end=${endId}`);
       return response.data as DiaryEntryProps[];
     } catch (error) {
       console.error("API error: ", error);
       throw error;
     }
   };
-
 
 
   export const diaryRegister = async (diaryCreateData: CreateDiaryProps) => {
@@ -37,13 +35,23 @@ interface DiaryEntryProps {
   }
 
 
-
-  export const diaryDelete = async (diaryId: number) => {
+  export const diaryDelete = async (diaryDay: string) => {
     try {
-      const response = await api.delete(`/common-service/diaries/${diaryId}`);
+      const response = await api.delete(`/common-service/diaries?date=${diaryDay}`);
       return response.data
     } catch (error) {
       console.error("API error: ", error);
       throw error;
     }
   }
+
+
+  export const diaryDetail = async (diaryDay: string): Promise<DiaryEntryProps> => {
+    try {
+        const response = await api.get(`/common-service/diaries?date=${diaryDay}`);
+        return response.data as DiaryEntryProps;  
+    } catch (error) {
+        console.error("API error: ", error);
+        throw error;
+    }
+}

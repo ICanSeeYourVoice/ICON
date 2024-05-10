@@ -4,15 +4,23 @@ import LabelTextInput from "../../components/common/Input/LabelTextInput";
 import PostButton from "../../components/common/button/PostButton";
 import { useNavigate } from "react-router-dom";
 import FileUploadInput from "../../components/main/record/FileUploadInput";
-import { useDateStore, useImageStore } from "../../stores/diary";
+import { useDateStore, useEmojiStore, useImageStore } from "../../stores/diary";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { diaryRegister } from "../../apis/Diary";
 import moment from "moment";
 import toast from "react-hot-toast";
 
+interface CreateDiaryProps {
+  content: string;
+  date: string;
+  image_urls: string[];
+  emoji: string;
+}
+
 const RegisterPage = () => {
   const selectedDate = useDateStore((state) => state.selectedDate); // zustand
   const { previewUrls, clearImages } = useImageStore(); // zustand 이미지 경로
+  const selectedEmojiUrl = useEmojiStore((state) => state.selectedEmojiId); // 이모지 URL을 직접 사용
   const [contentValue, setContentValue] = useState("");
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -37,17 +45,19 @@ const RegisterPage = () => {
   };
 
   const createDiary = () => {
-    if (!selectedDate || contentValue === "") {
+    if (!selectedDate || contentValue === "" || selectedEmojiUrl === null) {
       toast.error("일지 등록을 위해 모든 필드를 채워주세요");
       return;
     }
-    const formattedDate = moment(selectedDate).format("YYYY-MM-DD");
 
-    registerDiary({
+    const diaryData: CreateDiaryProps = {
       content: contentValue,
-      date: formattedDate,
+      date: moment(selectedDate).format("YYYY-MM-DD"),
       image_urls: previewUrls,
-    });
+      emoji: selectedEmojiUrl,
+    };
+
+    registerDiary(diaryData);
   };
 
   return (
@@ -59,7 +69,6 @@ const RegisterPage = () => {
             <span className="text-[1.5rem] font-semibold text-blue-500">
               {selectedDate.toLocaleDateString()}
             </span>
-            <span className="ml-[0.3rem]"> 일지 작성하기</span>
           </div>
         ) : (
           <div className="text-[1.3rem] text-red-500 font-semibold">

@@ -22,7 +22,7 @@ interface ImageUploadState {
   
 
 export const useDateStore = create<DateState>((set) => ({
-  selectedDate: null,
+  selectedDate: new Date(),  
   setSelectedDate: (date) => set({ selectedDate: date })
 }));
 
