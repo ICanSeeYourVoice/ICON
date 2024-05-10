@@ -148,7 +148,7 @@ pipeline {
                             transfers: [
                                 sshTransfer(execCommand: "sudo docker rm -f icon-chat"),
                                 sshTransfer(execCommand: "sudo docker pull " + repository +":icon-chat_${BUILD_NUMBER}"),
-                                sshTransfer(execCommand: "sudo docker run -d -P --name icon-chat --network host -e DISCOVERY_SERVER=\"${DISCOVERY_SERVER}\" " + repository + ":icon-chat_${BUILD_NUMBER}")
+                                sshTransfer(execCommand: "sudo docker run -d -P -e TZ=Asia/Seoul --name icon-chat --network host -e DISCOVERY_SERVER=\"${DISCOVERY_SERVER}\" " + repository + ":icon-chat_${BUILD_NUMBER}")
                             ]
                         )
                     ]

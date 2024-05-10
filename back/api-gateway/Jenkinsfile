@@ -147,7 +147,7 @@ pipeline {
                             transfers: [
                                 sshTransfer(execCommand: "sudo docker rm -f icon-gateway"),
                                 sshTransfer(execCommand: "sudo docker pull " + repository +":icon-gateway_${BUILD_NUMBER}"),
-                                sshTransfer(execCommand: "sudo docker run -d -p 8000:8000 --name icon-gateway --network host -e DISCOVERY_SERVER=\"${DISCOVERY_SERVER}\" " + repository + ":icon-gateway_${BUILD_NUMBER}")
+                                sshTransfer(execCommand: "sudo docker run -d -p 8000:8000 -e TZ=Asia/Seoul --name icon-gateway --network host -e DISCOVERY_SERVER=\"${DISCOVERY_SERVER}\" " + repository + ":icon-gateway_${BUILD_NUMBER}")
                             ]
                         )
                     ]
