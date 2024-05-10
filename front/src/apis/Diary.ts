@@ -55,3 +55,17 @@ interface DiaryEntryProps {
         throw error;
     }
 }
+
+
+export const diaryImage = async (image: { imageData: File }) => {
+  try {
+      const formData = new FormData();
+      formData.append("image", image.imageData);
+
+      const response = await api.post(`/common-service/images`, formData);
+      return response.data 
+  } catch (error) {
+      console.error("API error: ", error);
+      throw error;
+  }
+}
