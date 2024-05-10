@@ -47,8 +47,6 @@ const DiaryCalendar = () => {
     queryFn: () => diaryList({ startId: "2024-01-01", endId: "2024-12-31" }),
   });
 
-  console.log(dayList, "ss");
-
   const images: ImageMap = {
     clude: { id: "clude", url: Clude0 },
     clude1: { id: "clude1", url: Clude1 },

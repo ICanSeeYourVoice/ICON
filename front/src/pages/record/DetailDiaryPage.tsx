@@ -55,8 +55,6 @@ const DetailDiary = () => {
     queryFn: () => diaryDetail(selectedDate ?? ""),
   });
 
-  console.log(DiaryList);
-
   //다이어리 삭제
   const { mutate: deleteDiaryEntry } = useMutation({
     mutationFn: diaryDelete,

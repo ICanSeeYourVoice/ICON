@@ -37,3 +37,5 @@ export const userJoin = async (joinData: JoinProps) => {
     throw error;
   }
 };
+
+
