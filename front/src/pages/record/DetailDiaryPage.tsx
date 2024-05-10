@@ -6,7 +6,6 @@ import MoveButton from "../../components/common/button/MoveButton";
 import Trash from "../../assets/svgs/voice/delete.svg";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
-import { useDateStore } from "../../stores/diary";
 import { PulseLoader } from "react-spinners";
 import Clude1 from "../../assets/svgs/record/blueClude.png";
 import Clude2 from "../../assets/svgs/record/blueClude.png";
@@ -37,7 +36,7 @@ const DetailDiary = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const selectedDate = useDateStore((state) => state.selectedDate);
+  const selectedDate: string | null = sessionStorage.getItem("date");
 
   const images: ImageMap = {
     clude: { id: "clude", url: Clude0 },
@@ -52,9 +51,11 @@ const DetailDiary = () => {
   };
 
   const { data: DiaryList } = useQuery<DiaryEntryProps>({
-    queryKey: ["diaryDetail", selectedDate],
-    queryFn: () => diaryDetail(moment(selectedDate).format("YYYY-MM-DD")),
+    queryKey: ["diaryDetail"],
+    queryFn: () => diaryDetail(selectedDate ?? ""),
   });
+
+  console.log(DiaryList);
 
   //다이어리 삭제
   const { mutate: deleteDiaryEntry } = useMutation({

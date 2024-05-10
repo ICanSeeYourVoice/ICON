@@ -5,7 +5,7 @@ import "./StyledCalender.css";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import { useDateStore, useEmojiStore } from "../../../stores/diary";
-import Arrow from "../../../assets/svgs/record/arrow.svg";
+import Arrow from "../../../assets/svgs/record/arrowRight.svg";
 import { useQuery } from "@tanstack/react-query";
 import { diaryList } from "../../../apis/Diary";
 import Clude1 from "../../../assets/svgs/record/blueClude.png";
@@ -36,8 +36,8 @@ interface ImageMap {
 const DiaryCalendar = () => {
   const [value, setValue] = useState<Date>(new Date());
   const [showModal, setShowModal] = useState(false);
-  const selectedEmoji = useEmojiStore((state) => state.selectedEmojiId); // zustand
-  const { setSelectedDate } = useDateStore(); // zustand date저장
+  const selectedEmoji = useEmojiStore((state) => state.selectedEmojiId);
+  const { setSelectedDate } = useDateStore();
   const { setSelectedEmojiId } = useEmojiStore();
   const navigate = useNavigate();
 
@@ -46,6 +46,8 @@ const DiaryCalendar = () => {
     queryKey: ["DiaryList"],
     queryFn: () => diaryList({ startId: "2024-01-01", endId: "2024-12-31" }),
   });
+
+  console.log(dayList, "ss");
 
   const images: ImageMap = {
     clude: { id: "clude", url: Clude0 },
@@ -66,7 +68,7 @@ const DiaryCalendar = () => {
       setSelectedDate(newValue);
       const dateStr = moment(newValue).format("YYYY-MM-DD");
       const diaryEntry = dayList.find((entry) => entry.date === dateStr);
-
+      sessionStorage.setItem("date", dateStr);
       if (diaryEntry) {
         navigate("/record/diary/detail");
       }
@@ -99,6 +101,11 @@ const DiaryCalendar = () => {
   const onModalClick = () => {
     setShowModal(true);
   };
+
+  const handleCancel = () => {
+    setShowModal(false);
+    setSelectedEmojiId(null);
+  };
   return (
     <div>
       <div className="mt-[3rem] flex justify-center items-center border-gray-200 rounded-[1.3rem] shadow-xl">
@@ -126,10 +133,7 @@ const DiaryCalendar = () => {
         <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center">
           <div className="bg-gray-100 pl-[1.5rem] pr-[1.5rem] pb-[1.5rem] pt-[1rem] rounded-[1rem] shadow-lg  ">
             <div className="w-full flex justify-end mb-[1rem]">
-              <button
-                className=" text-black"
-                onClick={() => setShowModal(false)}
-              >
+              <button className=" text-black" onClick={handleCancel}>
                 x
               </button>
             </div>
@@ -142,7 +146,7 @@ const DiaryCalendar = () => {
                   key={id}
                   src={url}
                   alt="Emoji"
-                  className={`w-[3rem] h-[3rem] cursor-pointer ${
+                  className={`rounded-full w-[3rem] h-[3rem] cursor-pointer ${
                     selectedEmoji === id ? "scale-125 shadow-lg" : ""
                   }`}
                   onClick={() => handleEmojiClick(id)}
