@@ -187,7 +187,7 @@ pipeline {
                             transfers: [
                                 sshTransfer(execCommand: "sudo docker rm -f icon-common"),
                                 sshTransfer(execCommand: "sudo docker pull " + repository +":icon-common_${BUILD_NUMBER}"),
-                                sshTransfer(execCommand: "sudo docker run -d -p 8081:8081 -e TZ=Asia/Seoul --name icon-common --network host -e DISCOVERY_SERVER=\"${DISCOVERY_SERVER}\" " + repository + ":icon-common_${BUILD_NUMBER}")
+                                sshTransfer(execCommand: "sudo docker run -d -p 8081:8081 --name icon-common --network host -e DISCOVERY_SERVER=\"${DISCOVERY_SERVER}\" " + repository + ":icon-common_${BUILD_NUMBER}")
                             ]
                         )
                     ]
