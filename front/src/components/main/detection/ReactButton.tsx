@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router";
 import "./ReactButton.css";
 import { useDetectionStore } from "../../../stores/detection";
+import { useDetectionPoseStore } from "../../../stores/detectionPose";
 import useBleStore from "../../../stores/bluetooth";
 
 const ReactButton = ({ icon, color }: { icon: string; color: string }) => {
@@ -10,6 +11,11 @@ const ReactButton = ({ icon, color }: { icon: string; color: string }) => {
 
   const cryingType = useDetectionStore((state: any) => state.cryingType);
   const setCryingType = useDetectionStore((state: any) => state.setCryingType);
+
+  const setIsBabyFace = useDetectionPoseStore(
+    (state: any) => state.setIsBabyFace
+  );
+  const isBabyFace = useDetectionPoseStore((state: any) => state.isBabyFace);
 
   const { isChange, writeCharacteristic } = useBleStore();
 
@@ -39,13 +45,17 @@ const ReactButton = ({ icon, color }: { icon: string; color: string }) => {
       </div>
       <button
         onClick={() => {
-          if (cryingType !== "FAILED" && cryingType !== "LOADING") {
-            setCryingType(0);
-            setIsBabyCry(false);
-            writeCharacteristic("normal");
-            navigate("/detection");
-          }
-        }}
+          if (!isBabyFace) {
+            setIsBabyFace(true);
+            navigate("/pose");
+          } else { 
+            if (cryingType !== "FAILED" && cryingType !== "LOADING") {
+              setCryingType(0);
+              setIsBabyCry(false);
+              writeCharacteristic("normal");
+              navigate("/detection");
+            }
+          }}}
         className="flex justify-center items-center w-[35%] aspect-square rounded-full absolute max-w-[7.5rem] max-h-[7.5rem]"
         style={{ backgroundColor: color }}
       >

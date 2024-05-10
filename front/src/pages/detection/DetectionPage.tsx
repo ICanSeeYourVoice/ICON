@@ -6,8 +6,12 @@ import {
   FAILED_INFO,
   LOADING_INFO,
 } from "../../constants/detection";
-import { useEffect, useRef } from "react";
-import { useDetectionStore } from "../../stores/detection";
+import { useEffect, useRef, useState } from "react";
+import {
+  useDetectionStore,
+  useLoading,
+  useYamnetStore,
+} from "../../stores/detection";
 import { useNavigate } from "react-router";
 import { useMutation } from "@tanstack/react-query";
 import { analyzeAlarm, cryAlarm } from "../../apis/Notification";
@@ -15,19 +19,28 @@ import toast from "react-hot-toast";
 import * as tf from "@tensorflow/tfjs";
 import { loadYamnetModel } from "../../utils/cryingClassification";
 import useBleStore from "../../stores/bluetooth";
+import classmap from "../../model/yamnet-class-map.json";
+
+// test code
+type Result = {
+  label: any;
+  probability: any;
+};
 
 const DetectionPage = () => {
   const worker = new Worker("recordingWorker.js");
+  const { yamnetModel, setModel } = useYamnetStore.getState();
 
   const navigate = useNavigate();
   const isBabyCry = useDetectionStore((state: any) => state.isBabyCry);
   const cryingType = useDetectionStore((state: any) => state.cryingType);
-  const model = useRef<tf.GraphModel | null>(null);
   const setIsBabyCry = useDetectionStore((state: any) => state.setIsBabyCry);
   const setCryingType = useDetectionStore((state: any) => state.setCryingType);
   const streamRef = useRef<MediaStream | null>(null);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const { writeCharacteristic } = useBleStore();
+  const setLoading = useLoading((state) => state.setLoading);
+
+  const [results, setResults] = useState<Result[]>([]); // test위한 코드
 
   const { mutate } = useMutation({
     mutationFn: cryAlarm,
@@ -45,110 +58,141 @@ const DetectionPage = () => {
     },
     onError: (error: any) => {
       toast.error(error.message);
+
       if (error.response.status === 500) {
         setIsBabyCry(false);
         setCryingType(0);
         writeCharacteristic("normal");
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       }
     },
   });
 
-  useEffect(() => {
-    const fetchDataAndProcess = async () => {
-      let toastId;
+  let audioCtx: AudioContext | null = null;
+  let scriptNode: ScriptProcessorNode | null = null;
+  let source: any = null;
+  let gainNode: any = null;
 
-      try {
-        if (!streamRef.current) {
-          toastId = toast.loading("아기울음감지를 준비 중입니다.");
+  const fetchDataAndProcess = async () => {
+    setLoading(true);
+    try {
+      let yamnet: any;
 
-          const yamnet = await loadYamnetModel();
-          model.current = yamnet;
-
-          const stream = await navigator.mediaDevices.getUserMedia({
-            audio: true,
-          });
-
-          streamRef.current = stream;
-
-          const audioCtx = new AudioContext({ sampleRate: 16000 });
-          const source = audioCtx.createMediaStreamSource(stream);
-          const scriptNode = audioCtx.createScriptProcessor(8192, 1, 1);
-
-          let audioBuffer: number[] = [];
-
-          intervalRef.current = setInterval(() => {
-            console.log("녹음 초기화");
-            audioBuffer = [];
-          }, 4000);
-
-          let isCry = false;
-          let cnt = 0;
-
-          scriptNode.onaudioprocess = function (e) {
-            if (isCry) cnt++;
-
-            const inputBuffer = e.inputBuffer;
-            let inputData = inputBuffer.getChannelData(0);
-
-            audioBuffer.push(...inputData);
-
-            const [scores] = yamnet.predict(tf.tensor(inputData)) as [any];
-            const top5 = tf.topk(scores, 3, true);
-            const classes = top5.indices.dataSync();
-            const probabilities = top5.values.dataSync();
-
-            if (cnt == 0) {
-              for (let i = 0; i < 3; i++) {
-                if (classes[i] === 20 && probabilities[i] >= 0.5) {
-                  isCry = true;
-                  setIsBabyCry(true);
-                  setCryingType("LOADING");
-                  mutate();
-                  clearInterval(intervalRef.current!);
-
-                  return;
-                }
-              }
-            } else {
-              if (cnt >= 4) {
-                streamRef.current!.getTracks().forEach((track) => track.stop());
-
-                worker.postMessage(audioBuffer);
-                worker.onmessage = function (e) {
-                  const sound = e.data;
-                  analyzeMutate({ data: sound });
-                  source.disconnect();
-                  scriptNode.disconnect();
-                  audioCtx.close();
-                };
-              }
-            }
-          };
-
-          source.connect(scriptNode);
-          scriptNode.connect(audioCtx.destination);
-
-          toast.success("울음감지 시작");
-        } else {
-          toast.error("마이크 연결에 실패하였습니다.");
-        }
-      } catch (error) {
-        toast.error(
-          "울음감지 준비 중 오류가 발생했습니다.\n 마이크를 허용하고 다시 시작해주세요."
-        );
-        setCryingType("FAILED");
-      } finally {
-        toast.dismiss(toastId);
+      if (!yamnetModel) {
+        yamnet = await loadYamnetModel();
+        setModel(yamnet);
+      } else {
+        yamnet = yamnetModel;
       }
+
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+      });
+
+      streamRef.current = stream;
+
+      audioCtx = new AudioContext({ sampleRate: 16000 });
+      source = audioCtx.createMediaStreamSource(stream);
+      gainNode = audioCtx.createGain();
+      scriptNode = audioCtx.createScriptProcessor(8192, 1, 1);
+
+      gainNode.gain.value = 4;
+      source.connect(gainNode);
+      gainNode.connect(scriptNode);
+      scriptNode.connect(audioCtx.destination);
+
+      let audioBuffer: number[] = [];
+      let isCry = false;
+      let cnt = 0;
+      let initRecordCnt = 0;
+
+      scriptNode.onaudioprocess = function (e) {
+        // console.log(cnt);
+
+        if (isCry) {
+          cnt++;
+        } else {
+          initRecordCnt++;
+          // console.log(initRecordCnt);
+          if (initRecordCnt >= 8) {
+            initRecordCnt = 0;
+            audioBuffer = [];
+          }
+        }
+
+        const inputBuffer = e.inputBuffer;
+        let inputData = inputBuffer.getChannelData(0);
+
+        audioBuffer.push(...inputData);
+
+        const [scores] = yamnet.predict(tf.tensor(inputData)) as [any];
+        const top5 = tf.topk(scores, 5, true);
+        const classes = top5.indices.dataSync();
+        const probabilities = top5.values.dataSync();
+
+        const updatedResults: any[] = []; // test를 위한 코드
+        if (cnt == 0) {
+          for (let i = 0; i < 5; i++) {
+            // test를 위한 코드
+            updatedResults.push({
+              label: (classmap as any)[classes[i]].display_name,
+              probability: probabilities[i].toFixed(3),
+            });
+
+            if (classes[i] === 20) {
+              isCry = true;
+              setIsBabyCry(true);
+              setCryingType("LOADING");
+              mutate();
+              return;
+            }
+          }
+
+          setResults(updatedResults); // test를 위한 코드
+        } else {
+          if (cnt >= 4) {
+            streamRef.current!.getTracks().forEach((track) => track.stop());
+            source?.disconnect();
+            scriptNode?.disconnect();
+
+            streamRef.current = null;
+
+            worker.postMessage(audioBuffer);
+            worker.onmessage = function (e) {
+              const sound = e.data;
+              analyzeMutate({ data: sound });
+            };
+
+            return;
+          }
+        }
+      };
+    } catch (error) {
+      toast.error(
+        "울음감지 준비 중 오류가 발생했습니다.\n 마이크를 허용하고 다시 시작해주세요."
+      );
+      setCryingType("FAILED");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!isBabyCry) {
+      fetchDataAndProcess();
+    }
+
+    return () => {
+      streamRef.current?.getTracks().forEach((track) => track.stop());
+
+      source?.disconnect();
+      scriptNode?.disconnect();
+
+      streamRef.current = null;
     };
-
-    if (!isBabyCry) fetchDataAndProcess(); // 로그인 여부 확인 필요
-
-    // return () => {
-    //   if (streamRef.current) {
-    //     streamRef.current.getTracks().forEach((track) => track.stop());
-    //   }
-    // };
   }, []);
 
   useEffect(() => {
@@ -186,7 +230,7 @@ const DetectionPage = () => {
             : DETECTION.NORMAL.COLOR
         }
       />
-      {cryingType ? (
+      {/* {cryingType ? (
         <PulseLoader color="#c8c8c8" />
       ) : (
         <div className="flex flex-col items-center justify-center text-gray-0 text-xl">
@@ -195,6 +239,26 @@ const DetectionPage = () => {
             <span className="text-white">{DETECTION.NORMAL.MESSAGE}</span>
             상태에요
           </p>
+        </div>
+      )} */}
+      {cryingType ? (
+        <PulseLoader color="#c8c8c8" />
+      ) : (
+        <div className="flex flex-col items-center justify-center text-white text-xs">
+          {results.map((result, i) => (
+            <div
+              key={i}
+              style={{
+                display: "flex",
+                width: "18.5rem",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <p>{result.label} </p>
+              <p> : ({result.probability}) </p>
+            </div>
+          ))}
         </div>
       )}
       <div className="flex items-center justify-center w-[80%] h-[6rem]"></div>
