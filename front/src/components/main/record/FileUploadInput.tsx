@@ -2,12 +2,23 @@ import React, { useRef } from "react";
 import CameraIcon from "../../../assets/svgs/record/camera.svg";
 import toast from "react-hot-toast";
 import { useImageStore } from "../../../stores/diary";
+import { useMutation } from "@tanstack/react-query";
+import { diaryImage } from "../../../apis/Diary";
 
 const FileUploadInput: React.FC = () => {
   const { imageFiles, previewUrls, addImages, removeImage } = useImageStore();
-
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const { mutate: ImageRegister } = useMutation({
+    mutationFn: diaryImage,
+    onSuccess: () => {
+      toast.success("이미지가 성공적으로 업로드 되었습니다.");
+    },
+    onError: (error) => {
+      toast.error("이미지 업로드에 실패했습니다.");
+      console.error("API error: ", error);
+    },
+  });
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (imageFiles.length >= 6) {
       toast("사진은 최대 6장까지 등록 가능합니다.", {
@@ -19,6 +30,10 @@ const FileUploadInput: React.FC = () => {
     if (event.target.files) {
       const newFiles = Array.from(event.target.files);
       addImages(newFiles);
+
+      newFiles.forEach((file) => {
+        ImageRegister({ imageData: file });
+      });
     }
   };
 
