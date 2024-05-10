@@ -9,7 +9,7 @@ const SmallButton: React.FC<ButtonProps> = ({ label, onClick }) => {
   return (
     <button
       onClick={onClick}
-      className="bg-primary w-[6.25rem] mt-2 h-[2rem] text-white  rounded-full focus:outline-none focus:ring-1 focus:ring-blue-200 text-sm"
+      className="flex justify-center items-center w-[9.375rem] h-[2.5625rem] m-[0.125rem] bg-gradient-to-r from-linear-0 to-linear-100 rounded-[1.9375rem] text-sm text-[0.8rem] text-center text-white"
     >
       {label}
     </button>

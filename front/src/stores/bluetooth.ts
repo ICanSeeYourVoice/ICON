@@ -31,7 +31,21 @@ const useBleStore = create<BleStore>((set, get) => ({
   characteristic: null,
   deviceValue: "",
   changeValue: "",
-  setDevice: (device: BluetoothDevice) => set({ device }),
+  setDevice: (device: BluetoothDevice) => {
+    set({ device });
+    if (device) {
+      device.addEventListener("gattserverdisconnected", () => {
+        alert("디바이스 연결이 끊어졌습니다.");
+        useBleStore.setState({
+          isConnected: false,
+          device: null,
+          server: undefined,
+          service: undefined,
+          characteristic: undefined,
+        });
+      });
+    }
+  },
   setServer: (server: BluetoothRemoteGATTServer | undefined) => set({ server }),
   setService: (service: BluetoothRemoteGATTService | undefined) =>
     set({ service }),

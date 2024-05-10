@@ -30,15 +30,14 @@ environment:
 dependencies:
   wear:
     path: C:/Users/SSAFY/Desktop/new_front/S10P31C202/wearos/flutter_wear_plugin-master
-  flutter_blue_plus: ^1.32.4
-  flutter_ble_peripheral: ^1.2.4
-  ble_peripheral: ^2.2.3
+  ble_peripheral: ^2.3.1
   permission_handler: ^11.3.1
   get: ^4.6.6
   firebase_core: ^2.30.1
   firebase_messaging: ^14.9.1
   flutter_local_notifications: ^17.1.0
   vibration: ^1.8.4
+  device_info_plus: ^10.1.0
 
   flutter:
     sdk: flutter

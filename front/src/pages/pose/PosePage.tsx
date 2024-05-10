@@ -6,6 +6,7 @@ import { DETECTION_POSE_INFO } from "../../constants/detectionPose";
 import { useDetectionPoseStore } from "../../stores/detectionPose";
 import { poseAlarm } from "../../apis/Notification";
 import { useMutation } from "@tanstack/react-query";
+import useBleStore from "../../stores/bluetooth";
 
 const PosePage = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -13,6 +14,7 @@ const PosePage = () => {
   const intervalDetection = useRef<number | null>(null); // 타입을 number로 선언
   const [modelsLoaded, setModelsLoaded] = useState(false);
 
+  const { writeCharacteristic } = useBleStore();
   const navigate = useNavigate();
   const setIsBabyFace = useDetectionPoseStore(
     (state: any) => state.setIsBabyFace
@@ -107,6 +109,7 @@ const PosePage = () => {
               clearInterval(intervalDetection.current);
             }
             mutate();
+            writeCharacteristic("danger");
             navigate("/pose/result");
           }
         }
