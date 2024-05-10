@@ -23,7 +23,6 @@ const ResultPage = () => {
         writeCharacteristic("hungry");
         return DETECTION.TIRED;
       case "BURPING":
-        writeCharacteristic("hungry");
         return DETECTION.BURPING;
       default:
         return DETECTION.TIRED;

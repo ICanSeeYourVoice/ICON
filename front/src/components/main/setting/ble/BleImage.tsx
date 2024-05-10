@@ -11,11 +11,19 @@ const BleModel = ({ position }: ModelProps) => {
   const gltf = useGLTF("/ble_gltf/scene.gltf");
   const group = useRef<THREE.Group>(null!);
   // useFrame(() => (group.current.rotation.y += 0.02));
+  // useFrame((state) => {
+  //   const t = state.clock.getElapsedTime();
+  //   group.current.rotation.x = Math.PI + Math.cos(t / 4) / 8;
+  //   group.current.rotation.y = Math.sin(t / 4) / 8;
+  //   group.current.rotation.z = (1 + Math.sin(t / 1.5)) / 20;
+  //   group.current.position.y = (1 + Math.sin(t / 1.5)) / 10;
+  // });
   return (
     <primitive
+      // rotation={[Math.PI / 2, 0, 0]}
       ref={group}
       object={gltf.scene.clone()}
-      scale={2}
+      scale={[2, 2, 1]}
       position={position}
     />
   );

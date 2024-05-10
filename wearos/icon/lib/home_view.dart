@@ -1,11 +1,7 @@
-import 'package:ble_peripheral/ble_peripheral.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wear/wear.dart';
 import 'home_controller.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:vibration/vibration.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({Key? key}) : super(key: key);
@@ -13,240 +9,95 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.black),
-            borderRadius: const BorderRadius.all(Radius.circular(40)),
-            color: Colors.black,
-          ),
-          child: _buildUI(),
+      body: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.black),
+          borderRadius: const BorderRadius.all(Radius.circular(40)),
+          color: Colors.black,
         ),
+        child: _buildUI(),
+      ),
     );
   }
+
   Widget _buildUI() {
     return WatchShape(
       builder: (BuildContext context, WearShape shape, Widget? child) {
         return Center(
           child: SingleChildScrollView(
-            child:
-            Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Obx(() {
-                        switch (controller.status.value) {
-                        case 'init':
-                          return _buildInitialScreen();
-                        case 'advertising':
-                          return _buildAdvertisingScreen();
-                        case 'bleOn':
-                          return _buildBleOnScreen();
-                        case 'danger':
-                          return _buildDangerScreen();
-                        case 'discomfort':
-                          return _buildDiscomfortScreen();
-                        case 'hungry':
-                          return _buildHungryScreen();
-                        case 'normal':
-                          return _buildDefaultScreen();
-                        case 'pain':
-                          return _buildPainScreen();
-                        case 'sleep':
-                          return _buildSleepScreen();
-                        default:
-                          return _buildDefaultScreen();
-                        }
-                      }),
-
-                      // const Divider(),
-                      //       const ElevatedButton(
-                      //         onPressed: BlePeripheral.askBlePermission,
-                      //         child: Text('Ask Permission'),
-                      //       ),
-                      //       ElevatedButton(
-                      //         onPressed: controller.addServices,
-                      //         child: const Text('Add Services'),
-                      //       ),
-                      //       ElevatedButton(
-                      //         onPressed: controller.getAllServices,
-                      //         child: const Text('Get Services'),
-                      //       ),
-                      //       ElevatedButton(
-                      //         onPressed: controller.removeServices,
-                      //         child: const Text('Remove Services'),
-                      //       ),
-                      //       ElevatedButton(
-                      //         onPressed: controller.startAdvertising,
-                      //         child: const Text('Start Advertising'),
-                      //       ),
-                      //       ElevatedButton(
-                      //         onPressed: () async {
-                      //           await BlePeripheral.stopAdvertising();
-                      //           controller.isAdvertising.value = false;
-                      //         },
-                      //         child: const Text('Stop Advertising'),
-                      //       ),
-                      //       ElevatedButton(
-                      //         onPressed: () async {
-                      //           controller.updateCharacteristic(controller.devices[0]);
-                      //         },
-                      //         child: const Text('Update Characteristic value'),
-                      //       ),
-                      // const Divider(),
-                      // const Center(child: Text("Devices")),
-                      // Padding(
-                      //   padding: const EdgeInsets.all(8.0),
-                      //   child: Obx(() => SizedBox(
-                      //     height: 200,
-                      //     child: ListView.builder(
-                      //     itemCount: controller.devices.length,
-                      //     itemBuilder: (BuildContext context, int index) {
-                      //       return Card(
-                      //         child: ListTile(
-                      //           title: Text(controller.devices[index]),
-                      //         ),
-                      //       );
-                      //     },
-                      //   ),
-                      //   ),
-                      // )),
-                  //   ],
-                  // ),
-                // )
-                ],
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Obx(() {
+                  if (controller.isBleOn.value == false) {
+                    return _buildBleScreen();
+                  } else {
+                    switch (controller.status.value) {
+                      case 'init':
+                        return _buildConnectionScreen();
+                      case 'normal':
+                        return _buildDefaultScreen();
+                      case 'danger':
+                        return _buildDangerScreen();
+                      case 'discomfort':
+                        return _buildDiscomfortScreen();
+                      case 'hungry':
+                        return _buildHungryScreen();
+                      case 'pain':
+                        return _buildPainScreen();
+                      case 'sleep':
+                        return _buildSleepScreen();
+                      default:
+                        return _buildConnectionScreen();
+                    }
+                  }
+                }),
+              ],
+            ),
           ),
         );
       },
     );
   }
 
-  void startAdv() async {
-    controller.startAdvertising;
-    controller.addServices;
-  }
-  void requestBluetoothPermission() async {
-    var status = await Permission.bluetoothConnect.status;
-    if (!status.isGranted) {
-      await Permission.bluetoothConnect.request();
-    }
-  }
-
-  void OnVibration() {
-    Vibration.vibrate(duration: 1000); //1000 = 1초
-  }
-
-  void setStatus(String status) {
-    controller.status.value = status;
-
-    if(status == 'init') {
-      requestBluetoothPermission();
-      if(controller.isAdvertising.value == false) {
-        controller.startAdvertising();
-        controller.addServices();
-      }
-      controller.getAllServices();
-    }
-    if(status != 'init' && status != 'normal') {
-      print('진동진동');
-      Vibration.vibrate(
-          duration: 3000,
-          pattern: [100, 50, 200, 30, 1000, 2000]
-      );
-      // Vibration.vibrate(duration: 1000);
-      // HapticFeedback.vibrate();
-      // HapticFeedback.heavyImpact();
-      // HapticFeedback.vibrate();
-      // HapticFeedback.heavyImpact();
-      // HapticFeedback.mediumImpact();
-      // HapticFeedback.lightImpact();
-      // HapticFeedback.selectionClick();
-    }
-  }
-
-  Widget _buildInitialScreen() {
-    // 초기 화면 UI 구성
-    return Center(child: Column(
+  // 권한이 승인 안된 상태
+  Widget _buildBleScreen() {
+    return Center(
+        child: Column(
       children: [
-        Text('초기 화면', style: TextStyle(color: Colors.white),),
-        Obx(() =>
-            Text("Advertising: ${controller.isAdvertising.value}", style: TextStyle(color: Colors.white),)),
-        Obx(() => Text("BleOn: ${controller.isBleOn.value}", style: TextStyle(color: Colors.white),)),
-        Obx(() => Text("status: ${controller.status.value}", style: TextStyle(color: Colors.white),)),
-        const ElevatedButton(
-          onPressed: BlePeripheral.askBlePermission,
-          child: Text('Ask Permission'),
+        Text(
+          '블루투스 권한을 승인해주세요.',
+          style: TextStyle(color: Colors.white),
         ),
         ElevatedButton(
-          onPressed: controller.addServices,
-          child: const Text('Add Services'),
+          onPressed: controller.checkPermission,
+          child: Text('권한 요청'),
         ),
-        ElevatedButton(
-          onPressed: controller.startAdvertising,
-          child: const Text('Start Advertising'),
-        ),
-        ElevatedButton(
-            onPressed: () {
-              // controller.updateCharacteristic(controller.devices[0]);
-              setStatus('normal');
-            },
-            child: const Text('switc main'),
-          ),
-    //     const Center(child: Text("Devices")),
-    // Padding(
-    //   padding: const EdgeInsets.all(8.0),
-    //   child: Obx(() => SizedBox(
-    //     height: 200,
-    //     child: ListView.builder(
-    //     itemCount: controller.devices.length,
-    //     itemBuilder: (BuildContext context, int index) {
-    //       return Card(
-    //         child: ListTile(
-    //           title: Text(controller.devices[index]),
-    //         ),
-    //       );
-    //     },
-    //   ),
-    //   ),
-    // )),
       ],
     ));
   }
 
-  Widget _buildAdvertisingScreen() {
-    // 연결 화면 UI 구성 [TEST 코드-수정예정]
+  // 연결 화면
+  Widget _buildConnectionScreen() {
+    // 초기 화면 UI 구성
     return Center(
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          SizedBox(
-            width: 150,
-            height: 150,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(32.5),
-              child: const Image(
-                fit: BoxFit.cover,
-                image: AssetImage('assets/hungry.png'),
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: TextButton(
-              child: Text('닫기'),
-              onPressed: () {setStatus('normal');},
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBleOnScreen() {
-    // BLE가 켜져있을 때의 화면 UI 구성
-    return Center(child: Text('BLE is On'));
+        child: Column(
+      children: [
+        const Text(
+          '연결 버튼을\n눌러주세요.\n아이콘>설정>워치연결에서\n연결해주세요.',
+          style: TextStyle(color: Colors.white),
+          textAlign: TextAlign.center,
+        ),
+        Obx(() => Text(
+              "Advertising: ${controller.isAdvertising.value}",
+              style: TextStyle(color: Colors.white),
+            )),
+        ElevatedButton(
+            onPressed: controller.checkStartAdvertising,
+            child: const Text('연결')),
+      ],
+    ));
   }
 
   Widget _buildDefaultScreen() {
@@ -273,7 +124,9 @@ class HomeView extends GetView<HomeController> {
             child: TextButton(
               child: Text('재연결'),
               style: TextButton.styleFrom(foregroundColor: Colors.white),
-              onPressed: () {setStatus('init');},
+              onPressed: () {
+                controller.updateStatus('init');
+              },
             ),
           ),
         ],
@@ -304,10 +157,10 @@ class HomeView extends GetView<HomeController> {
             child: TextButton(
               child: Text('닫기'),
               onPressed: () async {
-                print("devices list: ${controller.devices[0]}");
-                print("device id: ${controller.devicesId.value}");
+                // print("devices list: ${controller.devices[0]}");
+                // print("device id: ${controller.devicesId.value}");
                 controller.updateCharacteristic(controller.devicesId.value);
-                setStatus('normal');
+                controller.updateStatus('normal');
               },
               style: TextButton.styleFrom(foregroundColor: Colors.white),
             ),
@@ -340,8 +193,8 @@ class HomeView extends GetView<HomeController> {
             child: TextButton(
               child: Text('닫기'),
               onPressed: () async {
-                controller.updateCharacteristic(controller.devices[0]);
-                setStatus('normal');
+                controller.updateCharacteristic(controller.devicesId.value);
+                controller.updateStatus('normal');
               },
             ),
           ),
@@ -373,8 +226,8 @@ class HomeView extends GetView<HomeController> {
             child: TextButton(
               child: Text('닫기'),
               onPressed: () async {
-                controller.updateCharacteristic(controller.devices[0]);
-                setStatus('normal');
+                controller.updateCharacteristic(controller.devicesId.value);
+                controller.updateStatus('normal');
               },
             ),
           ),
@@ -406,8 +259,8 @@ class HomeView extends GetView<HomeController> {
             child: TextButton(
               child: Text('닫기'),
               onPressed: () async {
-                controller.updateCharacteristic(controller.devices[0]);
-                setStatus('normal');
+                controller.updateCharacteristic(controller.devicesId.value);
+                controller.updateStatus('normal');
               },
             ),
           ),
@@ -440,7 +293,7 @@ class HomeView extends GetView<HomeController> {
               child: Text('닫기'),
               onPressed: () async {
                 controller.updateCharacteristic(controller.devicesId.value);
-                setStatus('normal');
+                controller.updateStatus('normal');
               },
             ),
           ),

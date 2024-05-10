@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import toast from "react-hot-toast";
 import SmallButton from "../../../components/common/button/SmallButton";
 import useBleStore from "../../../stores/bluetooth";
@@ -10,6 +10,7 @@ type DeviceOptions = {
 };
 
 interface BleStore {
+  isConnected: boolean;
   device: BluetoothDevice | null;
   setDevice: (device: BluetoothDevice) => void;
   setServer: (server: BluetoothRemoteGATTServer | undefined) => void;
@@ -25,6 +26,7 @@ interface BleStore {
 
 const BleConnect = () => {
   const {
+    isConnected,
     device,
     setDevice,
     setServer,
@@ -32,7 +34,6 @@ const BleConnect = () => {
     setCharacteristic,
     writeCharacteristic,
   } = useBleStore() as BleStore;
-  const [connection, setConnection] = useState(false);
 
   useEffect(() => {
     if (!("bluetooth" in navigator)) {
@@ -68,9 +69,12 @@ const BleConnect = () => {
       );
       console.log("characteristic", characteristic);
       setCharacteristic(characteristic);
-      setConnection(true);
-      writeCharacteristic("init");
+      useBleStore.setState({ isConnected: true });
+      writeCharacteristic("normal");
     } catch (err) {
+      toast.error("블루투스 연결에 실패했어요😢\n다시 시도해주세요.", {
+        duration: 5000,
+      });
       console.error(err);
     }
   };
@@ -84,11 +88,19 @@ const BleConnect = () => {
 
   const handleDisconnectClick = () => {
     if (!device) {
+      toast.error("연결된 디바이스가 없어요.");
       return;
     }
     if (device.gatt?.connected) {
-      device.gatt.disconnect;
-      setConnection(false);
+      device.gatt.disconnect();
+
+      useBleStore.setState({
+        isConnected: false,
+        device: null,
+        server: undefined,
+        service: undefined,
+        characteristic: undefined,
+      });
     }
   };
 
@@ -96,10 +108,16 @@ const BleConnect = () => {
     <div className="flex flex-col items-center mb-[1rem] gap-[1rem]">
       <p>워치랑 연결하고 알림을 받아보세요.</p>
       <BleImage />
-      {!connection ? (
+      {!isConnected ? (
         <SmallButton label="연결" onClick={handleScanClick} />
       ) : (
-        <SmallButton label="연결해제" onClick={handleDisconnectClick} />
+        <div>
+          <SmallButton
+            label="테스트버튼"
+            onClick={() => writeCharacteristic("hungry")}
+          />
+          <SmallButton label="연결해제" onClick={handleDisconnectClick} />
+        </div>
       )}
     </div>
   );
