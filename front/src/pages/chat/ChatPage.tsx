@@ -113,11 +113,13 @@ const ChatPage: React.FC = () => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    <div className="w-screen h-screen flex justify-center items-center">
+      <PulseLoader color="#7ec3f0" />
+    </div>;
   }
 
   if (isError) {
-    return <div>Error loading chat data.</div>;
+    return <div>챗 데이터 로드 실패</div>;
   }
 
   return (

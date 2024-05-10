@@ -30,7 +30,6 @@ const DetectionPage = () => {
   const setIsBabyCry = useDetectionStore((state: any) => state.setIsBabyCry);
   const setCryingType = useDetectionStore((state: any) => state.setCryingType);
   const streamRef = useRef<MediaStream | null>(null);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const { writeCharacteristic } = useBleStore();
   const setLoading = useLoading((state) => state.setLoading);
 
@@ -97,18 +96,23 @@ const DetectionPage = () => {
       scriptNode.connect(audioCtx.destination);
 
       let audioBuffer: number[] = [];
-
-      intervalRef.current = setInterval(() => {
-        console.log("녹음 초기화 " + intervalRef.current);
-        audioBuffer = [];
-      }, 4000);
-
       let isCry = false;
       let cnt = 0;
+      let initRecordCnt = 0;
 
       scriptNode.onaudioprocess = function (e) {
         // console.log(cnt);
-        if (isCry) cnt++;
+
+        if (isCry) {
+          cnt++;
+        } else {
+          initRecordCnt++;
+          // console.log(initRecordCnt);
+          if (initRecordCnt >= 8) {
+            initRecordCnt = 0;
+            audioBuffer = [];
+          }
+        }
 
         const inputBuffer = e.inputBuffer;
         let inputData = inputBuffer.getChannelData(0);
@@ -127,7 +131,6 @@ const DetectionPage = () => {
               setIsBabyCry(true);
               setCryingType("LOADING");
               mutate();
-              clearInterval(intervalRef.current!);
 
               return;
             }
@@ -137,8 +140,6 @@ const DetectionPage = () => {
             streamRef.current!.getTracks().forEach((track) => track.stop());
             source?.disconnect();
             scriptNode?.disconnect();
-            clearInterval(intervalRef.current!);
-            // console.log(intervalRef.current! + " 해제(cnt)");
 
             streamRef.current = null;
 
@@ -169,8 +170,6 @@ const DetectionPage = () => {
 
     return () => {
       streamRef.current?.getTracks().forEach((track) => track.stop());
-      clearInterval(intervalRef.current!);
-      // console.log(intervalRef.current! + " 해제 콜백");
 
       source?.disconnect();
       scriptNode?.disconnect();
