@@ -22,9 +22,9 @@ import ResultPage from "../pages/detection/ResultPage";
 import VoiceLayout from "../components/common/layout/VoiceLayout";
 import ClovaVoicePage from "../pages/tts/ClovaVoicePage";
 import SettingRoutinePage from "../pages/setting/smartThings/SettingRoutinePage";
-import PosePage from "../pages/detection/PosePage";
+import PosePage from "../pages/pose/PosePage";
 import BlePage from "../pages/setting/ble/BlePage";
-import PoseResultPage from "../pages/detection/PoseResultPage";
+import PoseResultPage from "../pages/pose/PoseResultPage";
 
 const authRoutes = [
   {
