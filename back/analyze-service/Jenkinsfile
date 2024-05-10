@@ -148,7 +148,7 @@ pipeline {
                             transfers: [
                                 sshTransfer(execCommand: "sudo docker rm -f icon-analyze"),
                                 sshTransfer(execCommand: "sudo docker pull " + repository +":icon-analyze_${BUILD_NUMBER}"),
-                                sshTransfer(execCommand: "sudo docker run -d -P --name icon-analyze --network host -e DISCOVERY_SERVER=\"${DISCOVERY_SERVER}\" " + repository + ":icon-analyze_${BUILD_NUMBER}")
+                                sshTransfer(execCommand: "sudo docker run -d -P -e TZ=Asia/Seoul --name icon-analyze --network host -e DISCOVERY_SERVER=\"${DISCOVERY_SERVER}\" " + repository + ":icon-analyze_${BUILD_NUMBER}")
                             ]
                         )
                     ]
