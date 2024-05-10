@@ -56,9 +56,6 @@ const DetailDiary = () => {
     queryFn: () => diaryDetail(moment(selectedDate).format("YYYY-MM-DD")),
   });
 
-  console.log(moment(selectedDate).format("YYYY-MM-DD"));
-  console.log(DiaryList, "상세정보");
-
   //다이어리 삭제
   const { mutate: deleteDiaryEntry } = useMutation({
     mutationFn: diaryDelete,
