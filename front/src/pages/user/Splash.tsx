@@ -2,18 +2,12 @@ import Logo from "../../assets/svgs/auth/Logo.svg";
 import PostButton from "../../components/common/button/PostButton";
 import { useNavigate } from "react-router-dom";
 import { useTokenStore } from "../../stores/notification";
-import toast from "react-hot-toast";
+import { PulseLoader } from "react-spinners";
 
 const SplashPage = () => {
   const { token } = useTokenStore();
   const navigate = useNavigate();
   const handleLoginClick = () => {
-    if (!token) {
-      toast.error("알림 권한을 허용해주세요");
-
-      return;
-    }
-
     navigate("/login");
   };
   return (
@@ -25,7 +19,13 @@ const SplashPage = () => {
           청각 장애인 부모를 위한 아기 돌봄 보조 서비스
         </div>
       </div>
-      <PostButton label="시작하기" onClick={handleLoginClick} />
+      {token ? (
+        <PostButton label="시작하기" onClick={handleLoginClick} />
+      ) : (
+        <button className="bg-primary w-[15.25rem] mt-2 h-[3rem] text-white  rounded-full focus:outline-none focus:ring-1 focus:ring-blue-200 ">
+          <PulseLoader size={9} color="white" />
+        </button>
+      )}
     </div>
   );
 };

@@ -24,7 +24,9 @@ export async function handleAllowNotification() {
         );
       }
     } else if (permission === "denied") {
-      toast.error("알림 권한을 허용해주세요");
+      toast.error("알림 권한을 허용해주세요", {
+        duration: Infinity,
+      });
     }
   } catch (error) {
     console.error("푸시 토큰 가져오는 중에 에러 발생", error);
