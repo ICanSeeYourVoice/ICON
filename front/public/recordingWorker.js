@@ -7,7 +7,6 @@ self.onmessage = function (e) {
   sound.fromScratch(1, 16000, "32f", soundData);
 
   const blob = new Blob([sound.toBuffer()], { type: "audio/wav" });
-  console.log(URL.createObjectURL(blob));
 
   self.postMessage(blob);
 };

@@ -17,7 +17,7 @@ import { useMutation } from "@tanstack/react-query";
 import { analyzeAlarm, cryAlarm } from "../../apis/Notification";
 import toast from "react-hot-toast";
 import * as tf from "@tensorflow/tfjs";
-import { loadYamnetModel } from "../../utils/cryingClassification";
+import { loadYamnetModel } from "../../utils/loadModel";
 import useBleStore from "../../stores/bluetooth";
 import classmap from "../../model/yamnet-class-map.json";
 
@@ -142,7 +142,7 @@ const DetectionPage = () => {
               probability: probabilities[i].toFixed(3),
             });
 
-            if (classes[i] === 20) {
+            if (classes[i] === 20 && probabilities[i] >= 0.5) {
               isCry = true;
               setIsBabyCry(true);
               setCryingType("LOADING");
@@ -163,6 +163,7 @@ const DetectionPage = () => {
             worker.postMessage(audioBuffer);
             worker.onmessage = function (e) {
               const sound = e.data;
+              console.log(URL.createObjectURL(sound));
               analyzeMutate({ data: sound });
             };
 
