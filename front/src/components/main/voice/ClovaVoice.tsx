@@ -152,7 +152,7 @@ const ClovaVoice = () => {
       </div>
 
       {/* 즐겨찾기 문구 */}
-      <div className="fixed bottom-0 left-0 right-0 p-3 bg-white shadow-xl">
+      <div className=" p-3 bg-white shadow-xl">
         <div className="gap-1 mb-[4rem]">
           <div className="text-gray-500 mb-[0.5rem] text-[1.2rem] ml-[1rem]">
             즐겨찾기 문구
