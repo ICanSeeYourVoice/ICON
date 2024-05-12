@@ -7,6 +7,21 @@ import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { userJoin } from "../../apis/User";
 import toast from "react-hot-toast";
+import {
+  ID_INFO,
+  NAME_INFO,
+  PASS_INFO,
+  REPASS_INFO,
+} from "../../constants/join";
+import { AxiosError } from "axios";
+
+interface ErrorResponse {
+  type: string;
+  title: string;
+  status: number;
+  detail: string;
+  instance: string;
+}
 
 const JoinPage = () => {
   const [nameValue, setNameValue] = useState("");
@@ -22,23 +37,34 @@ const JoinPage = () => {
       toast.success("회원가입이 완료되었습니다.\n로그인해주세요!");
       navigate("/login");
     },
-    onError: () => {
-      toast.error("아이디와 비밀번호를 확인해주세요");
+    onError: (error: AxiosError<ErrorResponse>) => {
+      if (error.response && error.response.data) {
+        toast.error(error.response.data.detail, { duration: 1000 });
+      } else {
+        toast.error("아이디와 비밀번호를 확인해주세요", { duration: 1000 });
+      }
     },
   });
+
   const handleConfirmClick = () => {
     if (nameValue && idValue && passwordValue) {
-      if (passwordValue === passwordCorValue) {
+      if (nameValue.length == 0 || nameValue.length > 5) {
+        return toast.error(NAME_INFO, { duration: 800 });
+      } else if (idValue.length < 5 || idValue.length > 12) {
+        return toast.error(ID_INFO, { duration: 800 });
+      } else if (passwordValue.length < 5 || passwordValue.length > 12) {
+        return toast.error(PASS_INFO, { duration: 800 });
+      } else if (passwordValue !== passwordCorValue) {
+        return toast.error(REPASS_INFO, { duration: 800 });
+      } else {
         mutate({
           uid: idValue,
           pw: passwordValue,
           name: nameValue,
         });
-      } else {
-        toast.error("비밀번호를 다시 확인해 주세요!");
       }
     } else {
-      toast.error("모든 정보를 입력해주세요!");
+      return toast.error("모든 정보를 입력해주세요!", { duration: 800 });
     }
   };
 
@@ -59,31 +85,47 @@ const JoinPage = () => {
     <div className="flex flex-col items-center h-screen w-screen">
       <TopBar text="회원 가입" />
       <main className="flex flex-col items-center justify-between w-[80%] h-full mt-[6rem]">
-        <div className="grid gap-[1.8rem] mt-[1.5rem]">
+        <div className="grid gap-[1rem] mt-[1.5rem]">
           <LabelInput
             label="이름"
             placeholder="이름"
             value={nameValue}
             onChange={nameChange}
           />
+          <div className="text-stone-400 text-xs whitespace-pre">
+            {nameValue.length == 0 || nameValue.length > 5 ? NAME_INFO : <br />}
+          </div>
           <LabelInput
             label="아이디"
             placeholder="아이디"
             value={idValue}
             onChange={idChange}
           />
+          <div className="text-stone-400 text-xs whitespace-pre">
+            {idValue.length < 5 || idValue.length > 12 ? ID_INFO : <br />}
+          </div>
           <PasswordInput
             placeholder="비밀번호"
             label="비밀번호"
             onChange={passwordChange}
             value={passwordValue}
           />
+          <div className="text-stone-400 text-xs whitespace-pre">
+            {passwordValue.length < 5 || passwordValue.length > 12 ? (
+              PASS_INFO
+            ) : (
+              <br />
+            )}
+          </div>
           <PasswordInput
             placeholder="비밀번호 확인"
             label="비밀번호 확인"
             onChange={passwordCorChange}
             value={passwordCorValue}
           />
+          <div className="text-stone-400 text-xs whitespace-pre">
+            {passwordValue != passwordCorValue ? REPASS_INFO : <br />}
+          </div>
         </div>
         <div className="mb-[3rem]">
           <PostButton label="확인" onClick={handleConfirmClick} />
