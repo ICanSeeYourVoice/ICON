@@ -48,7 +48,7 @@ const RegisterPage = () => {
   const createDiary = () => {
     if (!selectedDate || contentValue === "" || selectedEmojiUrl === null) {
       toast.error("일지 등록을 위해 모든 필드를 채워주세요");
-      console.log(previewUrls);
+
       return;
     }
 

@@ -22,7 +22,14 @@ const Button = () => {
   });
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setText(event.target.value);
+    const inputText = event.target.value;
+    if (inputText.length <= 30) {
+      setText(inputText);
+    } else {
+      toast.error("최대 30자까지 등록 가능합니다");
+      return;
+    }
+    setText(inputText);
   };
 
   const handleSubmit = () => {
