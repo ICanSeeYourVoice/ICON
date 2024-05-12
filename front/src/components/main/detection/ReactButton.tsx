@@ -47,15 +47,16 @@ const ReactButton = ({ icon, color }: { icon: string; color: string }) => {
         onClick={() => {
           if (!isBabyFace) {
             setIsBabyFace(true);
-            navigate("/pose");
-          } else { 
+            navigate("/detection");
+          } else {
             if (cryingType !== "FAILED" && cryingType !== "LOADING") {
               setCryingType(0);
               setIsBabyCry(false);
               writeCharacteristic("normal");
               navigate("/detection");
             }
-          }}}
+          }
+        }}
         className="flex justify-center items-center w-[35%] aspect-square rounded-full absolute max-w-[7.5rem] max-h-[7.5rem]"
         style={{ backgroundColor: color }}
       >
