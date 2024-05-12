@@ -10,6 +10,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   useDetectionStore,
   useLoading,
+  useToggle,
   useYamnetStore,
 } from "../../stores/detection";
 import { useNavigate } from "react-router";
@@ -267,8 +268,7 @@ const DetectionPage = () => {
     }
   };
 
-  const [isCryDetect, setIsCryDetect] = useState(true);
-  const [isFaceDetect, setIsFaceDetect] = useState(false);
+  const { isCryDetect, isFaceDetect } = useToggle();
 
   useEffect(() => {
     if (isCryDetect) {
@@ -318,25 +318,8 @@ const DetectionPage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-full gap-4">
-      {/* <video ref={videoRef} className="hidden" /> */}
-      <button
-        className="h-[1rem]"
-        onClick={() => {
-          setIsCryDetect(!isCryDetect);
-        }}
-      >
-        울음
-      </button>
-      <button
-        className="h-[1rem]"
-        onClick={() => {
-          setIsFaceDetect(!isFaceDetect);
-        }}
-      >
-        행동
-      </button>
-      <video ref={videoRef} className="h-[5rem] w-full" />
-      <p className="text-gray-1 text-sm ">
+      <video ref={videoRef} className="hidden" />
+      <p className="text-gray-1 text-sm">
         {cryingType === "FAILED"
           ? FAILED_INFO
           : cryingType === "LOADING"

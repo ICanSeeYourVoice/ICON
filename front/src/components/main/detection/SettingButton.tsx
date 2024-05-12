@@ -1,8 +1,11 @@
 import { useState } from "react";
 import setting from "../../../assets/svgs/detection/setting.svg";
+import { useToggle } from "../../../stores/detection";
 
 const SettingButton = () => {
-  const [isSettingOpen, setIsSettingOpen] = useState(false);
+  const [isSettingOpen, setIsSettingOpen] = useState(true);
+  const { isCryDetect, isFaceDetect, setIsCryDetect, setIsFaceDetect } =
+    useToggle();
 
   return (
     <div className="flex flex-col justify-center items-end absolute top-0 right-0 mt-[1.8rem] mr-[2rem] gap-3">
@@ -32,8 +35,15 @@ const SettingButton = () => {
               <div>
                 <span className="text-black text-base">울음</span>
               </div>
-              <div className="flex items-center justify-center w-[2rem] h-[2rem] bg-black bg-opacity-15 rounded-full">
-                <span className="text-xs font-bold">ON</span>
+              <div
+                onClick={() => {
+                  setIsCryDetect(!isCryDetect);
+                }}
+                className="flex items-center justify-center w-[2rem] h-[2rem] bg-black bg-opacity-15 rounded-full"
+              >
+                <span className="text-xs font-bold">
+                  {isCryDetect ? "ON" : "OFF"}
+                </span>
               </div>
             </div>
 
@@ -41,8 +51,15 @@ const SettingButton = () => {
               <div>
                 <span className="text-black text-base">행동</span>
               </div>
-              <div className="flex items-center justify-center w-[2rem] h-[2rem] bg-black bg-opacity-15 rounded-full">
-                <span className="text-xs font-bold">OFF</span>
+              <div
+                onClick={() => {
+                  setIsFaceDetect(!isFaceDetect);
+                }}
+                className="flex items-center justify-center w-[2rem] h-[2rem] bg-black bg-opacity-15 rounded-full"
+              >
+                <span className="text-xs font-bold">
+                  {isFaceDetect ? "ON" : "OFF"}
+                </span>
               </div>
             </div>
           </div>
