@@ -30,7 +30,7 @@ const PosePage = () => {
 
   useEffect(() => {
     const loadModels = async () => {
-      const MODEL_URL = "src/model";
+      const MODEL_URL = "/pose_model";
       try {
         await Promise.all([
           faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
