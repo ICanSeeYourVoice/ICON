@@ -6,9 +6,8 @@ interface DateState {
 }
 
 interface ImageUploadState {
-    imageFiles: File[];
     previewUrls: string[];
-    addImages: (newFiles: File[]) => void;
+    addImage: (url: string) => void;
     removeImage: (index: number) => void;
     clearImages: () => void;  
   }
@@ -28,23 +27,20 @@ export const useDateStore = create<DateState>((set) => ({
 
 
   export const useImageStore = create<ImageUploadState>((set) => ({
-    imageFiles: [],
     previewUrls: [],
-    addImages: (newFiles) => set((state) => {
-      const totalFiles = state.imageFiles.concat(newFiles).slice(0, 6);
-      const fileURLs = totalFiles.map(file => URL.createObjectURL(file));
-      return { imageFiles: totalFiles, previewUrls: fileURLs };
-    }),
-    removeImage: (index) => set((state) => {
-      const newFiles = state.imageFiles.filter((_, i) => i !== index);
-      const newURLs = state.previewUrls.filter((_, i) => i !== index);
-      return { imageFiles: newFiles, previewUrls: newURLs };
-    }),
+    addImage: (url) => set((state) => ({
+      previewUrls: [...state.previewUrls, url].slice(0, 6)
+    })),
+    removeImage: (index) => set((state) => ({
+      previewUrls: state.previewUrls.filter((_, i) => i !== index)
+    })),
     clearImages: () => set(() => ({ 
       imageFiles: [],
       previewUrls: []
     }))
   }));
+
+
 
 
  

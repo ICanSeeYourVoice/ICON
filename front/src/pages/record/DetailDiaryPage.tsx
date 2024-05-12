@@ -62,7 +62,7 @@ const DetailDiary = () => {
       queryClient.invalidateQueries({ queryKey: ["DiaryList"] });
     },
     onError: (error) => {
-      toast.error(`일지 삭제 실패: ${error.message}`);
+      console.log(`일지 삭제 실패`, error);
     },
   });
 
