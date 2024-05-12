@@ -1,10 +1,11 @@
  .waveform-container {
    position: relative;
+   margin-top: 1.5rem;
  }
 
 .cursor {
   position: absolute;
-  top: 35%; 
+  top: 42%; 
   left: 0; 
 }
 
