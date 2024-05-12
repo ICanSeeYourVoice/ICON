@@ -51,25 +51,18 @@ const Nav = () => {
       index: 2,
     },
     {
-      text: "행동감지",
-      icon: bed,
-      clickedIcon: bedClicked,
-      path: "/pose",
-      index: 3,
-    },
-    {
       text: "챗봇",
       icon: chat,
       clickedIcon: chatClicked,
       path: "/chat",
-      index: 4,
+      index: 3,
     },
     {
       text: "설정",
       icon: setting,
       clickedIcon: settingClicked,
       path: "/setting",
-      index: 5,
+      index: 4,
     },
   ];
 

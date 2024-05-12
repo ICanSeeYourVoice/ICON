@@ -53,7 +53,7 @@ export const DETECTION = {
   },
 };
 
-export const DETECTION_INFO = "아기가 우는지 감지하고 있어요";
+export const DETECTION_INFO = "아기의 상태를 감지하고 있어요";
 
 export const LOADING_INFO = "아기가 왜 우는지 분석 중이에요";
 
