@@ -91,6 +91,7 @@ const DetectionPage = () => {
   let noFaceCnt = 0;
 
   const detectFaceFeatures = async () => {
+    setLoading(true);
     try {
       const MODEL_URL = "/pose_model";
 
@@ -121,14 +122,14 @@ const DetectionPage = () => {
       if (!videoRef.current) return;
 
       intervalRef.current = window.setInterval(async () => {
-        // console.log("interval: " + intervalRef.current);
+        console.log("interval: " + intervalRef.current);
 
         if (videoRef.current) {
           const detections = await faceapi
             .detectSingleFace(videoRef.current, optionsSSDMobileNet)
             .withFaceLandmarks();
 
-          noFaceCnt = !detections ? 0 : noFaceCnt + 1;
+          noFaceCnt = detections ? 0 : noFaceCnt + 1;
 
           if (noFaceCnt > 1) {
             noFaceCnt = 0;
@@ -147,6 +148,8 @@ const DetectionPage = () => {
         "행동 준비 중 오류가 발생했습니다.\n 비디오를 허용하고 다시 시작해주세요."
       );
       setCryingType("FAILED");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -198,7 +201,7 @@ const DetectionPage = () => {
           cnt++;
         } else {
           initRecordCnt++;
-          // console.log("cry: " + initRecordCnt);
+          console.log("cry: cnt");
           if (initRecordCnt >= 8) {
             initRecordCnt = 0;
             audioBuffer = [];
@@ -225,6 +228,7 @@ const DetectionPage = () => {
             });
 
             if (classes[i] === 20 && probabilities[i] >= 0.5) {
+              // if (classes[i] === 20) {
               isCry = true;
               setIsBabyCry(true);
               setCryingType("LOADING");
@@ -263,19 +267,41 @@ const DetectionPage = () => {
     }
   };
 
-  useEffect(() => {
-    if (!isBabyCry && isBabyFace) {
-      detectCryState();
-      detectFaceFeatures();
-    }
+  const [isCryDetect, setIsCryDetect] = useState(true);
+  const [isFaceDetect, setIsFaceDetect] = useState(false);
 
+  useEffect(() => {
+    if (isCryDetect) {
+      if (!isBabyCry && isBabyFace) {
+        detectCryState();
+      }
+    } else {
+      streamRef.current?.getTracks().forEach((track) => track.stop());
+      source?.disconnect();
+      scriptNodeRef.current?.disconnect();
+      streamRef.current = null;
+    }
+  }, [isCryDetect]);
+
+  useEffect(() => {
+    if (isFaceDetect) {
+      if (!isBabyCry && isBabyFace) {
+        detectFaceFeatures();
+      }
+    } else {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      camMediaStream.current?.getTracks().forEach((track) => track.stop());
+    }
+  }, [isFaceDetect]);
+
+  useEffect(() => {
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
       camMediaStream.current?.getTracks().forEach((track) => track.stop());
 
       streamRef.current?.getTracks().forEach((track) => track.stop());
       source?.disconnect();
-      scriptNode?.disconnect();
+      scriptNodeRef.current?.disconnect();
       streamRef.current = null;
     };
   }, []);
@@ -292,6 +318,23 @@ const DetectionPage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-full gap-4">
+      {/* <video ref={videoRef} className="hidden" /> */}
+      <button
+        className="h-[1rem]"
+        onClick={() => {
+          setIsCryDetect(!isCryDetect);
+        }}
+      >
+        울음
+      </button>
+      <button
+        className="h-[1rem]"
+        onClick={() => {
+          setIsFaceDetect(!isFaceDetect);
+        }}
+      >
+        행동
+      </button>
       <video ref={videoRef} className="h-[5rem] w-full" />
       <p className="text-gray-1 text-sm ">
         {cryingType === "FAILED"
