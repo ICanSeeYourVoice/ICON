@@ -5,15 +5,11 @@ import Button from "../../../components/common/button/PostButton";
 import TokenInfo from "../../../components/main/setting/smartthings/TokenInfo";
 import { RegisterToken } from "../../../apis/SmartThings";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
-interface RegisterSmartThingsPageProps {
-  setIsToken: (isToken: boolean) => void;
-}
-
-const RegisterSmartThingsPage: React.FC<RegisterSmartThingsPageProps> = ({
-  setIsToken,
-}) => {
+const RegisterSmartThingsPage: React.FC = () => {
   const [smartthingsToken, setSmartthingsToken] = useState("");
+  const navigate = useNavigate();
 
   const handleTokenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSmartthingsToken(e.target.value);
@@ -30,8 +26,8 @@ const RegisterSmartThingsPage: React.FC<RegisterSmartThingsPageProps> = ({
   const { mutate } = useMutation({
     mutationFn: RegisterToken,
     onSuccess: () => {
-      setIsToken(true);
       toast.success("스마트싱스 토큰 등록 성공", { duration: 800 });
+      navigate("/setting/things");
     },
     onError: (error) => {
       toast.error("스마트싱스 접근 권한이 없습니다.", { duration: 800 });
@@ -40,7 +36,7 @@ const RegisterSmartThingsPage: React.FC<RegisterSmartThingsPageProps> = ({
   });
 
   return (
-    <div className="flex flex-col items-center mb-[1rem] gap-[1rem]">
+    <div className="flex flex-col w-full h-full items-center mb-[1rem] gap-[1rem]">
       <LabelInput
         placeholder="토큰 입력"
         onChange={handleTokenChange}

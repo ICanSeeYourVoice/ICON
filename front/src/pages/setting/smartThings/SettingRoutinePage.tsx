@@ -11,20 +11,18 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Button from "../../../components/common/button/PostButton";
+import { SMARTTHINGS } from "../../../constants/smartthings";
 
 interface RoutineItem {
   scene_id: string;
   name: string;
   trigger?: string;
-  istype?: boolean;
 }
 
 const SettingRoutinePage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { type } = location.state || {};
-  const [isLodding, setIsLodding] = useState(true);
-  const [routineList, setRoutineList] = useState<RoutineItem[]>([]);
   const [selectedSceneId, setSelectedSceneId] = useState("");
 
   const { data: checkRoutineData, isLoading: isLoadingCheckRoutine } = useQuery<
@@ -33,44 +31,27 @@ const SettingRoutinePage = () => {
   const { data: getStatusRoutineData, isLoading: isLoadingGetStatusRoutine } =
     useQuery({ queryFn: GetStatusRoutine, queryKey: ["getStatusRoutineData"] });
 
+  const findRoutineNameByTrigger = (trigger: string) => {
+    const foundRoutine = getStatusRoutineData.find(
+      (routine: RoutineItem) => routine.trigger === trigger
+    );
+    return foundRoutine ? foundRoutine.scene_id : "";
+  };
+
   useEffect(() => {
-    if (!isLoadingCheckRoutine && !isLoadingGetStatusRoutine) {
-      setIsLodding(false);
-    }
-
-    if (checkRoutineData && getStatusRoutineData) {
-      const typeItems = getStatusRoutineData.filter(
-        (item: RoutineItem) => item.trigger === type
-      );
-
-      const data = checkRoutineData.map((checkItem: RoutineItem) => {
-        const istype = typeItems.some(
-          (typeItem: RoutineItem) => typeItem.scene_id === checkItem.scene_id
-        );
-        return { ...checkItem, istype };
-      });
-
-      setRoutineList(data);
-    }
+    setSelectedSceneId(findRoutineNameByTrigger(type));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkRoutineData, getStatusRoutineData]);
 
-  const handleItemClick = (scene_id: string) => {
-    setSelectedSceneId(scene_id);
-    setRoutineList((data) =>
-      data.map((item) =>
-        item.scene_id === scene_id ? { ...item, istype: true } : item
-      )
+  const handleRoutineClick: React.MouseEventHandler<HTMLInputElement> = (e) => {
+    const target = e.target as HTMLInputElement;
+    setSelectedSceneId((checked) =>
+      checked == target.value ? "" : target.value
     );
   };
 
   const handleRegisterRoutine = () => {
-    if (selectedSceneId !== "") {
-      console.log(selectedSceneId, type);
-      mutate({ scene_id: selectedSceneId, trigger: type });
-    } else {
-      toast.error("등록할 자동화를 선택해주세요.", { duration: 800 });
-    }
+    mutate({ scene_id: selectedSceneId, trigger: type });
   };
 
   const { mutate } = useMutation({
@@ -89,28 +70,49 @@ const SettingRoutinePage = () => {
   return (
     <div className="flex flex-col items-center h-screen w-screen">
       <TopBar text="SmartThings" path="setting/things" />
-      <main className="flex flex-col items-center justify-center w-full flex-1">
-        {isLodding ? (
+      <main className="flex flex-col justify-center items-center w-[80%] mt-[6rem]">
+        {isLoadingCheckRoutine || isLoadingGetStatusRoutine ? (
           <div className="flex items-center justify-center w-full h-full">
             <PulseLoader color="#c8c8c8" />
           </div>
         ) : (
           <div>
-            <header className="text-primary w-[15.25rem] text-2xl">
-              {type}
+            <header className="text-primary w-full text-2xl">
+              {SMARTTHINGS[type].LABEL}
             </header>
-            {routineList.map((item: RoutineItem) => (
-              <div
-                key={item.scene_id}
-                className={`p-4 m-2 rounded-lg ${
-                  item.istype ? "bg-red-200" : "bg-gray-200"
-                }`}
-                onClick={() => handleItemClick(item.scene_id)}
-              >
-                {item.name}
+            {!checkRoutineData ? (
+              <div className="flex items-center justify-center w-full h-full">
+                자동화 목록이 없어요😢
+                <br />
+                SmartThings App에서 자동화를 추가해주세요.
               </div>
-            ))}
-            <Button label="등록" onClick={handleRegisterRoutine} />
+            ) : (
+              checkRoutineData.map((item: RoutineItem) => (
+                <div
+                  key={item.scene_id}
+                  className={`p-4 m-2 rounded-lg ${
+                    selectedSceneId == item.scene_id
+                      ? "bg-red-200"
+                      : "bg-gray-200"
+                  }`}
+                >
+                  <label>
+                    <input
+                      className="invisible"
+                      type="radio"
+                      value={item.scene_id}
+                      checked={selectedSceneId == item.scene_id}
+                      onClick={handleRoutineClick}
+                      onChange={() => {}}
+                    />
+                    {item.name}
+                  </label>
+                </div>
+              ))
+            )}
+            {checkRoutineData && (
+              <Button label="등록" onClick={handleRegisterRoutine} />
+            )}
           </div>
         )}
       </main>
