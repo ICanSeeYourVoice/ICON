@@ -10,16 +10,19 @@ import { useEffect, useRef, useState } from "react";
 import {
   useDetectionStore,
   useLoading,
+  useToggle,
   useYamnetStore,
 } from "../../stores/detection";
 import { useNavigate } from "react-router";
 import { useMutation } from "@tanstack/react-query";
-import { analyzeAlarm, cryAlarm } from "../../apis/Notification";
+import { analyzeAlarm, cryAlarm, poseAlarm } from "../../apis/Notification";
 import toast from "react-hot-toast";
 import * as tf from "@tensorflow/tfjs";
 import { loadYamnetModel } from "../../utils/loadModel";
 import useBleStore from "../../stores/bluetooth";
 import classmap from "../../model/yamnet-class-map.json";
+import * as faceapi from "@vladmandic/face-api";
+import { useDetectionPoseStore } from "../../stores/detectionPose";
 
 // test code
 type Result = {
@@ -34,15 +37,29 @@ const DetectionPage = () => {
   const navigate = useNavigate();
   const isBabyCry = useDetectionStore((state: any) => state.isBabyCry);
   const cryingType = useDetectionStore((state: any) => state.cryingType);
+  const isBabyFace = useDetectionPoseStore((state: any) => state.isBabyFace);
   const setIsBabyCry = useDetectionStore((state: any) => state.setIsBabyCry);
   const setCryingType = useDetectionStore((state: any) => state.setCryingType);
+  const setIsBabyFace = useDetectionPoseStore(
+    (state: any) => state.setIsBabyFace
+  );
   const streamRef = useRef<MediaStream | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const camMediaStream = useRef<MediaStream | null>(null);
   const { writeCharacteristic } = useBleStore();
   const setLoading = useLoading((state) => state.setLoading);
 
   const [results, setResults] = useState<Result[]>([]); // test위한 코드
 
-  const { mutate } = useMutation({
+  const { mutate: poseMutate } = useMutation({
+    mutationFn: poseAlarm,
+    onSuccess: () => {},
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
+  const { mutate: cryMutate } = useMutation({
     mutationFn: cryAlarm,
     onSuccess: () => {},
     onError: (error) => {
@@ -71,12 +88,79 @@ const DetectionPage = () => {
     },
   });
 
+  const intervalRef = useRef<number | null>(null);
+  let noFaceCnt = 0;
+
+  const detectFaceFeatures = async () => {
+    setLoading(true);
+    try {
+      const MODEL_URL = "/pose_model";
+
+      await Promise.all([
+        faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
+        faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
+        faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
+      ]);
+
+      navigator.mediaDevices
+        .getUserMedia({
+          video: {
+            facingMode: "user",
+          },
+        })
+        .then((stream) => {
+          camMediaStream.current = stream;
+          if (videoRef.current) {
+            videoRef.current.srcObject = stream;
+            videoRef.current.play();
+          }
+        });
+
+      const optionsSSDMobileNet = new faceapi.SsdMobilenetv1Options({
+        minConfidence: 0.2,
+      });
+
+      if (!videoRef.current) return;
+
+      intervalRef.current = window.setInterval(async () => {
+        console.log("interval: " + intervalRef.current);
+
+        if (videoRef.current) {
+          const detections = await faceapi
+            .detectSingleFace(videoRef.current, optionsSSDMobileNet)
+            .withFaceLandmarks();
+
+          noFaceCnt = detections ? 0 : noFaceCnt + 1;
+
+          if (noFaceCnt > 1) {
+            noFaceCnt = 0;
+            setIsBabyFace(false);
+
+            clearInterval(intervalRef.current!);
+
+            poseMutate();
+            writeCharacteristic("danger");
+            navigate("/detection/result/pose");
+          }
+        }
+      }, 1000);
+    } catch (error) {
+      toast.error(
+        "행동 준비 중 오류가 발생했습니다.\n 비디오를 허용하고 다시 시작해주세요."
+      );
+      setCryingType("FAILED");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   let audioCtx: AudioContext | null = null;
   let scriptNode: ScriptProcessorNode | null = null;
+  let scriptNodeRef = useRef<ScriptProcessorNode | null>();
   let source: any = null;
   let gainNode: any = null;
 
-  const fetchDataAndProcess = async () => {
+  const detectCryState = async () => {
     setLoading(true);
     try {
       let yamnet: any;
@@ -99,6 +183,8 @@ const DetectionPage = () => {
       gainNode = audioCtx.createGain();
       scriptNode = audioCtx.createScriptProcessor(8192, 1, 1);
 
+      scriptNodeRef.current = scriptNode;
+
       gainNode.gain.value = 4;
       source.connect(gainNode);
       gainNode.connect(scriptNode);
@@ -116,7 +202,7 @@ const DetectionPage = () => {
           cnt++;
         } else {
           initRecordCnt++;
-          // console.log(initRecordCnt);
+          console.log("cry: cnt");
           if (initRecordCnt >= 8) {
             initRecordCnt = 0;
             audioBuffer = [];
@@ -142,11 +228,12 @@ const DetectionPage = () => {
               probability: probabilities[i].toFixed(3),
             });
 
-            if (classes[i] === 20 && probabilities[i] >= 0.5) {
+            // if (classes[i] === 20 && probabilities[i] >= 0.5) {
+            if (classes[i] === 20) {
               isCry = true;
               setIsBabyCry(true);
               setCryingType("LOADING");
-              mutate();
+              cryMutate();
               return;
             }
           }
@@ -181,17 +268,40 @@ const DetectionPage = () => {
     }
   };
 
+  const { isCryDetect, isFaceDetect } = useToggle();
+
   useEffect(() => {
-    if (!isBabyCry) {
-      fetchDataAndProcess();
-    }
-
-    return () => {
+    if (isCryDetect) {
+      if (!isBabyCry && isBabyFace) {
+        detectCryState();
+      }
+    } else {
       streamRef.current?.getTracks().forEach((track) => track.stop());
-
       source?.disconnect();
-      scriptNode?.disconnect();
+      scriptNodeRef.current?.disconnect();
+      streamRef.current = null;
+    }
+  }, [isCryDetect]);
 
+  useEffect(() => {
+    if (isFaceDetect) {
+      if (!isBabyCry && isBabyFace) {
+        detectFaceFeatures();
+      }
+    } else {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      camMediaStream.current?.getTracks().forEach((track) => track.stop());
+    }
+  }, [isFaceDetect]);
+
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      camMediaStream.current?.getTracks().forEach((track) => track.stop());
+
+      streamRef.current?.getTracks().forEach((track) => track.stop());
+      source?.disconnect();
+      scriptNodeRef.current?.disconnect();
       streamRef.current = null;
     };
   }, []);
@@ -208,7 +318,8 @@ const DetectionPage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-full gap-4">
-      <p className="text-gray-1 text-sm ">
+      <video ref={videoRef} className="hidden" />
+      <p className="text-gray-1 text-sm">
         {cryingType === "FAILED"
           ? FAILED_INFO
           : cryingType === "LOADING"
