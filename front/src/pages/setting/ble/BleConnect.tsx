@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import toast from "react-hot-toast";
-import SmallButton from "../../../components/common/button/SmallButton";
+import SmallButton from "../../../components/common/button/GradientButton";
 import useBleStore from "../../../stores/bluetooth";
 import BleImage from "../../../components/main/setting/ble/BleImage";
 
