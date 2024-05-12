@@ -30,13 +30,17 @@ export const useYamnetStore = create<ModelState>((set) => ({
 interface ToggleState {
   isCryDetect: boolean;
   isFaceDetect: boolean;
+  isCamera: boolean;
   setIsCryDetect: (isCryDetect: boolean) => void;
   setIsFaceDetect: (isFaceDetect: boolean) => void;
+  setIsCamera: (isCamera: boolean) => void;
 }
 
 export const useToggle = create<ToggleState>((set) => ({
   isCryDetect: true,
   isFaceDetect: false,
+  isCamera: false,
   setIsCryDetect: (isCryDetect) => set({ isCryDetect }),
   setIsFaceDetect: (isFaceDetect) => set({ isFaceDetect }),
+  setIsCamera: (isCamera) => set({ isCamera }),
 }));
