@@ -4,23 +4,33 @@ import toast from "react-hot-toast";
 import { useImageStore } from "../../../stores/diary";
 import { useMutation } from "@tanstack/react-query";
 import { diaryImage } from "../../../apis/Diary";
+import axios from "axios";
 
 const FileUploadInput: React.FC = () => {
-  const { imageFiles, previewUrls, addImages, removeImage } = useImageStore();
+  const { previewUrls, addImage, removeImage } = useImageStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { mutate: ImageRegister } = useMutation({
     mutationFn: diaryImage,
-    onSuccess: () => {
-      toast.success("이미지가 성공적으로 업로드 되었습니다.");
+    onSuccess: (res) => {
+      toast.success("이미지가 성공적으로 선택 되었습니다.");
+      addImage(res.url);
     },
     onError: (error) => {
-      toast.error("이미지 업로드에 실패했습니다.");
+      if (axios.isAxiosError(error) && error.response) {
+        if (error.response.status === 413) {
+          toast.error("파일 크기가 커서 등록에 실패했어요");
+        } else {
+          toast.error("이미지 업로드에 실패했습니다.");
+        }
+      } else {
+        toast.error("알 수 없는 오류가 발생했습니다.");
+      }
       console.error("API error: ", error);
     },
   });
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (imageFiles.length >= 6) {
+    if (previewUrls.length >= 6) {
       toast("사진은 최대 6장까지 등록 가능합니다.", {
         icon: "❗❗",
       });
@@ -29,8 +39,6 @@ const FileUploadInput: React.FC = () => {
 
     if (event.target.files) {
       const newFiles = Array.from(event.target.files);
-      addImages(newFiles);
-
       newFiles.forEach((file) => {
         ImageRegister({ imageData: file });
       });

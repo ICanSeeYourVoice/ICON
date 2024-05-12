@@ -10,7 +10,10 @@ interface DiaryEntryProps {
 
   interface CreateDiaryProps {
     date: string;
-    
+  }
+
+  interface DiaryImageProps {
+    url: string;
   }
   
   export const diaryList = async ({ startId, endId }: { startId: string; endId: string }): Promise<DiaryEntryProps[]> => {
@@ -62,7 +65,7 @@ export const diaryImage = async (image: { imageData: File }) => {
       const formData = new FormData();
       formData.append("image", image.imageData);
 
-      const response = await api.post(`/common-service/images`, formData);
+      const response = await api.post<DiaryImageProps>(`/common-service/images`, formData);
       return response.data 
   } catch (error) {
       console.error("API error: ", error);
