@@ -4,8 +4,6 @@ import voice from "../../../assets/svgs/nav/voice.svg";
 import diary from "../../../assets/svgs/nav/diary.svg";
 import chat from "../../../assets/svgs/nav/chat.svg";
 import heart from "../../../assets/svgs/nav/heart.svg";
-import bed from "../../../assets/svgs/nav/bed.svg";
-import bedClicked from "../../../assets/svgs/nav/bedClicked.svg";
 import settingClicked from "../../../assets/svgs/nav/settingClicked.svg";
 import diaryClicked from "../../../assets/svgs/nav/diaryClicked.svg";
 import voiceClicked from "../../../assets/svgs/nav/voiceClicked.svg";
