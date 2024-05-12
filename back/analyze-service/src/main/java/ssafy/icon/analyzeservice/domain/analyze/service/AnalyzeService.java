@@ -26,12 +26,13 @@ public class AnalyzeService {
 	private final ColabApiClient colabApiClient;
 	private final KafkaBabyStatusProducer kafkaBabyStatusProducer;
 	private final AnalyzeRepository analyzeRepository;
+	private static final String[] predict = {"HUNGRY", "DISCOMFORT", "PAIN", "TIRED"};
 
 	//울음 분석
 	public String getCryReason(Integer memberId, MultipartFile babyCryingAudio) {
 		AnalyzeResult analyzeResult = getAnalyzeResult(babyCryingAudio);
 		String cryReason = getKey(analyzeResult).toUpperCase();
-		addAlarm(memberId, cryReason);
+	 	addAlarm(memberId, cryReason);
 		saveAnalyze(memberId, cryReason);
 		return cryReason;
 	}
@@ -50,8 +51,7 @@ public class AnalyzeService {
 
 	//울음 분석 결과에서 이유만 뽑기
 	private static String getKey(AnalyzeResult analyzeResult) {
-		Entry<String, Double> max = Collections.max(analyzeResult.prediction().entrySet(), Entry.comparingByValue());
-		return max.getKey();
+		return predict[analyzeResult.prediction()];
 	}
 
 
