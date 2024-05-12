@@ -4,8 +4,6 @@ import voice from "../../../assets/svgs/nav/voice.svg";
 import diary from "../../../assets/svgs/nav/diary.svg";
 import chat from "../../../assets/svgs/nav/chat.svg";
 import heart from "../../../assets/svgs/nav/heart.svg";
-import bed from "../../../assets/svgs/nav/bed.svg";
-import bedClicked from "../../../assets/svgs/nav/bedClicked.svg";
 import settingClicked from "../../../assets/svgs/nav/settingClicked.svg";
 import diaryClicked from "../../../assets/svgs/nav/diaryClicked.svg";
 import voiceClicked from "../../../assets/svgs/nav/voiceClicked.svg";
@@ -51,25 +49,18 @@ const Nav = () => {
       index: 2,
     },
     {
-      text: "행동감지",
-      icon: bed,
-      clickedIcon: bedClicked,
-      path: "/pose",
-      index: 3,
-    },
-    {
       text: "챗봇",
       icon: chat,
       clickedIcon: chatClicked,
       path: "/chat",
-      index: 4,
+      index: 3,
     },
     {
       text: "설정",
       icon: setting,
       clickedIcon: settingClicked,
       path: "/setting",
-      index: 5,
+      index: 4,
     },
   ];
 

@@ -23,9 +23,8 @@ import ResultPage from "../pages/detection/ResultPage";
 import VoiceLayout from "../components/common/layout/VoiceLayout";
 import ClovaVoicePage from "../pages/tts/ClovaVoicePage";
 import SettingRoutinePage from "../pages/setting/smartThings/SettingRoutinePage";
-import PosePage from "../pages/pose/PosePage";
 import BlePage from "../pages/setting/ble/BlePage";
-import PoseResultPage from "../pages/pose/PoseResultPage";
+import PoseResultPage from "../pages/detection/PoseResultPage";
 
 const authRoutes = [
   {
@@ -41,10 +40,11 @@ const authRoutes = [
 const detectionRoutes = [
   {
     path: "/detection",
-    element: <DarkCommonLayout title="울음감지" />,
+    element: <DarkCommonLayout title="아기감지" />,
     children: [
       { index: true, element: <DetectionPage /> },
       { path: "/detection/result", element: <ResultPage /> },
+      { path: "/detection/result/pose", element: <PoseResultPage /> },
     ],
   },
 ];
@@ -94,18 +94,7 @@ const voiceRoutes = [
     element: <VoiceLayout />,
     children: [{ index: true, element: <ClovaVoicePage /> }],
   },
-]; 
-
-const poseRoutes = [
-  {
-    path: "/pose",
-    element: <DarkCommonLayout title="자세감지" />,
-    children: [
-      { index: true, element: <PosePage /> },
-      { path: "/pose/result", element: <PoseResultPage /> },
-    ],
-  },
-]; 
+];
 
 const routes = [
   ...authRoutes,
@@ -115,7 +104,6 @@ const routes = [
   ...settingRoutes,
   ...settingNavRoutes,
   ...voiceRoutes,
-  ...poseRoutes,
 ];
 
 const router = createBrowserRouter(routes);
