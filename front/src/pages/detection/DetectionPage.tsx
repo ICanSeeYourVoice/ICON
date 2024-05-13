@@ -228,8 +228,8 @@ const DetectionPage = () => {
               probability: probabilities[i].toFixed(3),
             });
 
-            // if (classes[i] === 20 && probabilities[i] >= 0.5) {
-            if (classes[i] === 20) {
+            if (classes[i] === 20 && probabilities[i] >= 0.5) {
+              // if (classes[i] === 20) {
               isCry = true;
               setIsBabyCry(true);
               setCryingType("LOADING");
@@ -268,7 +268,8 @@ const DetectionPage = () => {
     }
   };
 
-  const { isCryDetect, isFaceDetect } = useToggle();
+  const { isCryDetect, isFaceDetect, isCamera, setIsFaceDetect, setIsCamera } =
+    useToggle();
 
   useEffect(() => {
     if (isCryDetect) {
@@ -303,6 +304,9 @@ const DetectionPage = () => {
       source?.disconnect();
       scriptNodeRef.current?.disconnect();
       streamRef.current = null;
+
+      setIsFaceDetect(false);
+      setIsCamera(false);
     };
   }, []);
 
@@ -318,62 +322,71 @@ const DetectionPage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-full gap-4">
-      <video ref={videoRef} className="hidden" />
-      <p className="text-gray-1 text-sm">
-        {cryingType === "FAILED"
-          ? FAILED_INFO
-          : cryingType === "LOADING"
-          ? LOADING_INFO
-          : DETECTION_INFO}
-      </p>
-      <ReactButton
-        icon={
-          cryingType === "LOADING"
-            ? DETECTION.LOADING.ICON
-            : cryingType === "FAILED"
-            ? DETECTION.FAILED.ICON
-            : DETECTION.NORMAL.ICON
-        }
-        color={
-          cryingType === "LOADING"
-            ? DETECTION.LOADING.COLOR
-            : cryingType === "FAILED"
-            ? DETECTION.FAILED.COLOR
-            : DETECTION.NORMAL.COLOR
-        }
+      <video
+        ref={videoRef}
+        className={`w-full h-full ${
+          isCamera ? "object-cover" : "hidden w-[3rem]"
+        }`}
       />
-      {/* {cryingType ? (
-        <PulseLoader color="#c8c8c8" />
-      ) : (
-        <div className="flex flex-col items-center justify-center text-gray-0 text-xl">
-          <p>아기가</p>
-          <p>
-            <span className="text-white">{DETECTION.NORMAL.MESSAGE}</span>
-            상태에요
+      {!isCamera && (
+        <>
+          <p className="text-gray-1 text-sm">
+            {cryingType === "FAILED"
+              ? FAILED_INFO
+              : cryingType === "LOADING"
+              ? LOADING_INFO
+              : DETECTION_INFO}
           </p>
-        </div>
-      )} */}
-      {cryingType ? (
-        <PulseLoader color="#c8c8c8" />
-      ) : (
-        <div className="flex flex-col items-center justify-center text-white text-xs">
-          {results.map((result, i) => (
-            <div
-              key={i}
-              style={{
-                display: "flex",
-                width: "18.5rem",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <p>{result.label} </p>
-              <p> : ({result.probability}) </p>
+          <ReactButton
+            icon={
+              cryingType === "LOADING"
+                ? DETECTION.LOADING.ICON
+                : cryingType === "FAILED"
+                ? DETECTION.FAILED.ICON
+                : DETECTION.NORMAL.ICON
+            }
+            color={
+              cryingType === "LOADING"
+                ? DETECTION.LOADING.COLOR
+                : cryingType === "FAILED"
+                ? DETECTION.FAILED.COLOR
+                : DETECTION.NORMAL.COLOR
+            }
+          />
+          {cryingType ? (
+            <PulseLoader color="#c8c8c8" />
+          ) : (
+            <div className="flex flex-col items-center justify-center text-gray-0 text-xl">
+              <p>아기가</p>
+              <p>
+                <span className="text-white">{DETECTION.NORMAL.MESSAGE}</span>
+                상태에요
+              </p>
             </div>
-          ))}
-        </div>
+          )}
+          {/* {cryingType ? (
+            <PulseLoader color="#c8c8c8" />
+          ) : (
+            <div className="flex flex-col items-center justify-center text-white text-xs">
+              {results.map((result, i) => (
+                <div
+                  key={i}
+                  style={{
+                    display: "flex",
+                    width: "18.5rem",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <p>{result.label} </p>
+                  <p> : ({result.probability}) </p>
+                </div>
+              ))}
+            </div>
+          )} */}
+          <div className="flex items-center justify-center w-[80%] h-[6rem]"></div>
+        </>
       )}
-      <div className="flex items-center justify-center w-[80%] h-[6rem]"></div>
     </div>
   );
 };
