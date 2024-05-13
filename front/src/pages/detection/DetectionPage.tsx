@@ -324,11 +324,15 @@ const DetectionPage = () => {
     <div className="flex flex-col items-center justify-center w-full h-full gap-4">
       <>
         <div
-          className={`fixed w-[150px] h-[150px] bottom-0 right-0 mb-[4.5rem] mr-[1rem] ${
+          className={`fixed w-[150px] h-[120px] bottom-0 right-0 mb-[4.5rem] mr-[1rem] ${
             !isCamera && "hidden w-[2px] h-[5px]"
           }`}
         >
-          <video className="rounded-[15px]" ref={videoRef} />
+          <video
+            className="rounded-[15px]"
+            style={{ transform: "scaleX(-1)" }}
+            ref={videoRef}
+          />
         </div>
 
         <p className="text-gray-1 text-sm">
