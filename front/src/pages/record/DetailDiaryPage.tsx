@@ -143,7 +143,7 @@ const DetailDiary = () => {
       </div>
 
       <div className="w-full flex justify-center mt-[2rem]">
-        <div className="w-[90%] justify-center items-center bg-blue-100 rounded-[1rem] overflow-auto p-2 pt-[2rem]">
+        <div className="w-[90%] justify-center items-center  rounded-[1rem] overflow-auto p-2 pt-[2rem]">
           <div className="relative flex justify-center items-center">
             {DiaryList.image_urls.length > 1 && (
               <button onClick={prevImage} className="absolute left-0 z-10">
@@ -153,7 +153,7 @@ const DetailDiary = () => {
             <img
               src={DiaryList.image_urls[currentIndex]}
               alt={`Image ${currentIndex}`}
-              className="flex-none w-[17.5rem] h-[17.5rem] object-cover"
+              className="flex-none w-[20rem] h-[17rem] object-cover"
             />
             {DiaryList.image_urls.length > 1 && (
               <button onClick={nextImage} className="absolute right-0 z-10">
