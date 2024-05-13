@@ -3,7 +3,7 @@ import { diaryDelete, diaryDetail } from "../../../apis/Diary";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import Trash from "../../../assets/svgs/record/blackTrash.svg";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import Vector from "../../../assets/svgs/nav/Vector.svg";
 import { PulseLoader } from "react-spinners";
@@ -34,15 +34,10 @@ interface ImageMap {
 
 const ExistDiary = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const { dateStr } = location.state || {};
-  console.log(typeof dateStr);
-  console.log(dateStr);
   const queryClient = useQueryClient();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [daily, setDaily] = useState("diary");
   const selectedDate: string | null = sessionStorage.getItem("date");
-  console.log(typeof selectedDate);
   const images: ImageMap = {
     clude: { id: "clude", url: Clude0 },
     clude1: { id: "clude1", url: Clude1 },

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import Vector from "../../assets/svgs/nav/Vector.svg";
 import { PulseLoader } from "react-spinners";
@@ -35,16 +35,12 @@ interface ImageMap {
 
 const DetailDiary = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const [showModal, setShowModal] = useState(false);
   const { setSelectedEmojiId } = useEmojiStore();
   const selectedEmoji = useEmojiStore((state) => state.selectedEmojiId);
-  const { dateStr } = location.state || {};
-  console.log(dateStr, "날짜");
 
   const [daily, setDaily] = useState("diary");
   const selectedDate: string | null = sessionStorage.getItem("date");
-  console.log(typeof selectedDate);
 
   const { data: DiaryList, isLoading: DiaryLoading } =
     useQuery<DiaryEntryProps>({
@@ -76,7 +72,6 @@ const DetailDiary = () => {
     clude8: { id: "clude2", url: Clude8 },
   };
 
-  console.log(DiaryList);
   const handleDailyChange = (clickDaily: string) => {
     clickDaily === "daily" ? "diary" : "chart";
     setDaily(clickDaily);
