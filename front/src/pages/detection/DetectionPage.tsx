@@ -49,7 +49,7 @@ const DetectionPage = () => {
   const { writeCharacteristic } = useBleStore();
   const setLoading = useLoading((state) => state.setLoading);
 
-  const [results, setResults] = useState<Result[]>([]); // test위한 코드
+  const [, setResults] = useState<Result[]>([]); // test위한 코드
 
   const { mutate: poseMutate } = useMutation({
     mutationFn: poseAlarm,
