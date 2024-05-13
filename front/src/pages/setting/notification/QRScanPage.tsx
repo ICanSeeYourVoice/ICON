@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { createGuardian } from "../../../apis/Notification";
+import TopBar from "../../../components/common/Navigator/TopBar";
 
 const QRScanPage = () => {
   const navigate = useNavigate();
@@ -101,11 +102,16 @@ const QRScanPage = () => {
   }, [data]);
 
   return (
-    <video
-      className="w-screen h-screen"
-      style={{ transform: "scaleX(-1)" }}
-      ref={videoRef}
-    />
+    <div className="flex flex-col items-center h-screen w-screen">
+      <TopBar text="QR코드 촬영" path="setting/share" />
+      <main>
+        <video
+          className="w-screen h-screen"
+          style={{ transform: "scaleX(-1)" }}
+          ref={videoRef}
+        />
+      </main>
+    </div>
   );
 };
 
