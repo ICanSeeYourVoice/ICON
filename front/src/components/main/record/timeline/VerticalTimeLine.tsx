@@ -10,7 +10,7 @@ import { GetChartDetailData } from "../../../../apis/Chart";
 import { PulseLoader } from "react-spinners";
 
 interface VerticalTimeLineProps {
-  date: string;
+  date: string | null;
 }
 
 interface TimelineData {
@@ -68,7 +68,7 @@ const VerticalTimeLine: React.FC<VerticalTimeLineProps> = (date) => {
                       padding: "2px 10px 0px 10px",
                     }}
                     contentArrowStyle={{
-                      borderRight: "7px solid  rgb(33, 150, 243)",
+                      borderRight: "7px solid #7BB7F7",
                     }}
                     date={val.cryingDate}
                     dateClassName="p-0"

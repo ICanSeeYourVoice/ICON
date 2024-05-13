@@ -12,7 +12,7 @@ import { PulseLoader } from "react-spinners";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface DoughnutChartProps {
-  date: string;
+  date: string | null;
 }
 interface ChartData {
   total: number;
@@ -24,7 +24,7 @@ interface ChartData {
 
 const DoughnutChart: React.FC<DoughnutChartProps> = (date) => {
   const chartRef = useRef(null);
-
+  console.log(date);
   // dougnutchart onclick test code
   const onClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
     if (!chartRef.current) {
