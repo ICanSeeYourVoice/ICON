@@ -23,7 +23,7 @@ const SettingButton = () => {
     <div>
       <button
         className={`flex flex-col justify-center items-end absolute top-0 right-0 mt-[1.8rem] mr-[5.2rem] gap-3 ${
-          isSettingOpen || cryingType !== 0 || !isBabyFace
+          isSettingOpen || cryingType !== 0 || !isBabyFace || !isFaceDetect
             ? "opacity-40 pointer-events-none"
             : ""
         }`}
