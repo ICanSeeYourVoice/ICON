@@ -94,7 +94,7 @@ public class DiaryService {
 
 	public DiaryDetailResponse queryDetail(Integer memberId, LocalDate date) {
 		Diary diary = diaryRepository.findByMemberIdAndDate(memberId, date)
-			.orElseThrow(() -> new DiaryException(NOT_FOUND, "성장일지를 찾을 수 없습니다."));
+			.orElse(Diary.builder().build());
 
 		return DiaryDetailResponse.of(diary);
 	}
