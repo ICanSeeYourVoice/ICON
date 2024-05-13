@@ -32,16 +32,18 @@ const SettingRoutinePage = () => {
     useQuery({ queryFn: GetStatusRoutine, queryKey: ["getStatusRoutineData"] });
 
   const findRoutineNameByTrigger = (trigger: string) => {
-    const foundRoutine = getStatusRoutineData.find(
-      (routine: RoutineItem) => routine.trigger === trigger
-    );
-    return foundRoutine ? foundRoutine.scene_id : "";
+    if (getStatusRoutineData) {
+      const foundRoutine = getStatusRoutineData.find(
+        (routine: RoutineItem) => routine.trigger === trigger
+      );
+      return foundRoutine ? foundRoutine.scene_id : "";
+    }
   };
 
   useEffect(() => {
     setSelectedSceneId(findRoutineNameByTrigger(type));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [checkRoutineData, getStatusRoutineData]);
+  }, [checkRoutineData, getStatusRoutineData, type]);
 
   const handleRoutineClick: React.MouseEventHandler<HTMLInputElement> = (e) => {
     const target = e.target as HTMLInputElement;
@@ -70,50 +72,52 @@ const SettingRoutinePage = () => {
   return (
     <div className="flex flex-col items-center h-screen w-screen">
       <TopBar text="SmartThings" path="setting/things" />
-      <main className="flex flex-col justify-center items-center w-[80%] mt-[6rem]">
+      <main className="flex flex-col justify-center items-center w-[80%] gap-[1rem] mt-[6rem]">
         {isLoadingCheckRoutine || isLoadingGetStatusRoutine ? (
           <div className="flex items-center justify-center w-full h-full">
             <PulseLoader color="#c8c8c8" />
           </div>
         ) : (
-          <div>
-            <header className="text-primary w-full text-2xl">
+          <>
+            <header className="text-primary align-bottom w-full text-2xl">
               {SMARTTHINGS[type].LABEL}
             </header>
             {!checkRoutineData ? (
-              <div className="flex items-center justify-center w-full h-full">
+              <div className="flex items-center justify-items-center justify-center w-full h-full">
                 자동화 목록이 없어요😢
                 <br />
                 SmartThings App에서 자동화를 추가해주세요.
               </div>
             ) : (
-              checkRoutineData.map((item: RoutineItem) => (
-                <div
-                  key={item.scene_id}
-                  className={`p-4 m-2 rounded-lg ${
-                    selectedSceneId == item.scene_id
-                      ? "bg-red-200"
-                      : "bg-gray-200"
-                  }`}
-                >
-                  <label>
-                    <input
-                      className="invisible"
-                      type="radio"
-                      value={item.scene_id}
-                      checked={selectedSceneId == item.scene_id}
-                      onClick={handleRoutineClick}
-                      onChange={() => {}}
-                    />
-                    {item.name}
-                  </label>
-                </div>
-              ))
+              <div className="grid grid-cols-2 gap-2 w-full justify-center justify-items-center items-center content-start h-[60vh] overflow-y-auto">
+                {checkRoutineData.map((item: RoutineItem) => (
+                  <div
+                    key={item.scene_id}
+                    className={`p-4 w-full h-full text-center rounded-lg whitespace-pre-line ${
+                      selectedSceneId == item.scene_id
+                        ? "bg-primary text-white"
+                        : "bg-gray-200"
+                    }`}
+                  >
+                    <label>
+                      <input
+                        className="hidden"
+                        type="radio"
+                        value={item.scene_id}
+                        checked={selectedSceneId == item.scene_id}
+                        onClick={handleRoutineClick}
+                        onChange={() => {}}
+                      />
+                      {item.name}
+                    </label>
+                  </div>
+                ))}
+              </div>
             )}
             {checkRoutineData && (
               <Button label="등록" onClick={handleRegisterRoutine} />
             )}
-          </div>
+          </>
         )}
       </main>
       <Nav />

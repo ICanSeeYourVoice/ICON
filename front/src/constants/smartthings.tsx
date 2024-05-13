@@ -3,7 +3,8 @@ import sleepy from "../assets/svgs/things/sleepy.svg";
 import hungry from "../assets/svgs/things/hungry.svg";
 import uncomfortable from "../assets/svgs/things/uncomfortable.svg";
 import sick from "../assets/svgs/things/sick.svg";
-import danger from "../assets/svgs/things/danger.svg";
+import noface from "../assets/svgs/things/noface.svg";
+
 interface SmartThing {
   ICON: string;
   LABEL: string;
@@ -40,7 +41,7 @@ export const SMARTTHINGS: SmartThings = {
     COLOR: "rgba(255, 93, 93, 0.40)",
   },
   DANGER: {
-    ICON: danger,
+    ICON: noface,
     LABEL: "위험함",
     COLOR: "rgba(75, 242, 92, 0.40)",
   },
