@@ -10,7 +10,9 @@ import toast from "react-hot-toast";
 import {
   ID_INFO,
   NAME_INFO,
+  NAME_REG,
   PASS_INFO,
+  PASS_REG,
   REPASS_INFO,
 } from "../../constants/join";
 import { AxiosError } from "axios";
@@ -48,11 +50,11 @@ const JoinPage = () => {
 
   const handleConfirmClick = () => {
     if (nameValue && idValue && passwordValue) {
-      if (nameValue.length == 0 || nameValue.length > 5) {
+      if (!NAME_REG.test(nameValue)) {
         return toast.error(NAME_INFO, { duration: 800 });
       } else if (idValue.length < 5 || idValue.length > 12) {
         return toast.error(ID_INFO, { duration: 800 });
-      } else if (passwordValue.length < 5 || passwordValue.length > 12) {
+      } else if (!PASS_REG.test(passwordValue)) {
         return toast.error(PASS_INFO, { duration: 800 });
       } else if (passwordValue !== passwordCorValue) {
         return toast.error(REPASS_INFO, { duration: 800 });
@@ -93,7 +95,7 @@ const JoinPage = () => {
             onChange={nameChange}
           />
           <div className="text-stone-400 text-xs whitespace-pre">
-            {nameValue.length == 0 || nameValue.length > 5 ? NAME_INFO : <br />}
+            {!NAME_REG.test(nameValue) ? NAME_INFO : <br />}
           </div>
           <LabelInput
             label="아이디"
@@ -111,11 +113,7 @@ const JoinPage = () => {
             value={passwordValue}
           />
           <div className="text-stone-400 text-xs whitespace-pre">
-            {passwordValue.length < 5 || passwordValue.length > 12 ? (
-              PASS_INFO
-            ) : (
-              <br />
-            )}
+            {!PASS_REG.test(passwordValue) ? PASS_INFO : <br />}
           </div>
           <PasswordInput
             placeholder="비밀번호 확인"
