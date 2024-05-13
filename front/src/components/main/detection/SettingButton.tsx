@@ -6,7 +6,7 @@ import { useDetectionStore, useToggle } from "../../../stores/detection";
 import { useDetectionPoseStore } from "../../../stores/detectionPose";
 
 const SettingButton = () => {
-  const [isSettingOpen, setIsSettingOpen] = useState(true);
+  const [isSettingOpen, setIsSettingOpen] = useState(false);
   const cryingType = useDetectionStore((state: any) => state.cryingType);
   const isBabyFace = useDetectionPoseStore((state: any) => state.isBabyFace);
 
