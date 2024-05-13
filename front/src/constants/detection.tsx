@@ -24,7 +24,7 @@ export const DETECTION = {
   TIRED: {
     ICON: sleepy,
     MESSAGE: "졸려서 ",
-    SOLUTION: "5분 가량 안고 걸어주세요",
+    SOLUTION: "아기를 안고 걸어주세요",
     COLOR: "#E3A6FF",
   },
   HUNGRY: {
@@ -42,7 +42,7 @@ export const DETECTION = {
   PAIN: {
     ICON: sick,
     MESSAGE: "아파서 ",
-    SOLUTION: "아기를 데리고 병원에 가세요",
+    SOLUTION: "아기와 병원에 가세요",
     COLOR: "#FF5D5D",
   },
   BURPING: {

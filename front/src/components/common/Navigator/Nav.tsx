@@ -42,7 +42,7 @@ const Nav = () => {
       index: 1,
     },
     {
-      text: "울음감지",
+      text: "상태감지",
       icon: heart,
       clickedIcon: heartClicked,
       path: "/detection",
