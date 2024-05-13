@@ -8,7 +8,7 @@ interface ModelProps {
 }
 
 const BleModel = ({ position }: ModelProps) => {
-  const gltf = useGLTF("/ble_gltf/scene.gltf");
+  const glb = useGLTF("/ble/bluetooth_icon.glb");
   const group = useRef<THREE.Group>(null!);
   // useFrame(() => (group.current.rotation.y += 0.02));
   // useFrame((state) => {
@@ -22,7 +22,7 @@ const BleModel = ({ position }: ModelProps) => {
     <primitive
       // rotation={[Math.PI / 2, 0, 0]}
       ref={group}
-      object={gltf.scene.clone()}
+      object={glb.scene.clone()}
       scale={[2, 2, 1]}
       position={position}
     />
@@ -30,7 +30,7 @@ const BleModel = ({ position }: ModelProps) => {
 };
 
 const WatchModel = ({ position }: ModelProps) => {
-  const gltf = useGLTF("/watch_gltf/scene.gltf");
+  const gltf = useGLTF("/watch/samsung__galaxy__watch_5.glb");
   const group = useRef<THREE.Group>(null!);
   useFrame(() => (group.current.rotation.y += 0.02));
   return (
@@ -69,5 +69,6 @@ const BleImage = () => {
     </div>
   );
 };
-
+useGLTF.preload("/ble/bluetooth_icon.glb");
+useGLTF.preload("/watch/samsung__galaxy__watch_5.glb");
 export default BleImage;
