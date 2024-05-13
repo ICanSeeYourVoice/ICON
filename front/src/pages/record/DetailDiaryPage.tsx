@@ -1,12 +1,12 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { diaryDelete, diaryDetail } from "../../apis/Diary";
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import toast from "react-hot-toast";
-import MoveButton from "../../components/common/button/MoveButton";
-import Trash from "../../assets/svgs/voice/delete.svg";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
+import Vector from "../../assets/svgs/nav/Vector.svg";
 import { PulseLoader } from "react-spinners";
+import Arrow from "../../assets/svgs/record/arrowRight.svg";
+import { diaryDetail } from "../../apis/Diary";
+import ExistDiary from "../../components/main/record/ExistDiary";
 import Clude1 from "../../assets/svgs/record/blueClude.png";
 import Clude2 from "../../assets/svgs/record/blueClude.png";
 import Clude4 from "../../assets/svgs/record/blueClude.png";
@@ -16,6 +16,7 @@ import Clude6 from "../../assets/svgs/record/blueClude.png";
 import Clude7 from "../../assets/svgs/record/blueClude.png";
 import Clude8 from "../../assets/svgs/record/blueClude.png";
 import Clude0 from "../../assets/svgs/record/blueClude.png";
+import { useEmojiStore } from "../../stores/diary";
 
 interface DiaryEntryProps {
   diary_id: number;
@@ -34,9 +35,30 @@ interface ImageMap {
 
 const DetailDiary = () => {
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [showModal, setShowModal] = useState(false);
+  const { setSelectedEmojiId } = useEmojiStore();
+  const selectedEmoji = useEmojiStore((state) => state.selectedEmojiId);
+
+  const [daily, setDaily] = useState("diary");
   const selectedDate: string | null = sessionStorage.getItem("date");
+
+  const { data: DiaryList, isLoading: DiaryLoading } =
+    useQuery<DiaryEntryProps>({
+      queryKey: ["diaryDetail"],
+      queryFn: () => diaryDetail(selectedDate ?? ""),
+    });
+
+  const handleCancel = () => {
+    setShowModal(false);
+    setSelectedEmojiId(null);
+  };
+
+  const handleEmojiClick = (id: string) => {
+    setSelectedEmojiId(id);
+  };
+
+  const formattedDate = moment(selectedDate).format("MM월 DD일");
+  const formattedDayOfWeek = moment(selectedDate).format("dddd");
 
   const images: ImageMap = {
     clude: { id: "clude", url: Clude0 },
@@ -50,126 +72,129 @@ const DetailDiary = () => {
     clude8: { id: "clude2", url: Clude8 },
   };
 
-  const { data: DiaryList } = useQuery<DiaryEntryProps>({
-    queryKey: ["diaryDetail"],
-    queryFn: () => diaryDetail(selectedDate ?? ""),
-  });
-
-  //다이어리 삭제
-  const { mutate: deleteDiaryEntry } = useMutation({
-    mutationFn: diaryDelete,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["DiaryList"] });
-    },
-    onError: (error) => {
-      console.log(`일지 삭제 실패`, error);
-    },
-  });
-
-  if (!DiaryList) {
-    return (
-      <div className="w-screen h-screen flex justify-center items-center">
-        <PulseLoader color="#7ec3f0" />
-      </div>
-    );
-  }
-
-  const formattedDate = moment(DiaryList.date).format("M월 D일");
-  const formattedDayOfWeek = moment(DiaryList.date).format("dddd");
-
-  const nextImage = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === DiaryList.image_urls.length - 1 ? 0 : prevIndex + 1
-    );
+  const handleDailyChange = (clickDaily: string) => {
+    clickDaily === "daily" ? "diary" : "chart";
+    setDaily(clickDaily);
   };
 
-  const prevImage = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? DiaryList.image_urls.length - 1 : prevIndex - 1
-    );
+  const handleTopClick = () => {
+    navigate("/record/diary");
   };
 
-  const hanlDeleteClick = (diaryDay: string) => {
-    toast((t) => (
-      <div className="flex flex-col items-center justify-center w-full">
-        <p>일지를 삭제하시겠습니까?</p>
-        <hr />
-        <div className="mt-4 flex w-full justify-end text-white">
-          <button
-            className="bg-gray-1 py-2 px-4 rounded mr-[0.4rem]"
-            onClick={() => {
-              toast.dismiss(t.id);
-            }}
-          >
-            취소
-          </button>
-          <button
-            className="bg-primary py-2 px-4 rounded mr-2"
-            onClick={() => {
-              deleteDiaryEntry(diaryDay);
-              toast.dismiss(t.id);
-              navigate("/record/diary");
-            }}
-          >
-            확인
-          </button>
-        </div>
-      </div>
-    ));
+  const goToRegister = () => {
+    setShowModal(true);
   };
 
   return (
-    <div className="w-full  h-screen ">
-      <div
-        onClick={() => hanlDeleteClick(DiaryList.date)}
-        className="pt-[1rem] flex justify-end  items-center mr-[1rem] mb-[0.5rem]"
-      >
-        <div className="w-[2rem] h-[2rem] bg-primary flex justify-center items-center rounded-[0.5rem]">
-          <img src={Trash} alt="삭제" className="w-[1.5rem]" />
-        </div>
-      </div>
+    <>
+      {!DiaryList?.diary_id ? (
+        <div className="w-full  h-screen ">
+          <div className="flex flex-col items-center h-screen w-screen">
+            <div className="w-full h-[6rem] fixed flex flex-col items-center z-10 ">
+              <div className="m-auto w-[80%]">
+                {DiaryLoading && (
+                  <div className="w-screen h-screen flex justify-center items-center">
+                    <PulseLoader color="#7ec3f0" />
+                  </div>
+                )}
+                <div className="flex justify-between items-center font-bold">
+                  <button onClick={handleTopClick}>
+                    <img src={Vector} alt="Back" />
+                  </button>
+                </div>
+              </div>
+            </div>
 
-      <div className="justify-center items-center flex mt-[1rem]">
-        <img
-          src={images[DiaryList.emoji].url}
-          alt=""
-          className=" w-[5rem] h-[5rem]"
-        />
-      </div>
+            {/* 이모지 */}
+            <div className="justify-center items-center flex mt-[6rem]">
+              <img src={Clude0} alt="" className=" w-[5rem] h-[5rem]" />
+            </div>
 
-      <div className="flex flex-col w-full items-center  justify-center gap-[0.3rem]">
-        <div className="text-[1.3rem] ">{formattedDate}</div>
-        <div>{formattedDayOfWeek}</div>
-      </div>
+            <div className="flex flex-col w-full items-center  justify-center gap-[0.3rem]">
+              <div className="text-[1.3rem] ">{formattedDate}</div>
+              <div>{formattedDayOfWeek}</div>
+            </div>
 
-      <div className="w-full flex justify-center mt-[2rem]">
-        <div className="w-[90%] justify-center items-center bg-blue-100 rounded-[1rem] overflow-auto p-2 pt-[2rem]">
-          <div className="relative flex justify-center items-center">
-            {DiaryList.image_urls.length > 1 && (
-              <button onClick={prevImage} className="absolute left-0 z-10">
-                &lt;
+            {/* 다이어리 차트 토글 */}
+            <div className="flex w-[90%] justify-start mt-[2rem]">
+              <button
+                className={`flex-1 p-2 transition-colors duration-300 ease-in-out ${
+                  daily === "diary"
+                    ? "bg-gray-300 text-white shadow-lg"
+                    : "bg-gray-200 hover:bg-gray-300"
+                } rounded-l-lg`}
+                onClick={() => handleDailyChange("diary")}
+              >
+                다이어리
               </button>
-            )}
-            <img
-              src={DiaryList.image_urls[currentIndex]}
-              alt={`Image ${currentIndex}`}
-              className="flex-none w-[17.5rem] h-[17.5rem] object-cover"
-            />
-            {DiaryList.image_urls.length > 1 && (
-              <button onClick={nextImage} className="absolute right-0 z-10">
-                &gt;
+              <button
+                className={`flex-1 p-2 transition-colors duration-300 ease-in-out ${
+                  daily === "chart"
+                    ? "bg-gray-300 text-white shadow-lg"
+                    : "bg-gray-200 hover:bg-gray-300"
+                } rounded-r-lg`}
+                onClick={() => handleDailyChange("chart")}
+              >
+                통계
               </button>
+            </div>
+
+            {daily === "diary" ? (
+              <div
+                onClick={goToRegister}
+                className="w-[70%] h-[10rem] flex justify-center items-center text-[1.5rem] text-gray-500 border border-gray-600 rounded-[1rem] mt-[5rem]"
+              >
+                일지 작성하러 가기
+              </div>
+            ) : (
+              <div>chart</div>
             )}
           </div>
-          <div className="text-gray-700 text-[1rem] p-5">
-            {DiaryList.content}
-          </div>
+          {showModal && (
+            <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center">
+              <div className="bg-gray-100 pl-[1.5rem] pr-[1.5rem] pb-[1.5rem] pt-[1rem] rounded-[1rem] shadow-lg  ">
+                <div className="w-full flex justify-end mb-[1rem]">
+                  <button className=" text-black" onClick={handleCancel}>
+                    x
+                  </button>
+                </div>
+                <div className="flex justify-center items-center mb-[2rem] text-sm">
+                  오늘의 감정을 골라보세요
+                </div>
+                <div className="grid grid-cols-3 gap-4 mb-[2rem]">
+                  {Object.entries(images).map(([id, { url }]) => (
+                    <img
+                      key={id}
+                      src={url}
+                      alt="Emoji"
+                      className={`rounded-full w-[3rem] h-[3rem] cursor-pointer ${
+                        selectedEmoji === id ? "scale-125 shadow-lg" : ""
+                      }`}
+                      onClick={() => handleEmojiClick(id)}
+                    />
+                  ))}
+                </div>
+                <div className="flex justify-around">
+                  <button
+                    className="bg-gray-300 text-white py-1 px-1 rounded-[1rem] hover:bg-gray-400"
+                    onClick={() => {
+                      setShowModal(false);
+                      navigate("/record/diary/register");
+                    }}
+                  >
+                    <img src={Arrow} alt="arrow" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
-      </div>
-      <div className="fixed bottom-[4rem] items-center justify-center flex w-full">
-        <MoveButton path="/record/diary" text="다이어리로 돌아가기" />
-      </div>
-    </div>
+      ) : (
+        <div>
+          <ExistDiary />
+        </div>
+      )}
+    </>
   );
 };
 

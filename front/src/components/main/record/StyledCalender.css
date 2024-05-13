@@ -1,7 +1,7 @@
 .react-calendar__navigation {
     height: 5rem;
     border-radius: 1rem 1rem 0 0;
-    background: rgb(223, 40, 40);
+    background:#7BB7F7;
     span {
       font-size: 1.5rem;
       font-weight: 600;
@@ -24,7 +24,7 @@
 
   .react-calendar__navigation button:enabled:hover,
   .react-calendar__navigation button:enabled:focus {
-    background-color:rgb(225, 227, 250);
+    background-color: #7BB7F7;
     border-radius: 2rem 2rem 0 0;
   }
 
@@ -35,7 +35,7 @@
 
   .react-calendar__month-view__weekdays {
     abbr {
-      color: rgb(167, 171, 225);
+      color: rgb(155, 161, 248);
       font-weight: 900;
     }
   }
@@ -99,3 +99,7 @@
   }
   
 
+  .react-calendar__tile:disabled {
+    background-color: white;
+    color:#dedede;
+  }

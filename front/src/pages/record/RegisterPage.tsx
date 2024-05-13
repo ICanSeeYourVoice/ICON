@@ -5,13 +5,22 @@ import PostButton from "../../components/common/button/PostButton";
 import { useNavigate } from "react-router-dom";
 import FileUploadInput from "../../components/main/record/FileUploadInput";
 import { useEmojiStore, useImageStore } from "../../stores/diary";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { diaryRegister } from "../../apis/Diary";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { diaryList, diaryRegister } from "../../apis/Diary";
 import toast from "react-hot-toast";
+import moment from "moment";
 
 interface CreateDiaryProps {
   content: string;
   date: string;
+  image_urls: string[];
+  emoji: string;
+}
+
+interface DiaryEntryProps {
+  diary_id: number;
+  date: string;
+  content: string;
   image_urls: string[];
   emoji: string;
 }
@@ -22,8 +31,29 @@ const RegisterPage = () => {
   const { previewUrls, clearImages } = useImageStore();
   const { setSelectedEmojiId } = useEmojiStore();
   const selectedEmojiUrl = useEmojiStore((state) => state.selectedEmojiId);
-  const selectedDate: string | null = sessionStorage.getItem("date");
+  const today = moment().format("YYYY-MM-DD");
+  const [selectedDate, setSelectedDate] = useState(
+    moment().format("YYYY-MM-DD")
+  );
   const navigate = useNavigate();
+
+  // 일지 데이터 받아오기
+  const { data: dayList = [] } = useQuery<DiaryEntryProps[]>({
+    queryKey: ["DiaryList"],
+    queryFn: () => diaryList({ startId: "2024-01-01", endId: "2024-12-31" }),
+  });
+
+  // 이미 등록되어있는 날짜 추출
+  const registeredDates: string[] = dayList.map((diary) => diary.date);
+
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newDate = e.target.value;
+    if (registeredDates.includes(newDate)) {
+      toast.error("이미 일지가 등록된 날짜입니다. ");
+      return;
+    }
+    setSelectedDate(newDate);
+  };
 
   // 일지 등록
   const { mutate: registerDiary } = useMutation({
@@ -70,7 +100,7 @@ const RegisterPage = () => {
 
   return (
     <div className="flex flex-col items-center h-screen w-screen gap-[2rem]">
-      <div className="bg-white z-10 flex flex-col items-center w-full h-[6rem] fixed">
+      <div className="bg-white z-10 flex flex-col items-center w-full h-[6rem] fixed m-auto w-[80%]">
         <div className="m-auto w-[80%]">
           <div className="flex justify-between items-center font-bold">
             <button onClick={handleTopClick}>
@@ -81,20 +111,21 @@ const RegisterPage = () => {
           </div>
         </div>
       </div>
-      <div className="mt-[8rem]">
-        {selectedDate ? (
-          <div>
-            <span className="text-[1.5rem] font-semibold text-blue-500">
-              {selectedDate}
-            </span>
-          </div>
-        ) : (
-          <div className="text-[1.3rem] text-red-500 font-semibold">
-            날짜를 선택해주세요
-          </div>
-        )}
+      <div className="flex w-[13rem] mt-[8rem] justify-center">
+        <div className="text-[1.5rem] font-semibold text-blue-500 ">
+          {selectedDate}
+        </div>
+        <div className="ml-[1rem] rounded-[0.6rem] border-black border-[0.1rem] w-[2.2rem] h-[2.2rem] justify-center items-center">
+          <input
+            type="date"
+            className="w-[1.2rem] ml-[0.4rem] h-[2rem]"
+            onChange={handleDateChange}
+            value={selectedDate}
+            max={today}
+          />
+        </div>
       </div>
-      <div>
+      <div className="appearance-none">
         <LabelTextInput
           label="내용"
           placeholder="내용 입력.."
