@@ -10,7 +10,7 @@ import { GetChartDetailData } from "../../../../apis/Chart";
 import { PulseLoader } from "react-spinners";
 
 interface VerticalTimeLineProps {
-  date: string;
+  date: string | null;
 }
 
 interface TimelineData {
@@ -54,7 +54,7 @@ const VerticalTimeLine: React.FC<VerticalTimeLineProps> = (date) => {
           <div>다시 시도해주세요.</div>
         </div>
       ) : (
-        <div className="h-[60vh] overflow-y-scroll no-scrollbar">
+        <div className="h-[20vh] overflow-y-scroll no-scrollbar">
           <VerticalTimeline layout="1-column-left" lineColor="#7BB7F7">
             {chartDetailData &&
               chartDetailData.timeline.map((val, index) => {
@@ -63,13 +63,15 @@ const VerticalTimeLine: React.FC<VerticalTimeLineProps> = (date) => {
                     className=""
                     key={index}
                     contentStyle={{
-                      background: "rgb(33, 150, 243)",
+                      background: "#7BB7F7",
                       color: "#fff",
+                      padding: "2px 10px 0px 10px",
                     }}
                     contentArrowStyle={{
-                      borderRight: "7px solid  rgb(33, 150, 243)",
+                      borderRight: "7px solid #7BB7F7",
                     }}
                     date={val.cryingDate}
+                    dateClassName="p-0"
                     iconStyle={RECORD[val.type].ICONSTYLE}
                     icon={RECORD[val.type].ICON}
                   >

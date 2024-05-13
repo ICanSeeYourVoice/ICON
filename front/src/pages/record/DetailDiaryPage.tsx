@@ -17,6 +17,8 @@ import Clude7 from "../../assets/svgs/record/blueClude.png";
 import Clude8 from "../../assets/svgs/record/blueClude.png";
 import Clude0 from "../../assets/svgs/record/blueClude.png";
 import { useEmojiStore } from "../../stores/diary";
+import DoughnutChart from "../../components/main/record/chart/DoughnutChart";
+import VerticalTimeLine from "../../components/main/record/timeline/VerticalTimeLine";
 
 interface DiaryEntryProps {
   diary_id: number;
@@ -147,7 +149,14 @@ const DetailDiary = () => {
                 일지 작성하러 가기
               </div>
             ) : (
-              <div>chart</div>
+              <div>
+                <div className="flex flex-col items-center m-[1rem] gap-[1rem] flex-1">
+                  <DoughnutChart date={selectedDate} />
+                </div>
+                <div className="flex flex-col items-center mb-[1rem] gap-[1rem] flex-1">
+                  <VerticalTimeLine date={selectedDate} />
+                </div>
+              </div>
             )}
           </div>
           {showModal && (

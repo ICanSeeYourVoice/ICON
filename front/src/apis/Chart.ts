@@ -1,7 +1,7 @@
 import { baseApi } from "./Base";
 
 interface StatisticsDate {
-  statisticsDate: string;
+  statisticsDate: string | null;
 }
 
 // GET: 통계 조회
