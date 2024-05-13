@@ -65,11 +65,8 @@ const DiaryCalendar = () => {
       setValue(newValue);
       setSelectedDate(newValue);
       const dateStr = moment(newValue).format("YYYY-MM-DD");
-      const diaryEntry = dayList.find((entry) => entry.date === dateStr);
       sessionStorage.setItem("date", dateStr);
-      if (diaryEntry) {
-        navigate("/record/diary/detail");
-      }
+      navigate("/record/diary/detail", { state: { dateStr } });
     }
   };
 
@@ -104,6 +101,10 @@ const DiaryCalendar = () => {
     setShowModal(false);
     setSelectedEmojiId(null);
   };
+
+  // 미래 일지 작성 금지
+  const tileDisabled = ({ date }: { date: Date }) => date > new Date();
+
   return (
     <div>
       <div className="mt-[3rem] flex justify-center items-center border-gray-200 rounded-[1.3rem] shadow-xl">
@@ -116,6 +117,7 @@ const DiaryCalendar = () => {
           formatDay={(_, date) => moment(date).format("D")}
           tileContent={addContent}
           showNeighboringMonth={false}
+          tileDisabled={tileDisabled}
         />
       </div>
 

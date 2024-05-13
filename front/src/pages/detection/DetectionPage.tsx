@@ -31,9 +31,9 @@ type Result = {
 };
 
 const DetectionPage = () => {
-  const worker = new Worker("recordingWorker.js");
   const { yamnetModel, setModel } = useYamnetStore.getState();
-
+  const { isCryDetect, isFaceDetect, isCamera, setIsFaceDetect, setIsCamera } =
+    useToggle();
   const navigate = useNavigate();
   const isBabyCry = useDetectionStore((state: any) => state.isBabyCry);
   const cryingType = useDetectionStore((state: any) => state.cryingType);
@@ -49,7 +49,7 @@ const DetectionPage = () => {
   const { writeCharacteristic } = useBleStore();
   const setLoading = useLoading((state) => state.setLoading);
 
-  const [results, setResults] = useState<Result[]>([]); // test위한 코드
+  const [, setResults] = useState<Result[]>([]); // test위한 코드
 
   const { mutate: poseMutate } = useMutation({
     mutationFn: poseAlarm,
@@ -146,7 +146,7 @@ const DetectionPage = () => {
       }, 1000);
     } catch (error) {
       toast.error(
-        "행동 준비 중 오류가 발생했습니다.\n 비디오를 허용하고 다시 시작해주세요."
+        "행동감지 준비 중 오류가 발생했습니다.\n 비디오를 허용하고 다시 시작해주세요."
       );
       setCryingType("FAILED");
     } finally {
@@ -228,8 +228,8 @@ const DetectionPage = () => {
               probability: probabilities[i].toFixed(3),
             });
 
-            // if (classes[i] === 20 && probabilities[i] >= 0.5) {
-            if (classes[i] === 20) {
+            if (classes[i] === 20 && probabilities[i] >= 0.5) {
+              // if (classes[i] === 20) {
               isCry = true;
               setIsBabyCry(true);
               setCryingType("LOADING");
@@ -241,6 +241,8 @@ const DetectionPage = () => {
           setResults(updatedResults); // test를 위한 코드
         } else {
           if (cnt >= 4) {
+            const worker = new Worker("recordingWorker.js");
+
             streamRef.current!.getTracks().forEach((track) => track.stop());
             source?.disconnect();
             scriptNode?.disconnect();
@@ -267,8 +269,6 @@ const DetectionPage = () => {
       setLoading(false);
     }
   };
-
-  const { isCryDetect, isFaceDetect } = useToggle();
 
   useEffect(() => {
     if (isCryDetect) {
@@ -303,6 +303,9 @@ const DetectionPage = () => {
       source?.disconnect();
       scriptNodeRef.current?.disconnect();
       streamRef.current = null;
+
+      setIsFaceDetect(false);
+      setIsCamera(false);
     };
   }, []);
 
@@ -318,62 +321,75 @@ const DetectionPage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-full gap-4">
-      <video ref={videoRef} className="hidden" />
-      <p className="text-gray-1 text-sm">
-        {cryingType === "FAILED"
-          ? FAILED_INFO
-          : cryingType === "LOADING"
-          ? LOADING_INFO
-          : DETECTION_INFO}
-      </p>
-      <ReactButton
-        icon={
-          cryingType === "LOADING"
-            ? DETECTION.LOADING.ICON
-            : cryingType === "FAILED"
-            ? DETECTION.FAILED.ICON
-            : DETECTION.NORMAL.ICON
-        }
-        color={
-          cryingType === "LOADING"
-            ? DETECTION.LOADING.COLOR
-            : cryingType === "FAILED"
-            ? DETECTION.FAILED.COLOR
-            : DETECTION.NORMAL.COLOR
-        }
-      />
-      {/* {cryingType ? (
-        <PulseLoader color="#c8c8c8" />
-      ) : (
-        <div className="flex flex-col items-center justify-center text-gray-0 text-xl">
-          <p>아기가</p>
-          <p>
-            <span className="text-white">{DETECTION.NORMAL.MESSAGE}</span>
-            상태에요
-          </p>
+      <>
+        <div
+          className={`fixed w-[10rem] h-[4rem] bottom-0 right-0 mb-[9rem] mr-[1rem] ${
+            !isCamera && "hidden w-[2px] h-[5px]"
+          }`}
+        >
+          <video
+            className="rounded-[1rem]"
+            style={{ transform: "scaleX(-1)" }}
+            ref={videoRef}
+          />
         </div>
-      )} */}
-      {cryingType ? (
-        <PulseLoader color="#c8c8c8" />
-      ) : (
-        <div className="flex flex-col items-center justify-center text-white text-xs">
-          {results.map((result, i) => (
-            <div
-              key={i}
-              style={{
-                display: "flex",
-                width: "18.5rem",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <p>{result.label} </p>
-              <p> : ({result.probability}) </p>
-            </div>
-          ))}
-        </div>
-      )}
-      <div className="flex items-center justify-center w-[80%] h-[6rem]"></div>
+
+        <p className="text-gray-1 text-sm">
+          {cryingType === "FAILED"
+            ? FAILED_INFO
+            : cryingType === "LOADING"
+            ? LOADING_INFO
+            : DETECTION_INFO}
+        </p>
+        <ReactButton
+          icon={
+            cryingType === "LOADING"
+              ? DETECTION.LOADING.ICON
+              : cryingType === "FAILED"
+              ? DETECTION.FAILED.ICON
+              : DETECTION.NORMAL.ICON
+          }
+          color={
+            cryingType === "LOADING"
+              ? DETECTION.LOADING.COLOR
+              : cryingType === "FAILED"
+              ? DETECTION.FAILED.COLOR
+              : DETECTION.NORMAL.COLOR
+          }
+        />
+        {cryingType ? (
+          <PulseLoader color="#c8c8c8" />
+        ) : (
+          <div className="flex flex-col items-center justify-center text-gray-0 text-xl">
+            <p>아기가</p>
+            <p>
+              <span className="text-white">{DETECTION.NORMAL.MESSAGE}</span>
+              상태에요
+            </p>
+          </div>
+        )}
+        {/* {cryingType ? (
+          <PulseLoader color="#c8c8c8" />
+        ) : (
+          <div className="flex flex-col items-center justify-center text-white text-xs">
+            {results.map((result, i) => (
+              <div
+                key={i}
+                style={{
+                  display: "flex",
+                  width: "18.5rem",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <p>{result.label} </p>
+                <p> : ({result.probability}) </p>
+              </div>
+            ))}
+          </div>
+        )} */}
+        <div className="flex items-center justify-center w-[80%] h-[6rem]"></div>
+      </>
     </div>
   );
 };

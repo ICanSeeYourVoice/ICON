@@ -24,7 +24,7 @@ export const DETECTION = {
   TIRED: {
     ICON: sleepy,
     MESSAGE: "졸려서 ",
-    SOLUTION: "5분 가량 안고 걸어주세요",
+    SOLUTION: "아기를 안고 걸어주세요",
     COLOR: "#E3A6FF",
   },
   HUNGRY: {
@@ -42,7 +42,7 @@ export const DETECTION = {
   PAIN: {
     ICON: sick,
     MESSAGE: "아파서 ",
-    SOLUTION: "아기를 데리고 병원에 가세요",
+    SOLUTION: "아기와 병원에 가세요",
     COLOR: "#FF5D5D",
   },
   BURPING: {
@@ -57,6 +57,6 @@ export const DETECTION_INFO = "아기의 상태를 감지하고 있어요";
 
 export const LOADING_INFO = "아기가 왜 우는지 분석 중이에요";
 
-export const FAILED_INFO = "마이크 권한을 확인해주세요";
+export const FAILED_INFO = "마이크와 비디오 권한을 확인해주세요";
 
 export const RESTART_INFO = "가운데 버튼을 눌러 재시작해주세요";

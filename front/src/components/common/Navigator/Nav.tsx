@@ -31,7 +31,7 @@ const Nav = () => {
       text: "성장일지",
       icon: diary,
       clickedIcon: diaryClicked,
-      path: "/record",
+      path: "/record/diary",
       index: 0,
     },
     {
@@ -42,7 +42,7 @@ const Nav = () => {
       index: 1,
     },
     {
-      text: "울음감지",
+      text: "상태감지",
       icon: heart,
       clickedIcon: heartClicked,
       path: "/detection",

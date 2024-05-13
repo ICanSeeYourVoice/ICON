@@ -40,7 +40,7 @@ const authRoutes = [
 const detectionRoutes = [
   {
     path: "/detection",
-    element: <DarkCommonLayout title="아기감지" />,
+    element: <DarkCommonLayout title="상태 감지" />,
     children: [
       { index: true, element: <DetectionPage /> },
       { path: "/detection/result", element: <ResultPage /> },
