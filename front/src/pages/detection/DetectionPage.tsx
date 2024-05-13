@@ -324,7 +324,7 @@ const DetectionPage = () => {
     <div className="flex flex-col items-center justify-center w-full h-full gap-4">
       <>
         <div
-          className={`fixed w-[150px] h-[150px] bottom-0 right-0 mb-[2rem] mr-[1rem] ${
+          className={`fixed w-[150px] h-[150px] bottom-0 right-0 mb-[4.5rem] mr-[1rem] ${
             !isCamera && "hidden w-[2px] h-[5px]"
           }`}
         >
