@@ -32,10 +32,12 @@ const SettingRoutinePage = () => {
     useQuery({ queryFn: GetStatusRoutine, queryKey: ["getStatusRoutineData"] });
 
   const findRoutineNameByTrigger = (trigger: string) => {
-    const foundRoutine = getStatusRoutineData.find(
-      (routine: RoutineItem) => routine.trigger === trigger
-    );
-    return foundRoutine ? foundRoutine.scene_id : "";
+    if (getStatusRoutineData) {
+      const foundRoutine = getStatusRoutineData.find(
+        (routine: RoutineItem) => routine.trigger === trigger
+      );
+      return foundRoutine ? foundRoutine.scene_id : "";
+    }
   };
 
   useEffect(() => {
