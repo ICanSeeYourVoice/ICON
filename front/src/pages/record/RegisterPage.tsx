@@ -115,7 +115,7 @@ const RegisterPage = () => {
         <div className="text-[1.5rem] font-semibold text-blue-500 ">
           {selectedDate}
         </div>
-        <div className="ml-[1rem] rounded-[0.6rem] border-gray-500 border-[0.1rem] w-[2.2rem] h-[2.2rem] justify-center items-center">
+        <div className="ml-[1rem] rounded-[0.6rem] border-black border-[0.1rem] w-[2.2rem] h-[2.2rem] justify-center items-center">
           <input
             type="date"
             className="w-[1.2rem] ml-[0.4rem] h-[2rem]"

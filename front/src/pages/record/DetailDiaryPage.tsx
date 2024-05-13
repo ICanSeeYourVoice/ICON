@@ -4,9 +4,19 @@ import { useLocation, useNavigate } from "react-router-dom";
 import moment from "moment";
 import Vector from "../../assets/svgs/nav/Vector.svg";
 import { PulseLoader } from "react-spinners";
-import Clude0 from "../../assets/svgs/setting/delete.svg";
+import Arrow from "../../assets/svgs/record/arrowRight.svg";
 import { diaryDetail } from "../../apis/Diary";
 import ExistDiary from "../../components/main/record/ExistDiary";
+import Clude1 from "../../assets/svgs/record/blueClude.png";
+import Clude2 from "../../assets/svgs/record/blueClude.png";
+import Clude4 from "../../assets/svgs/record/blueClude.png";
+import Clude3 from "../../assets/svgs/record/blueClude.png";
+import Clude5 from "../../assets/svgs/record/blueClude.png";
+import Clude6 from "../../assets/svgs/record/blueClude.png";
+import Clude7 from "../../assets/svgs/record/blueClude.png";
+import Clude8 from "../../assets/svgs/record/blueClude.png";
+import Clude0 from "../../assets/svgs/record/blueClude.png";
+import { useEmojiStore } from "../../stores/diary";
 
 interface DiaryEntryProps {
   diary_id: number;
@@ -16,9 +26,19 @@ interface DiaryEntryProps {
   emoji: string;
 }
 
+interface ImageMap {
+  [key: string]: {
+    id: string;
+    url: string;
+  };
+}
+
 const DetailDiary = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [showModal, setShowModal] = useState(false);
+  const { setSelectedEmojiId } = useEmojiStore();
+  const selectedEmoji = useEmojiStore((state) => state.selectedEmojiId);
   const { dateStr } = location.state || {};
   console.log(dateStr, "날짜");
 
@@ -32,8 +52,29 @@ const DetailDiary = () => {
       queryFn: () => diaryDetail(selectedDate ?? ""),
     });
 
+  const handleCancel = () => {
+    setShowModal(false);
+    setSelectedEmojiId(null);
+  };
+
+  const handleEmojiClick = (id: string) => {
+    setSelectedEmojiId(id);
+  };
+
   const formattedDate = moment(selectedDate).format("MM월 DD일");
   const formattedDayOfWeek = moment(selectedDate).format("dddd");
+
+  const images: ImageMap = {
+    clude: { id: "clude", url: Clude0 },
+    clude1: { id: "clude1", url: Clude1 },
+    clude2: { id: "clude2", url: Clude2 },
+    clude3: { id: "clude2", url: Clude3 },
+    clude4: { id: "clude2", url: Clude4 },
+    clude5: { id: "clude2", url: Clude5 },
+    clude6: { id: "clude2", url: Clude6 },
+    clude7: { id: "clude2", url: Clude7 },
+    clude8: { id: "clude2", url: Clude8 },
+  };
 
   console.log(DiaryList);
   const handleDailyChange = (clickDaily: string) => {
@@ -43,6 +84,10 @@ const DetailDiary = () => {
 
   const handleTopClick = () => {
     navigate("/record/diary");
+  };
+
+  const goToRegister = () => {
+    setShowModal(true);
   };
 
   return (
@@ -99,8 +144,55 @@ const DetailDiary = () => {
               </button>
             </div>
 
-            {daily === "diary" ? <div>일지</div> : <div>chart</div>}
+            {daily === "diary" ? (
+              <div
+                onClick={goToRegister}
+                className="w-[70%] h-[10rem] flex justify-center items-center text-[1.5rem] text-gray-500 border border-gray-600 rounded-[1rem] mt-[5rem]"
+              >
+                일지 작성하러 가기
+              </div>
+            ) : (
+              <div>chart</div>
+            )}
           </div>
+          {showModal && (
+            <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center">
+              <div className="bg-gray-100 pl-[1.5rem] pr-[1.5rem] pb-[1.5rem] pt-[1rem] rounded-[1rem] shadow-lg  ">
+                <div className="w-full flex justify-end mb-[1rem]">
+                  <button className=" text-black" onClick={handleCancel}>
+                    x
+                  </button>
+                </div>
+                <div className="flex justify-center items-center mb-[2rem] text-sm">
+                  오늘의 감정을 골라보세요
+                </div>
+                <div className="grid grid-cols-3 gap-4 mb-[2rem]">
+                  {Object.entries(images).map(([id, { url }]) => (
+                    <img
+                      key={id}
+                      src={url}
+                      alt="Emoji"
+                      className={`rounded-full w-[3rem] h-[3rem] cursor-pointer ${
+                        selectedEmoji === id ? "scale-125 shadow-lg" : ""
+                      }`}
+                      onClick={() => handleEmojiClick(id)}
+                    />
+                  ))}
+                </div>
+                <div className="flex justify-around">
+                  <button
+                    className="bg-gray-300 text-white py-1 px-1 rounded-[1rem] hover:bg-gray-400"
+                    onClick={() => {
+                      setShowModal(false);
+                      navigate("/record/diary/register");
+                    }}
+                  >
+                    <img src={Arrow} alt="arrow" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       ) : (
         <div>
