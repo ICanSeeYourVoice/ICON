@@ -88,13 +88,20 @@ const RegisterPage = () => {
           </div>
         </div>
       </div>
-      <div className="text-[1.5rem] font-semibold text-blue-500 mt-[8rem]">
-        {selectedDate}
+      <div className="flex w-[13rem] mt-[8rem] justify-center">
+        <div className="text-[1.5rem] font-semibold text-blue-500 ">
+          {selectedDate}
+        </div>
+        <div className="ml-[1rem] rounded-[0.6rem] border-gray-500 border-[0.1rem] w-[2.2rem] h-[2.2rem] justify-center items-center">
+          <input
+            type="date"
+            className="w-[1.2rem] ml-[0.4rem] h-[2rem]"
+            onChange={handleDateChange}
+            value={selectedDate}
+          />
+        </div>
       </div>
-      <div>
-        <input type="date" value={selectedDate} onChange={handleDateChange} />
-      </div>
-      <div>
+      <div className="appearance-none">
         <LabelTextInput
           label="내용"
           placeholder="내용 입력.."
