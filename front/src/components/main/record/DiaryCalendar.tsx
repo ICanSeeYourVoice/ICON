@@ -107,7 +107,7 @@ const DiaryCalendar = () => {
 
   return (
     <div>
-      <div className="mt-[3rem] flex justify-center items-center border-gray-200 rounded-[1.3rem] shadow-xl">
+      <div className="mt-[2rem] flex justify-center items-center border-gray-200 rounded-[1.3rem] shadow-xl">
         <Calendar
           locale="en-US"
           onChange={handleChange}

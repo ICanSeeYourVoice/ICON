@@ -106,7 +106,7 @@ const DetailDiary = () => {
             </div>
 
             {/* 이모지 */}
-            <div className="justify-center items-center flex mt-[6rem]">
+            <div className="justify-center items-center flex mt-[4.5rem]">
               <img src={Clude0} alt="" className=" w-[5rem] h-[5rem]" />
             </div>
 
@@ -120,8 +120,8 @@ const DetailDiary = () => {
               <button
                 className={`flex-1 p-2 transition-colors duration-300 ease-in-out ${
                   daily === "diary"
-                    ? "bg-gray-300 text-white shadow-lg"
-                    : "bg-gray-200 hover:bg-gray-300"
+                    ? "bg-gray-300 text-white"
+                    : "bg-gray-100 hover:bg-gray-300"
                 } rounded-l-lg`}
                 onClick={() => handleDailyChange("diary")}
               >
@@ -130,8 +130,8 @@ const DetailDiary = () => {
               <button
                 className={`flex-1 p-2 transition-colors duration-300 ease-in-out ${
                   daily === "chart"
-                    ? "bg-gray-300 text-white shadow-lg"
-                    : "bg-gray-200 hover:bg-gray-300"
+                    ? "bg-gray-300 text-white"
+                    : "bg-gray-100 hover:bg-gray-300"
                 } rounded-r-lg`}
                 onClick={() => handleDailyChange("chart")}
               >
@@ -144,7 +144,7 @@ const DetailDiary = () => {
                 onClick={goToRegister}
                 className="w-[70%] h-[10rem] flex justify-center items-center text-[1.5rem] text-gray-500 border border-gray-600 rounded-[1rem] mt-[5rem]"
               >
-                일지 작성하러 가기
+                일지를 작성해 주세요
               </div>
             ) : (
               <div>chart</div>

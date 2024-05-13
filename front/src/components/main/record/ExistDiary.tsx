@@ -138,7 +138,11 @@ const ExistDiary = () => {
                 className="pt-[1rem] flex justify-end  items-center  mb-[0.5rem]"
               >
                 <div className="w-[2rem] h-[2rem] flex justify-center items-center">
-                  <img src={Trash} alt="삭제" className="w-[1.5rem]" />
+                  <img
+                    src={Trash}
+                    alt="삭제"
+                    className="w-[1.5rem] h-[1.5rem]"
+                  />
                 </div>
               </div>
             </div>
@@ -146,7 +150,7 @@ const ExistDiary = () => {
         </div>
 
         {/* 이모지 */}
-        <div className="justify-center items-center flex mt-[6rem]">
+        <div className="justify-center items-center flex mt-[4.5rem]">
           <img
             src={images[DiaryList!.emoji].url}
             alt=""
@@ -164,8 +168,8 @@ const ExistDiary = () => {
           <button
             className={`flex-1 p-2 transition-colors duration-300 ease-in-out ${
               daily === "diary"
-                ? "bg-gray-300 text-white shadow-lg"
-                : "bg-gray-200 hover:bg-gray-300"
+                ? "bg-gray-300 text-white"
+                : "bg-gray-100 hover:bg-gray-300"
             } rounded-l-lg`}
             onClick={() => handleDailyChange("diary")}
           >
@@ -174,8 +178,8 @@ const ExistDiary = () => {
           <button
             className={`flex-1 p-2 transition-colors duration-300 ease-in-out ${
               daily === "chart"
-                ? "bg-gray-300 text-white shadow-lg"
-                : "bg-gray-200 hover:bg-gray-300"
+                ? "bg-gray-300 text-white"
+                : "bg-gray-100 hover:bg-gray-300"
             } rounded-r-lg`}
             onClick={() => handleDailyChange("chart")}
           >

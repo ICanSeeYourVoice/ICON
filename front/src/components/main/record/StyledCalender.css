@@ -10,7 +10,7 @@
   }
 
   .react-calendar {
-    width: 22rem;
+    width: 19rem;
     max-width: 100%;
     border-radius: 1rem ;
     border : none;
@@ -19,13 +19,19 @@
   
 
   .react-calendar__navigation button:disabled {
+
     border-radius: 1rem 1rem 0 0;
+  }
+
+  .react-calendar__navigation button{
+    color:white;
   }
 
   .react-calendar__navigation button:enabled:hover,
   .react-calendar__navigation button:enabled:focus {
     background-color: #7BB7F7;
     border-radius: 2rem 2rem 0 0;
+    color:white;
   }
 
 
@@ -65,13 +71,12 @@
 .react-calendar__month-view__days__day--weekend {
   color: #d10000;
   font-size: 1rem;
-
 }
 
 
 .react-calendar__tile {
   text-align: center;
-  height: 3.6rem;
+  height: 3.3rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
