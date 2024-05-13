@@ -8,6 +8,7 @@ import { useEmojiStore, useImageStore } from "../../stores/diary";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { diaryRegister } from "../../apis/Diary";
 import toast from "react-hot-toast";
+import moment from "moment";
 
 interface CreateDiaryProps {
   content: string;
@@ -22,7 +23,9 @@ const RegisterPage = () => {
   const { previewUrls, clearImages } = useImageStore();
   const { setSelectedEmojiId } = useEmojiStore();
   const selectedEmojiUrl = useEmojiStore((state) => state.selectedEmojiId);
-  const selectedDate: string | null = sessionStorage.getItem("date");
+  const [selectedDate, setSelectedDate] = useState(
+    moment().format("YYYY-MM-DD")
+  );
   const navigate = useNavigate();
 
   // 일지 등록
@@ -43,6 +46,10 @@ const RegisterPage = () => {
 
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContentValue(e.target.value);
+  };
+
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedDate(e.target.value);
   };
 
   const createDiary = () => {
@@ -70,7 +77,7 @@ const RegisterPage = () => {
 
   return (
     <div className="flex flex-col items-center h-screen w-screen gap-[2rem]">
-      <div className="bg-white z-10 flex flex-col items-center w-full h-[6rem] fixed">
+      <div className="bg-white z-10 flex flex-col items-center w-full h-[6rem] fixed m-auto w-[80%]">
         <div className="m-auto w-[80%]">
           <div className="flex justify-between items-center font-bold">
             <button onClick={handleTopClick}>
@@ -81,18 +88,11 @@ const RegisterPage = () => {
           </div>
         </div>
       </div>
-      <div className="mt-[8rem]">
-        {selectedDate ? (
-          <div>
-            <span className="text-[1.5rem] font-semibold text-blue-500">
-              {selectedDate}
-            </span>
-          </div>
-        ) : (
-          <div className="text-[1.3rem] text-red-500 font-semibold">
-            날짜를 선택해주세요
-          </div>
-        )}
+      <div className="text-[1.5rem] font-semibold text-blue-500 mt-[8rem]">
+        {selectedDate}
+      </div>
+      <div>
+        <input type="date" value={selectedDate} onChange={handleDateChange} />
       </div>
       <div>
         <LabelTextInput

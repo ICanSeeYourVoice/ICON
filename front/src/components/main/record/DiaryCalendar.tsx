@@ -65,11 +65,8 @@ const DiaryCalendar = () => {
       setValue(newValue);
       setSelectedDate(newValue);
       const dateStr = moment(newValue).format("YYYY-MM-DD");
-      const diaryEntry = dayList.find((entry) => entry.date === dateStr);
       sessionStorage.setItem("date", dateStr);
-      if (diaryEntry) {
-        navigate("/record/diary/detail");
-      }
+      navigate("/record/diary/detail", { state: { dateStr } });
     }
   };
 
