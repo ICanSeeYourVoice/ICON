@@ -26,8 +26,8 @@ const SmartThingsPage = () => {
         ) : !getRoutineData ? (
           <RegisterSmartThingsPage />
         ) : (
-          <div className="flex h-full">
-            <SettingThingsPage routineData={getRoutineData} />
+          <div className="flex h-full w-full">
+            <SettingThingsPage />
           </div>
         )}
       </main>
