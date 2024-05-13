@@ -5,8 +5,8 @@ import PostButton from "../../components/common/button/PostButton";
 import { useNavigate } from "react-router-dom";
 import FileUploadInput from "../../components/main/record/FileUploadInput";
 import { useEmojiStore, useImageStore } from "../../stores/diary";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { diaryRegister } from "../../apis/Diary";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { diaryList, diaryRegister } from "../../apis/Diary";
 import toast from "react-hot-toast";
 import moment from "moment";
 
@@ -17,16 +17,43 @@ interface CreateDiaryProps {
   emoji: string;
 }
 
+interface DiaryEntryProps {
+  diary_id: number;
+  date: string;
+  content: string;
+  image_urls: string[];
+  emoji: string;
+}
+
 const RegisterPage = () => {
   const queryClient = useQueryClient();
   const [contentValue, setContentValue] = useState("");
   const { previewUrls, clearImages } = useImageStore();
   const { setSelectedEmojiId } = useEmojiStore();
   const selectedEmojiUrl = useEmojiStore((state) => state.selectedEmojiId);
+  const today = moment().format("YYYY-MM-DD");
   const [selectedDate, setSelectedDate] = useState(
     moment().format("YYYY-MM-DD")
   );
   const navigate = useNavigate();
+
+  // 일지 데이터 받아오기
+  const { data: dayList = [] } = useQuery<DiaryEntryProps[]>({
+    queryKey: ["DiaryList"],
+    queryFn: () => diaryList({ startId: "2024-01-01", endId: "2024-12-31" }),
+  });
+
+  // 이미 등록되어있는 날짜 추출
+  const registeredDates: string[] = dayList.map((diary) => diary.date);
+
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newDate = e.target.value;
+    if (registeredDates.includes(newDate)) {
+      toast.error("이미 일지가 등록된 날짜입니다. ");
+      return;
+    }
+    setSelectedDate(newDate);
+  };
 
   // 일지 등록
   const { mutate: registerDiary } = useMutation({
@@ -46,10 +73,6 @@ const RegisterPage = () => {
 
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContentValue(e.target.value);
-  };
-
-  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedDate(e.target.value);
   };
 
   const createDiary = () => {
@@ -98,6 +121,7 @@ const RegisterPage = () => {
             className="w-[1.2rem] ml-[0.4rem] h-[2rem]"
             onChange={handleDateChange}
             value={selectedDate}
+            max={today}
           />
         </div>
       </div>
