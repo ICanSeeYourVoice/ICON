@@ -2,10 +2,14 @@ import { useState } from "react";
 import setting from "../../../assets/svgs/detection/setting.svg";
 import video from "../../../assets/svgs/detection/video.svg";
 import novideo from "../../../assets/svgs/detection/novideo.svg";
-import { useToggle } from "../../../stores/detection";
+import { useDetectionStore, useToggle } from "../../../stores/detection";
+import { useDetectionPoseStore } from "../../../stores/detectionPose";
 
 const SettingButton = () => {
   const [isSettingOpen, setIsSettingOpen] = useState(true);
+  const cryingType = useDetectionStore((state: any) => state.cryingType);
+  const isBabyFace = useDetectionPoseStore((state: any) => state.isBabyFace);
+
   const {
     isCryDetect,
     isFaceDetect,
@@ -19,7 +23,9 @@ const SettingButton = () => {
     <div>
       <button
         className={`flex flex-col justify-center items-end absolute top-0 right-0 mt-[1.8rem] mr-[5.2rem] gap-3 ${
-          isSettingOpen ? "opacity-40 pointer-events-none" : ""
+          isSettingOpen || cryingType !== 0 || !isBabyFace
+            ? "opacity-40 pointer-events-none"
+            : ""
         }`}
       >
         <div
