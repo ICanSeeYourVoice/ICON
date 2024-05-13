@@ -322,49 +322,51 @@ const DetectionPage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-full gap-4">
-      <video
-        ref={videoRef}
-        className={`w-full h-full ${
-          isCamera ? "object-cover" : "hidden w-[3rem]"
-        }`}
-      />
-      {!isCamera && (
-        <>
-          <p className="text-gray-1 text-sm">
-            {cryingType === "FAILED"
-              ? FAILED_INFO
-              : cryingType === "LOADING"
-              ? LOADING_INFO
-              : DETECTION_INFO}
-          </p>
-          <ReactButton
-            icon={
-              cryingType === "LOADING"
-                ? DETECTION.LOADING.ICON
-                : cryingType === "FAILED"
-                ? DETECTION.FAILED.ICON
-                : DETECTION.NORMAL.ICON
-            }
-            color={
-              cryingType === "LOADING"
-                ? DETECTION.LOADING.COLOR
-                : cryingType === "FAILED"
-                ? DETECTION.FAILED.COLOR
-                : DETECTION.NORMAL.COLOR
-            }
+      <>
+        <div className="fixed w-[150px] h-[150px] bottom-0 right-0 mb-[2rem] mr-[1rem]">
+          <video
+            ref={videoRef}
+            className={`${
+              isCamera ? "rounded-[15px]" : "hidden w-[2px] h-[5px]"
+            }`}
           />
-          {cryingType ? (
-            <PulseLoader color="#c8c8c8" />
-          ) : (
-            <div className="flex flex-col items-center justify-center text-gray-0 text-xl">
-              <p>아기가</p>
-              <p>
-                <span className="text-white">{DETECTION.NORMAL.MESSAGE}</span>
-                상태에요
-              </p>
-            </div>
-          )}
-          {/* {cryingType ? (
+        </div>
+
+        <p className="text-gray-1 text-sm">
+          {cryingType === "FAILED"
+            ? FAILED_INFO
+            : cryingType === "LOADING"
+            ? LOADING_INFO
+            : DETECTION_INFO}
+        </p>
+        <ReactButton
+          icon={
+            cryingType === "LOADING"
+              ? DETECTION.LOADING.ICON
+              : cryingType === "FAILED"
+              ? DETECTION.FAILED.ICON
+              : DETECTION.NORMAL.ICON
+          }
+          color={
+            cryingType === "LOADING"
+              ? DETECTION.LOADING.COLOR
+              : cryingType === "FAILED"
+              ? DETECTION.FAILED.COLOR
+              : DETECTION.NORMAL.COLOR
+          }
+        />
+        {cryingType ? (
+          <PulseLoader color="#c8c8c8" />
+        ) : (
+          <div className="flex flex-col items-center justify-center text-gray-0 text-xl">
+            <p>아기가</p>
+            <p>
+              <span className="text-white">{DETECTION.NORMAL.MESSAGE}</span>
+              상태에요
+            </p>
+          </div>
+        )}
+        {/* {cryingType ? (
             <PulseLoader color="#c8c8c8" />
           ) : (
             <div className="flex flex-col items-center justify-center text-white text-xs">
@@ -384,9 +386,8 @@ const DetectionPage = () => {
               ))}
             </div>
           )} */}
-          <div className="flex items-center justify-center w-[80%] h-[6rem]"></div>
-        </>
-      )}
+        <div className="flex items-center justify-center w-[80%] h-[6rem]"></div>
+      </>
     </div>
   );
 };
