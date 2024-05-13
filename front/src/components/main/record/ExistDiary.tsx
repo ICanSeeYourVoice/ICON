@@ -16,6 +16,8 @@ import Clude6 from "../../../assets/svgs/record/blueClude.png";
 import Clude7 from "../../../assets/svgs/record/blueClude.png";
 import Clude8 from "../../../assets/svgs/record/blueClude.png";
 import Clude0 from "../../../assets/svgs/setting/delete.svg";
+import DoughnutChart from "./chart/DoughnutChart";
+import VerticalTimeLine from "./timeline/VerticalTimeLine";
 
 interface DiaryEntryProps {
   diary_id: number;
@@ -213,7 +215,14 @@ const ExistDiary = () => {
             </div>
           </div>
         ) : (
-          <div>chart</div>
+          <div>
+            <div className="flex flex-col items-center m-[1rem] gap-[1rem] flex-1">
+              <DoughnutChart date={selectedDate} />
+            </div>
+            <div className="flex flex-col items-center mb-[1rem] gap-[1rem] flex-1">
+              <VerticalTimeLine date={selectedDate} />
+            </div>
+          </div>
         )}
       </div>
     </div>
