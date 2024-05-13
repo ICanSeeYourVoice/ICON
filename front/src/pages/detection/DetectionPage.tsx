@@ -31,9 +31,9 @@ type Result = {
 };
 
 const DetectionPage = () => {
-  const worker = new Worker("recordingWorker.js");
   const { yamnetModel, setModel } = useYamnetStore.getState();
-
+  const { isCryDetect, isFaceDetect, isCamera, setIsFaceDetect, setIsCamera } =
+    useToggle();
   const navigate = useNavigate();
   const isBabyCry = useDetectionStore((state: any) => state.isBabyCry);
   const cryingType = useDetectionStore((state: any) => state.cryingType);
@@ -146,7 +146,7 @@ const DetectionPage = () => {
       }, 1000);
     } catch (error) {
       toast.error(
-        "행동 준비 중 오류가 발생했습니다.\n 비디오를 허용하고 다시 시작해주세요."
+        "행동감지 준비 중 오류가 발생했습니다.\n 비디오를 허용하고 다시 시작해주세요."
       );
       setCryingType("FAILED");
     } finally {
@@ -241,6 +241,8 @@ const DetectionPage = () => {
           setResults(updatedResults); // test를 위한 코드
         } else {
           if (cnt >= 4) {
+            const worker = new Worker("recordingWorker.js");
+
             streamRef.current!.getTracks().forEach((track) => track.stop());
             source?.disconnect();
             scriptNode?.disconnect();
@@ -267,9 +269,6 @@ const DetectionPage = () => {
       setLoading(false);
     }
   };
-
-  const { isCryDetect, isFaceDetect, isCamera, setIsFaceDetect, setIsCamera } =
-    useToggle();
 
   useEffect(() => {
     if (isCryDetect) {
@@ -324,12 +323,12 @@ const DetectionPage = () => {
     <div className="flex flex-col items-center justify-center w-full h-full gap-4">
       <>
         <div
-          className={`fixed w-[150px] h-[120px] bottom-0 right-0 mb-[4.5rem] mr-[1rem] ${
+          className={`fixed w-[10rem] h-[4rem] bottom-0 right-0 mb-[9rem] mr-[1rem] ${
             !isCamera && "hidden w-[2px] h-[5px]"
           }`}
         >
           <video
-            className="rounded-[15px]"
+            className="rounded-[1rem]"
             style={{ transform: "scaleX(-1)" }}
             ref={videoRef}
           />
@@ -370,25 +369,25 @@ const DetectionPage = () => {
           </div>
         )}
         {/* {cryingType ? (
-            <PulseLoader color="#c8c8c8" />
-          ) : (
-            <div className="flex flex-col items-center justify-center text-white text-xs">
-              {results.map((result, i) => (
-                <div
-                  key={i}
-                  style={{
-                    display: "flex",
-                    width: "18.5rem",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <p>{result.label} </p>
-                  <p> : ({result.probability}) </p>
-                </div>
-              ))}
-            </div>
-          )} */}
+          <PulseLoader color="#c8c8c8" />
+        ) : (
+          <div className="flex flex-col items-center justify-center text-white text-xs">
+            {results.map((result, i) => (
+              <div
+                key={i}
+                style={{
+                  display: "flex",
+                  width: "18.5rem",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <p>{result.label} </p>
+                <p> : ({result.probability}) </p>
+              </div>
+            ))}
+          </div>
+        )} */}
         <div className="flex items-center justify-center w-[80%] h-[6rem]"></div>
       </>
     </div>

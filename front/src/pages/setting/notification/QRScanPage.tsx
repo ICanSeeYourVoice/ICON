@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { createGuardian } from "../../../apis/Notification";
+import TopBar from "../../../components/common/Navigator/TopBar";
 
 const QRScanPage = () => {
   const navigate = useNavigate();
@@ -35,9 +36,16 @@ const QRScanPage = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["guardianList"] });
       toast.success(`${data?.uid}를 보호자 목록에 추가하였습니다.`);
+      setTimeout(() => {
+        toast.dismiss();
+      }, 1500);
     },
-    onError: (error) => {
-      toast.error(error.message);
+    onError: (error: any) => {
+      if (error.response.status === 400) {
+        toast.error("이미 등록된 보호자입니다");
+      } else {
+        toast.error(error.message);
+      }
     },
   });
 
@@ -94,8 +102,15 @@ const QRScanPage = () => {
   }, [data]);
 
   return (
-    <div className="w-full h-full flex items-center justify-center">
-      <video className="w-full h-full object-cover" ref={videoRef}></video>
+    <div className="flex flex-col items-center h-screen w-screen">
+      <TopBar text="QR코드 촬영" path="setting/share" />
+      <main>
+        <video
+          className="w-screen h-screen"
+          style={{ transform: "scaleX(-1)" }}
+          ref={videoRef}
+        />
+      </main>
     </div>
   );
 };

@@ -57,6 +57,6 @@ export const DETECTION_INFO = "아기의 상태를 감지하고 있어요";
 
 export const LOADING_INFO = "아기가 왜 우는지 분석 중이에요";
 
-export const FAILED_INFO = "마이크 권한을 확인해주세요";
+export const FAILED_INFO = "마이크와 비디오 권한을 확인해주세요";
 
 export const RESTART_INFO = "가운데 버튼을 눌러 재시작해주세요";
