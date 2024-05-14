@@ -132,13 +132,14 @@ const ExistDiary = () => {
                 <PulseLoader color="#7ec3f0" />
               </div>
             )}
+
             <div className="flex justify-between items-center font-bold">
               <button onClick={handleTopClick}>
                 <img src={Vector} alt="Back" />
               </button>
               <div
                 onClick={() => hanlDeleteClick(DiaryList!.date)}
-                className="pt-[1rem] flex justify-end  items-center  mb-[0.5rem]"
+                className="flex justify-end  items-center w-[80%]"
               >
                 <div className="w-[2rem] h-[2rem] flex justify-center items-center">
                   <img
@@ -169,12 +170,17 @@ const ExistDiary = () => {
         {/* 다이어리 차트 토글 */}
         <DiaryChartToggle daily={daily} handleDailyChange={handleDailyChange} />
 
+        {/* 삭제 버튼 */}
+
         {daily === "diary" ? (
           <div className="w-full flex justify-center ">
-            <div className="w-[90%] justify-center items-center  rounded-[1rem] overflow-auto p-2 pt-[2rem]">
+            <div className="w-[90%] justify-center items-center  rounded-[1rem] overflow-auto p-2 pt-[1rem]">
               <div className="relative flex justify-center items-center">
                 {DiaryList!.image_urls.length > 1 && (
-                  <button onClick={prevImage} className="absolute left-0 z-10">
+                  <button
+                    onClick={prevImage}
+                    className="absolute left-[-0.5rem] z-10"
+                  >
                     &lt;
                   </button>
                 )}
@@ -184,12 +190,15 @@ const ExistDiary = () => {
                   className="flex-none w-[20rem] h-[17rem] object-cover"
                 />
                 {DiaryList!.image_urls.length > 1 && (
-                  <button onClick={nextImage} className="absolute right-0 z-10">
+                  <button
+                    onClick={nextImage}
+                    className="absolute right-[-0.5rem]"
+                  >
                     &gt;
                   </button>
                 )}
               </div>
-              <div className="text-gray-700 text-[1rem] p-5 bg-gray-200 rounded-[1rem] mt-[0.5rem]">
+              <div className="text-gray-700 text-[1rem] p-5 bg-gray-200 rounded-[1rem] mt-[0.5rem] max-h-[7rem] overflow-y-auto">
                 {DiaryList!.content}
               </div>
             </div>

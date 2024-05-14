@@ -123,7 +123,7 @@ const ChatPage: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col gap-[1rem] border-t w-screen p-[2rem]">
+    <div className="flex flex-col gap-[1rem] w-screen p-[2rem]">
       <div className="flex flex-col-reverse overflow-auto h-[70vh]">
         {messages.map((message, index, arr) => {
           const isFirstMessageOfDay =
