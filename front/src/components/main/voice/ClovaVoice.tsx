@@ -113,7 +113,7 @@ const ClovaVoice = () => {
           <button
             className={`flex-1 p-2 transition-colors duration-300 ease-in-out ${
               gender === "female"
-                ? "bg-gray-300 text-white shadow-lg"
+                ? "bg-primary text-white shadow-lg"
                 : "bg-gray-200 hover:bg-gray-300"
             } rounded-l-lg`}
             onClick={() => handleGenderChange("female")}
@@ -123,7 +123,7 @@ const ClovaVoice = () => {
           <button
             className={`flex-1 p-2 transition-colors duration-300 ease-in-out ${
               gender === "male"
-                ? "bg-gray-300 text-white shadow-lg"
+                ? "bg-primary text-white shadow-lg"
                 : "bg-gray-200 hover:bg-gray-300"
             } rounded-r-lg`}
             onClick={() => handleGenderChange("male")}

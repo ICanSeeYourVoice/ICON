@@ -20,6 +20,13 @@ const EmojiModal = ({
 
   if (!showModal) return null;
 
+  const handleSubmit = () => {
+    if (selectedEmoji) {
+      setShowModal(false);
+      navigate("/record/diary/register");
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center">
       <div className="bg-gray-100 pl-[1.5rem] pr-[1.5rem] pb-[1.5rem] pt-[1rem] rounded-[1rem] shadow-lg">
@@ -46,11 +53,13 @@ const EmojiModal = ({
         </div>
         <div className="flex justify-around">
           <button
-            className="bg-gray-300 text-white py-1 px-1 rounded-[1rem] hover:bg-gray-400"
-            onClick={() => {
-              setShowModal(false);
-              navigate("/record/diary/register");
-            }}
+            className={`py-1 px-1 rounded-[1rem] ${
+              selectedEmoji
+                ? "bg-primary text-white hover:bg-gray-400"
+                : "bg-gray-300 text-gray-400 cursor-not-allowed"
+            }`}
+            onClick={handleSubmit}
+            disabled={!selectedEmoji}
           >
             <img src={Arrow} alt="arrow" />
           </button>
