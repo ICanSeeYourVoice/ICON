@@ -204,11 +204,11 @@ const ExistDiary = () => {
             </div>
           </div>
         ) : (
-          <div>
-            <div className="flex flex-col items-center m-[1rem] gap-[1rem] flex-1">
+          <div className="flex flex-col w-[90%] h-full">
+            <div className="flex flex-col items-center my-[1rem] gap-[1rem] flex-1">
               <DoughnutChart date={selectedDate} />
             </div>
-            <div className="flex flex-col items-center mb-[1rem] gap-[1rem] flex-1">
+            <div className="flex flex-col items-center gap-[1rem] flex-1">
               <VerticalTimeLine date={selectedDate} />
             </div>
           </div>
