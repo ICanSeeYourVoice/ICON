@@ -29,7 +29,9 @@ public class Conversation {
 
 		ArrayList<ChatMessage> latestMessages = new ArrayList<>();
 
-		for (int i = chatMessages.size() - 1; i >= chatMessages.size() - 5 && i >= 0; i--) {
+		int idx = chatMessages.size() >= 6 ? chatMessages.size() - 6 : 0;
+
+		for (int i = idx; i < chatMessages.size(); i++) {
 			latestMessages.add(this.getChatMessages().get(i));
 		}
 
