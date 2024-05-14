@@ -40,7 +40,7 @@ public class ConversationService {
 				+ "The answer should be in Korean, and the appropriate emoticon should be used. "
 				+ "You should answer so that the user feels familiar.\n"
 				+ "You never answer questions that don't fit my field.\n"
-				+ "Please write it in 2 paragraphs.", LocalDateTime.now()));
+				+ "Please write it in 1 paragraphs.", LocalDateTime.now()));
 
 		chatMessages.addAll(conversation.getLatestMessage());
 
