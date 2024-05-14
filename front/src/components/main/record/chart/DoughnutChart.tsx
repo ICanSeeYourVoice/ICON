@@ -66,7 +66,6 @@ const DoughnutChart: React.FC<DoughnutChartProps> = (date) => {
     responsive: true,
     maintainAspectRatio: false,
   };
-
   return (
     <>
       {isLoadingChartData ? (
@@ -74,7 +73,7 @@ const DoughnutChart: React.FC<DoughnutChartProps> = (date) => {
           <PulseLoader color="#c8c8c8" />
         </div>
       ) : chartData && chartData.total === 0 ? (
-        <div className="flex items-center justify-center w-full h-full">
+        <div className="flex items-center justify-center w-full h-full bg-primary rounded-xl">
           <div>오늘은 아기가 울지 않았어요😊</div>
         </div>
       ) : (

@@ -3,6 +3,8 @@ import hungry from "../assets/svgs/detection/hungry.svg";
 import uncomfortable from "../assets/svgs/detection/uncomfortable.svg";
 import sick from "../assets/svgs/detection/sick.svg";
 import burp from "../assets/svgs/detection/burp.svg";
+import baby from "../assets/svgs/detection/baby.svg";
+
 interface RecordItem {
   ICON: JSX.Element;
   MESSAGE: string;
@@ -20,6 +22,18 @@ interface Record {
   [key: string]: RecordItem;
 }
 export const RECORD: Record = {
+  BABY: {
+    ICON: <img width={15} height={15} src={baby} alt="baby Icon" />,
+    MESSAGE: "오늘은 아기가 울지 않았어요😊",
+    COLOR: "#7BB7F7",
+    ICONSTYLE: {
+      background: "#7BB7F7",
+      color: "#fff",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+  },
   SLEEPY: {
     ICON: <img width={15} height={15} src={sleepy} alt="sleepy Icon" />,
     MESSAGE: "아기가 졸려서 울었어요.",
