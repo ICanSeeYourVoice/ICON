@@ -144,9 +144,11 @@ const DetailDiary = () => {
             {daily === "diary" ? (
               <div
                 onClick={goToRegister}
-                className="w-[70%] h-[10rem] flex justify-center items-center text-[1.5rem] text-gray-500 border border-gray-600 rounded-[1rem] mt-[5rem]"
+                className="w-full justify-center flex items-center mt-[3rem]"
               >
-                일지를 작성해 주세요
+                <div className="text-white fixed bottom-[5rem] w-[3rem] h-[3rem] flex justify-center items-center shadow-xl hover:bg-gray-400 bg-gray-300 text-[2rem] rounded-[1rem]">
+                  +
+                </div>
               </div>
             ) : (
               <div>

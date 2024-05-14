@@ -4,8 +4,7 @@ import "react-calendar/dist/Calendar.css";
 import "./StyledCalender.css";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
-import { useDateStore, useEmojiStore } from "../../../stores/diary";
-import Arrow from "../../../assets/svgs/record/arrowRight.svg";
+import { useDateStore } from "../../../stores/diary";
 import { useQuery } from "@tanstack/react-query";
 import { diaryList } from "../../../apis/Diary";
 import Clude1 from "../../../assets/svgs/record/blueClude.png";
@@ -35,10 +34,7 @@ interface ImageMap {
 
 const DiaryCalendar = () => {
   const [value, setValue] = useState<Date>(new Date());
-  const [showModal, setShowModal] = useState(false);
-  const selectedEmoji = useEmojiStore((state) => state.selectedEmojiId);
   const { setSelectedDate } = useDateStore();
-  const { setSelectedEmojiId } = useEmojiStore();
   const navigate = useNavigate();
 
   // 일지 데이터 받아오기
@@ -88,85 +84,22 @@ const DiaryCalendar = () => {
     return;
   };
 
-  // 선택한 이모지 zustand에 저장
-  const handleEmojiClick = (id: string) => {
-    setSelectedEmojiId(id);
-  };
-
-  const onModalClick = () => {
-    setShowModal(true);
-  };
-
-  const handleCancel = () => {
-    setShowModal(false);
-    setSelectedEmojiId(null);
-  };
-
   // 미래 일지 작성 금지
   const tileDisabled = ({ date }: { date: Date }) => date > new Date();
 
   return (
-    <div>
-      <div className="mt-[2rem] flex justify-center items-center border-gray-200 rounded-[1.3rem] shadow-xl">
-        <Calendar
-          locale="en-US"
-          onChange={handleChange}
-          value={value}
-          next2Label={null}
-          prev2Label={null}
-          formatDay={(_, date) => moment(date).format("D")}
-          tileContent={addContent}
-          showNeighboringMonth={false}
-          tileDisabled={tileDisabled}
-        />
-      </div>
-
-      <div
-        onClick={onModalClick}
-        className="w-full justify-center flex items-center mt-[3rem]"
-      >
-        <div className="text-white fixed bottom-[5rem] w-[3rem] h-[3rem] flex justify-center items-center shadow-xl hover:bg-gray-400 bg-gray-300 text-[2rem] rounded-[1rem]">
-          +
-        </div>
-      </div>
-      {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center">
-          <div className="bg-gray-100 pl-[1.5rem] pr-[1.5rem] pb-[1.5rem] pt-[1rem] rounded-[1rem] shadow-lg  ">
-            <div className="w-full flex justify-end mb-[1rem]">
-              <button className=" text-black" onClick={handleCancel}>
-                x
-              </button>
-            </div>
-            <div className="flex justify-center items-center mb-[2rem] text-sm">
-              오늘의 감정을 골라보세요
-            </div>
-            <div className="grid grid-cols-3 gap-4 mb-[2rem]">
-              {Object.entries(images).map(([id, { url }]) => (
-                <img
-                  key={id}
-                  src={url}
-                  alt="Emoji"
-                  className={`rounded-full w-[3rem] h-[3rem] cursor-pointer ${
-                    selectedEmoji === id ? "scale-125 shadow-lg" : ""
-                  }`}
-                  onClick={() => handleEmojiClick(id)}
-                />
-              ))}
-            </div>
-            <div className="flex justify-around">
-              <button
-                className="bg-gray-300 text-white py-1 px-1 rounded-[1rem] hover:bg-gray-400"
-                onClick={() => {
-                  setShowModal(false);
-                  navigate("/record/diary/register");
-                }}
-              >
-                <img src={Arrow} alt="arrow" />
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+    <div className="mt-[3rem] flex justify-center items-center border-gray-200 rounded-[1.3rem] shadow-xl">
+      <Calendar
+        locale="en-US"
+        onChange={handleChange}
+        value={value}
+        next2Label={null}
+        prev2Label={null}
+        formatDay={(_, date) => moment(date).format("D")}
+        tileContent={addContent}
+        showNeighboringMonth={false}
+        tileDisabled={tileDisabled}
+      />
     </div>
   );
 };
