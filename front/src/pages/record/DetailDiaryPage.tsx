@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import Vector from "../../assets/svgs/nav/Vector.svg";
 import { PulseLoader } from "react-spinners";
-import Arrow from "../../assets/svgs/record/arrowRight.svg";
 import { diaryDetail } from "../../apis/Diary";
 import ExistDiary from "../../components/main/record/ExistDiary";
 import Clude1 from "../../assets/svgs/record/blueClude.png";
@@ -19,6 +18,8 @@ import Clude0 from "../../assets/svgs/record/blueClude.png";
 import { useEmojiStore } from "../../stores/diary";
 import DoughnutChart from "../../components/main/record/chart/DoughnutChart";
 import VerticalTimeLine from "../../components/main/record/timeline/VerticalTimeLine";
+import DiaryChartToggle from "../../components/main/record/DiaryChartToggle";
+import EmojiModal from "../../components/main/record/EmojiModal";
 
 interface DiaryEntryProps {
   diary_id: number;
@@ -108,7 +109,7 @@ const DetailDiary = () => {
             </div>
 
             {/* 이모지 */}
-            <div className="justify-center items-center flex mt-[6rem]">
+            <div className="justify-center items-center flex mt-[4.5rem]">
               <img src={Clude0} alt="" className=" w-[5rem] h-[5rem]" />
             </div>
 
@@ -118,35 +119,23 @@ const DetailDiary = () => {
             </div>
 
             {/* 다이어리 차트 토글 */}
-            <div className="flex w-[90%] justify-start mt-[2rem]">
-              <button
-                className={`flex-1 p-2 transition-colors duration-300 ease-in-out ${
-                  daily === "diary"
-                    ? "bg-gray-300 text-white shadow-lg"
-                    : "bg-gray-200 hover:bg-gray-300"
-                } rounded-l-lg`}
-                onClick={() => handleDailyChange("diary")}
-              >
-                다이어리
-              </button>
-              <button
-                className={`flex-1 p-2 transition-colors duration-300 ease-in-out ${
-                  daily === "chart"
-                    ? "bg-gray-300 text-white shadow-lg"
-                    : "bg-gray-200 hover:bg-gray-300"
-                } rounded-r-lg`}
-                onClick={() => handleDailyChange("chart")}
-              >
-                통계
-              </button>
-            </div>
-
+            <DiaryChartToggle
+              daily={daily}
+              handleDailyChange={handleDailyChange}
+            />
             {daily === "diary" ? (
-              <div
-                onClick={goToRegister}
-                className="w-[70%] h-[10rem] flex justify-center items-center text-[1.5rem] text-gray-500 border border-gray-600 rounded-[1rem] mt-[5rem]"
-              >
-                일지 작성하러 가기
+              <div>
+                <div
+                  onClick={goToRegister}
+                  className="w-full justify-center flex items-center mt-[3rem]"
+                >
+                  <div className="mt-[2rem]">
+                    일지가 없어요 일지를 작성해주세요
+                  </div>
+                  <div className="text-white fixed bottom-[5rem] w-[3rem] h-[3rem] flex justify-center items-center shadow-xl hover:bg-gray-400 bg-gray-300 text-[2rem] rounded-[1rem]">
+                    +
+                  </div>
+                </div>
               </div>
             ) : (
               <div>
@@ -160,42 +149,14 @@ const DetailDiary = () => {
             )}
           </div>
           {showModal && (
-            <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center">
-              <div className="bg-gray-100 pl-[1.5rem] pr-[1.5rem] pb-[1.5rem] pt-[1rem] rounded-[1rem] shadow-lg  ">
-                <div className="w-full flex justify-end mb-[1rem]">
-                  <button className=" text-black" onClick={handleCancel}>
-                    x
-                  </button>
-                </div>
-                <div className="flex justify-center items-center mb-[2rem] text-sm">
-                  오늘의 감정을 골라보세요
-                </div>
-                <div className="grid grid-cols-3 gap-4 mb-[2rem]">
-                  {Object.entries(images).map(([id, { url }]) => (
-                    <img
-                      key={id}
-                      src={url}
-                      alt="Emoji"
-                      className={`rounded-full w-[3rem] h-[3rem] cursor-pointer ${
-                        selectedEmoji === id ? "scale-125 shadow-lg" : ""
-                      }`}
-                      onClick={() => handleEmojiClick(id)}
-                    />
-                  ))}
-                </div>
-                <div className="flex justify-around">
-                  <button
-                    className="bg-gray-300 text-white py-1 px-1 rounded-[1rem] hover:bg-gray-400"
-                    onClick={() => {
-                      setShowModal(false);
-                      navigate("/record/diary/register");
-                    }}
-                  >
-                    <img src={Arrow} alt="arrow" />
-                  </button>
-                </div>
-              </div>
-            </div>
+            <EmojiModal
+              showModal={showModal}
+              setShowModal={setShowModal}
+              handleCancel={handleCancel}
+              handleEmojiClick={handleEmojiClick}
+              selectedEmoji={selectedEmoji}
+              images={images}
+            />
           )}
         </div>
       ) : (
