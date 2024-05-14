@@ -18,6 +18,7 @@ import Clude8 from "../../../assets/svgs/record/blueClude.png";
 import Clude0 from "../../../assets/svgs/setting/delete.svg";
 import DoughnutChart from "./chart/DoughnutChart";
 import VerticalTimeLine from "./timeline/VerticalTimeLine";
+import DiaryChartToggle from "./DiaryChartToggle";
 
 interface DiaryEntryProps {
   diary_id: number;
@@ -166,28 +167,7 @@ const ExistDiary = () => {
         </div>
 
         {/* 다이어리 차트 토글 */}
-        <div className="flex w-[90%] justify-start mt-[2rem]">
-          <button
-            className={`flex-1 p-2 transition-colors duration-300 ease-in-out ${
-              daily === "diary"
-                ? "bg-gray-300 text-white"
-                : "bg-gray-100 hover:bg-gray-300"
-            } rounded-l-lg`}
-            onClick={() => handleDailyChange("diary")}
-          >
-            다이어리
-          </button>
-          <button
-            className={`flex-1 p-2 transition-colors duration-300 ease-in-out ${
-              daily === "chart"
-                ? "bg-gray-300 text-white"
-                : "bg-gray-100 hover:bg-gray-300"
-            } rounded-r-lg`}
-            onClick={() => handleDailyChange("chart")}
-          >
-            통계
-          </button>
-        </div>
+        <DiaryChartToggle daily={daily} handleDailyChange={handleDailyChange} />
 
         {daily === "diary" ? (
           <div className="w-full flex justify-center ">
