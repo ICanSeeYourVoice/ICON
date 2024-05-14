@@ -25,4 +25,15 @@ public class Conversation {
 		this.chatMessages.add(chatMessage);
 	}
 
+	public List<ChatMessage> getLatestMessage() {
+
+		ArrayList<ChatMessage> latestMessages = new ArrayList<>();
+
+		for (int i = chatMessages.size() - 1; i >= chatMessages.size() - 5 && i >= 0; i--) {
+			latestMessages.add(this.getChatMessages().get(i));
+		}
+
+		return latestMessages;
+	}
+
 }

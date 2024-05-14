@@ -42,7 +42,7 @@ public class ConversationService {
 				+ "You never answer questions that don't fit my field.\n"
 				+ "Please write it in 2 paragraphs.", LocalDateTime.now()));
 
-		chatMessages.addAll(conversation.getChatMessages());
+		chatMessages.addAll(conversation.getLatestMessage());
 
 		Prompt prompt = new Prompt(chatMessages);
 
