@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import Arrow from "../../assets/svgs/record/arrowRight.svg";
+import Arrow from "../../../assets/svgs/record/arrowRight.svg";
 
 const EmojiModal = ({
   showModal,

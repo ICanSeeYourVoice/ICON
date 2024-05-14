@@ -123,14 +123,18 @@ const DetailDiary = () => {
               daily={daily}
               handleDailyChange={handleDailyChange}
             />
-
             {daily === "diary" ? (
-              <div
-                onClick={goToRegister}
-                className="w-full justify-center flex items-center mt-[3rem]"
-              >
-                <div className="text-white fixed bottom-[5rem] w-[3rem] h-[3rem] flex justify-center items-center shadow-xl hover:bg-gray-400 bg-gray-300 text-[2rem] rounded-[1rem]">
-                  +
+              <div>
+                <div
+                  onClick={goToRegister}
+                  className="w-full justify-center flex items-center mt-[3rem]"
+                >
+                  <div className="mt-[2rem]">
+                    일지가 없어요 일지를 작성해주세요
+                  </div>
+                  <div className="text-white fixed bottom-[5rem] w-[3rem] h-[3rem] flex justify-center items-center shadow-xl hover:bg-gray-400 bg-gray-300 text-[2rem] rounded-[1rem]">
+                    +
+                  </div>
                 </div>
               </div>
             ) : (

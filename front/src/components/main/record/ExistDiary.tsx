@@ -198,7 +198,7 @@ const ExistDiary = () => {
                   </button>
                 )}
               </div>
-              <div className="text-gray-700 text-[1rem] p-5 bg-gray-200 rounded-[1rem] mt-[0.5rem] max-h-[7rem] overflow-y-auto">
+              <div className="text-gray-700 text-[1rem] p-5 border-[0.1rem] rounded-[1rem] mt-[0.5rem] max-h-[7rem] overflow-y-auto">
                 {DiaryList!.content}
               </div>
             </div>
