@@ -37,24 +37,26 @@ const VerticalTimeLine: React.FC<VerticalTimeLineProps> = (date) => {
     });
 
   return (
-    <div className="flex-col w-full">
-      <div className="flex justify-start text-slate-500 text-xs">타임라인</div>
+    <div className="flex-col w-full h-full">
+      <div className="flex justify-start text-slate-500 text-xs mb-[0.5rem]">
+        타임라인
+      </div>
 
       {isLoadingChartDetailData ? (
-        <div className="flex items-center justify-center w-full h-full">
+        <div className="flex items-center justify-center w-full ">
           <PulseLoader color="#c8c8c8" />
         </div>
       ) : chartDetailData && chartDetailData.statisticsResponse.total === 0 ? (
-        <div className="flex items-center justify-center w-full h-full">
+        <div className="flex items-center justify-center w-full ">
           <div>오늘은 아기가 울지 않았어요😊</div>
         </div>
       ) : !chartDetailData ? (
-        <div className="flex items-center justify-center w-full h-full">
+        <div className="flex items-center justify-center w-full ">
           <div>데이터를 불러오는데 실패했어요😢</div>
           <div>다시 시도해주세요.</div>
         </div>
       ) : (
-        <div className="h-[20vh] overflow-y-scroll no-scrollbar">
+        <div className="h-[30vh] overflow-y-scroll no-scrollbar">
           <VerticalTimeline layout="1-column-left" lineColor="#7BB7F7">
             {chartDetailData &&
               chartDetailData.timeline.map((val, index) => {
