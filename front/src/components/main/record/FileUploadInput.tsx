@@ -13,7 +13,6 @@ const FileUploadInput: React.FC = () => {
   const { mutate: ImageRegister } = useMutation({
     mutationFn: diaryImage,
     onSuccess: (res) => {
-      toast.success("이미지가 성공적으로 선택 되었습니다.");
       addImage(res.url);
     },
     onError: (error) => {
