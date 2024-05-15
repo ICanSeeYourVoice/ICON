@@ -49,6 +49,7 @@ public class AnalyzeService {
 
 	//울음 분석 결과에서 이유만 뽑기
 	private static String getKey(AnalyzeResult analyzeResult) {
+		if(analyzeResult.prediction().equals("burping")) return "DISCOMFORT";
 		return analyzeResult.prediction().toUpperCase();
 	}
 
