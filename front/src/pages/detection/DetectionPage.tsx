@@ -49,7 +49,7 @@ const DetectionPage = () => {
   const { writeCharacteristic } = useBleStore();
   const setLoading = useLoading((state) => state.setLoading);
 
-  const [, setResults] = useState<Result[]>([]); // test위한 코드
+  const [results, setResults] = useState<Result[]>([]); // test위한 코드
 
   const { mutate: poseMutate } = useMutation({
     mutationFn: poseAlarm,
@@ -115,6 +115,19 @@ const DetectionPage = () => {
             videoRef.current.play();
           }
         });
+
+      // test로 인한 코드
+      // navigator.mediaDevices
+      //   .getUserMedia({
+      //     video: true,
+      //   })
+      //   .then((stream) => {
+      //     camMediaStream.current = stream;
+      //     if (videoRef.current) {
+      //       videoRef.current.srcObject = stream;
+      //       videoRef.current.play();
+      //     }
+      //   });
 
       const optionsSSDMobileNet = new faceapi.SsdMobilenetv1Options({
         minConfidence: 0.2,
@@ -202,7 +215,7 @@ const DetectionPage = () => {
           cnt++;
         } else {
           initRecordCnt++;
-          console.log("cry: cnt");
+          // console.log("cry: cnt");
           if (initRecordCnt >= 8) {
             initRecordCnt = 0;
             audioBuffer = [];
@@ -228,7 +241,16 @@ const DetectionPage = () => {
               probability: probabilities[i].toFixed(3),
             });
 
-            if (classes[i] === 20 && probabilities[i] >= 0.5) {
+            // test 코드
+            if (classes[i] === 20) console.log("cry: " + probabilities[i]);
+            if (classes[i] === 76) console.log("cat: " + probabilities[i]);
+            if (classes[i] === 78) console.log("meow: " + probabilities[i]);
+            if (classes[i] === 76 && probabilities[i] >= 0.7 && i < 3) {
+              console.log("고양이");
+              return;
+            }
+
+            if (classes[i] === 20 && probabilities[i] >= 0.35 && i < 3) {
               // if (classes[i] === 20) {
               isCry = true;
               setIsBabyCry(true);
@@ -357,7 +379,7 @@ const DetectionPage = () => {
               : DETECTION.NORMAL.COLOR
           }
         />
-        {cryingType ? (
+        {/* {cryingType ? (
           <PulseLoader color="#c8c8c8" />
         ) : (
           <div className="flex flex-col items-center justify-center text-gray-0 text-xl">
@@ -367,8 +389,8 @@ const DetectionPage = () => {
               상태에요
             </p>
           </div>
-        )}
-        {/* {cryingType ? (
+        )} */}
+        {cryingType ? (
           <PulseLoader color="#c8c8c8" />
         ) : (
           <div className="flex flex-col items-center justify-center text-white text-xs">
@@ -387,7 +409,7 @@ const DetectionPage = () => {
               </div>
             ))}
           </div>
-        )} */}
+        )}
         <div className="flex items-center justify-center w-[80%] h-[6rem] invisible"></div>
       </>
     </div>
