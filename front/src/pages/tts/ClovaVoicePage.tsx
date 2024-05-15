@@ -1,10 +1,6 @@
 import ClovaVoice from "../../components/main/voice/ClovaVoice";
 const ClovaVoicePage = () => {
-  return (
-    <div>
-      <ClovaVoice />
-    </div>
-  );
+  return <ClovaVoice />;
 };
 
 export default ClovaVoicePage;

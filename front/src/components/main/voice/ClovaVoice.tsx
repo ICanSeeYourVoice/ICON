@@ -106,8 +106,8 @@ const ClovaVoice = () => {
   };
 
   return (
-    <div className="flex flex-col  items-center justify-center mt-[6rem]">
-      <div className="w-[22rem] h-[18rem]  border-gray-300 border-[0.1rem] bg-gray-100 rounded-[1rem] shadow-lg flex flex-col justify-center items-center p-4">
+    <div className="flex flex-col items-center justify-center w-full gap-10 mb-[6rem]">
+      <div className="h-[18rem] w-[80%] bg-gray-100 rounded-[1rem]  flex flex-col justify-center items-center p-4">
         {/* 남자 여자 토글 */}
         <div className="flex justify-start w-full mb-[1rem]">
           <button
@@ -133,7 +133,7 @@ const ClovaVoice = () => {
         </div>
         <div className="flex flex-col justify-center items-center w-full">
           {!audioUrl && (
-            <div className="w-full flex justify-center">
+            <div className="w-full flex justify-center mx-[2rem]">
               <WaveSurferComponent />
             </div>
           )}
@@ -169,8 +169,8 @@ const ClovaVoice = () => {
       </div>
 
       {/* 즐겨찾기 문구 */}
-      <div className="fixed bottom-[3.5rem] pt-3 pl-3 pr-3 bg-white shadow-xl rounded-[1rem]  border-gray-300 border-[0.1rem]">
-        <div className="text-gray-500 mb-[0.5rem] text-[1.1rem] ml-[0.5rem]">
+      <div className="flex flex-col justify-center w-[80%] p-3 bg-white rounded-[1rem] ">
+        <div className="text-gray-500 mb-[1rem] text-[1.1rem]">
           즐겨찾기 문구
         </div>
         {voices.length >= 0 && voices.length < 3 ? (

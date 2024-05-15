@@ -38,13 +38,13 @@ const Button = () => {
 
   return (
     <div className="flex justify-center">
-      <div className="w-[20rem] h-[5rem] p-2 border-b border-gray-300 overflow-hidden">
+      <div className="w-full  border-gray-300">
         <input
           type="text"
           placeholder="등록할 문구를 입력해주세요"
           value={text}
           onChange={handleChange}
-          className="mt-1 text-sx w-full p-1"
+          className="mt-1 text-sx w-full"
         />
         <div className="flex justify-between">
           <div></div>

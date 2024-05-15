@@ -10,12 +10,9 @@ const DateDisplay: React.FC<{ date: Date }> = ({ date }) => {
   };
 
   return (
-    <div className="flex justify-center pb-8 pt-5">
-      <div className="w-[6rem] h-[1rem] relative">
-        <div className="w-[5rem] h-[1.2rem] left-0 top-0 absolute bg-zinc-100 rounded-[1rem]" />
-        <div className="tracking-wider left-[0.5rem] top-[0.2rem] absolute text-center text-slate-500 text-[0.48rem] ">
-          {formatDate(date)}
-        </div>
+    <div className="flex justify-center items-center h-[1rem] mb-[1.8rem]">
+      <div className="bg-[#F3F3F3] text-sub-0 px-[0.8rem] py-[0.2rem] text-[0.5rem] rounded-full">
+        <span>{formatDate(date)}</span>
       </div>
     </div>
   );
