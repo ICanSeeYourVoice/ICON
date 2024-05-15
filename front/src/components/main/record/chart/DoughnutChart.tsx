@@ -29,7 +29,7 @@ const DoughnutChart: React.FC<DoughnutChartProps> = (date) => {
     });
 
   const data = {
-    labels: ["배고파요", "졸려요", "불편해요", "아파요"],
+    labels: ["배고픔", "졸림", "불편함", "복통"],
     datasets: [
       {
         label: "횟수",
