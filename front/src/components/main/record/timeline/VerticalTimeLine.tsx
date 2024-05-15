@@ -59,7 +59,7 @@ const VerticalTimeLine: React.FC<VerticalTimeLineProps> = (date) => {
           <div className="flex justify-start text-slate-500 text-xs mb-[0.5rem]">
             타임라인
           </div>
-          <div className="h-[30vh] overflow-y-scroll no-scrollbar">
+          <div className="h-[27vh] overflow-y-scroll no-scrollbar">
             <VerticalTimeline layout="1-column-left" lineColor="#7BB7F7">
               {chartDetailData &&
                 chartDetailData.timeline.map((val, index) => {
