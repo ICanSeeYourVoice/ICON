@@ -139,7 +139,7 @@ const DetailDiary = () => {
               </div>
             ) : (
               <div className="flex flex-col w-[90%] h-full">
-                <div className="flex flex-col items-center my-[1rem] gap-[1rem]">
+                <div className="flex flex-col items-center my-[1rem] gap-[1rem] flex-1">
                   <DoughnutChart date={selectedDate} />
                 </div>
                 <div className="flex flex-col items-center gap-[1rem] flex-1">

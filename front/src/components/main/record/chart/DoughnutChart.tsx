@@ -73,11 +73,11 @@ const DoughnutChart: React.FC<DoughnutChartProps> = (date) => {
           <PulseLoader color="#c8c8c8" />
         </div>
       ) : chartData && chartData.total === 0 ? (
-        <div className="flex items-center justify-center w-full h-full bg-primary rounded-xl">
+        <div className="flex items-center justify-center w-full h-full">
           <div>오늘은 아기가 울지 않았어요😊</div>
         </div>
       ) : (
-        <div className="flex w-full">
+        <div className="flex w-full h-full">
           <Doughnut
             ref={chartRef}
             data={data}
