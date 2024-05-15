@@ -7,15 +7,15 @@ import { useNavigate } from "react-router-dom";
 import { useDateStore } from "../../../stores/diary";
 import { useQuery } from "@tanstack/react-query";
 import { diaryList } from "../../../apis/Diary";
-import Clude1 from "../../../assets/svgs/record/blueClude.png";
-import Clude2 from "../../../assets/svgs/record/blueClude.png";
-import Clude4 from "../../../assets/svgs/record/blueClude.png";
-import Clude3 from "../../../assets/svgs/record/blueClude.png";
-import Clude5 from "../../../assets/svgs/record/blueClude.png";
-import Clude6 from "../../../assets/svgs/record/blueClude.png";
-import Clude7 from "../../../assets/svgs/record/blueClude.png";
-import Clude8 from "../../../assets/svgs/record/blueClude.png";
-import Clude0 from "../../../assets/svgs/record/blueClude.png";
+import Clude1 from "../../../assets/svgs/record/1.png";
+import Clude2 from "../../../assets/svgs/record/2.png";
+import Clude4 from "../../../assets/svgs/record/3.png";
+import Clude3 from "../../../assets/svgs/record/4.png";
+import Clude5 from "../../../assets/svgs/record/5.png";
+import Clude6 from "../../../assets/svgs/record/6.png";
+import Clude7 from "../../../assets/svgs/record/7.png";
+import Clude8 from "../../../assets/svgs/record/8.png";
+import Clude9 from "../../../assets/svgs/record/9.png";
 
 interface DiaryEntryProps {
   diary_id: number;
@@ -44,7 +44,7 @@ const DiaryCalendar = () => {
   });
 
   const images: ImageMap = {
-    clude: { id: "clude", url: Clude0 },
+    clude9: { id: "clude", url: Clude9 },
     clude1: { id: "clude1", url: Clude1 },
     clude2: { id: "clude2", url: Clude2 },
     clude3: { id: "clude2", url: Clude3 },
@@ -73,7 +73,7 @@ const DiaryCalendar = () => {
 
     if (diaryEntry) {
       return (
-        <div className="w-[1.8rem] h-[1.7rem] flex justify-center items-center">
+        <div className="w-[2.3rem] h-[2.3rem] flex justify-center items-center">
           <img
             src={images[diaryEntry.emoji].url}
             alt={`${diaryEntry.emoji} emoji`}

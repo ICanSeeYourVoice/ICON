@@ -9,7 +9,7 @@ const DiaryChartToggle = ({
     <button
       className={`flex-1 p-2 transition-colors duration-300 ease-in-out ${
         daily === "diary"
-          ? "bg-gray-300 text-white"
+          ? "bg-primary text-white"
           : "bg-gray-100 hover:bg-gray-300"
       } rounded-l-lg`}
       onClick={() => handleDailyChange("diary")}
@@ -19,7 +19,7 @@ const DiaryChartToggle = ({
     <button
       className={`flex-1 p-2 transition-colors duration-300 ease-in-out ${
         daily === "chart"
-          ? "bg-gray-300 text-white"
+          ? "bg-primary text-white"
           : "bg-gray-100 hover:bg-gray-300"
       } rounded-r-lg`}
       onClick={() => handleDailyChange("chart")}

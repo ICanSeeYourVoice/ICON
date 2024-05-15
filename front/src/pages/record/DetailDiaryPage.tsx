@@ -6,14 +6,15 @@ import Vector from "../../assets/svgs/nav/Vector.svg";
 import { PulseLoader } from "react-spinners";
 import { diaryDetail } from "../../apis/Diary";
 import ExistDiary from "../../components/main/record/ExistDiary";
-import Clude1 from "../../assets/svgs/record/blueClude.png";
-import Clude2 from "../../assets/svgs/record/blueClude.png";
-import Clude4 from "../../assets/svgs/record/blueClude.png";
-import Clude3 from "../../assets/svgs/record/blueClude.png";
-import Clude5 from "../../assets/svgs/record/blueClude.png";
-import Clude6 from "../../assets/svgs/record/blueClude.png";
-import Clude7 from "../../assets/svgs/record/blueClude.png";
-import Clude8 from "../../assets/svgs/record/blueClude.png";
+import Clude1 from "../../assets/svgs/record/1.png";
+import Clude2 from "../../assets/svgs/record/2.png";
+import Clude4 from "../../assets/svgs/record/3.png";
+import Clude3 from "../../assets/svgs/record/4.png";
+import Clude5 from "../../assets/svgs/record/5.png";
+import Clude6 from "../../assets/svgs/record/6.png";
+import Clude7 from "../../assets/svgs/record/7.png";
+import Clude8 from "../../assets/svgs/record/8.png";
+import Clude9 from "../../assets/svgs/record/9.png";
 import Clude0 from "../../assets/svgs/record/blueClude.png";
 import { useEmojiStore } from "../../stores/diary";
 import DoughnutChart from "../../components/main/record/chart/DoughnutChart";
@@ -64,7 +65,7 @@ const DetailDiary = () => {
   const formattedDayOfWeek = moment(selectedDate).format("dddd");
 
   const images: ImageMap = {
-    clude: { id: "clude", url: Clude0 },
+    clude9: { id: "clude", url: Clude9 },
     clude1: { id: "clude1", url: Clude1 },
     clude2: { id: "clude2", url: Clude2 },
     clude3: { id: "clude2", url: Clude3 },
@@ -127,13 +128,15 @@ const DetailDiary = () => {
               <div>
                 <div
                   onClick={goToRegister}
-                  className="w-full justify-center flex items-center mt-[3rem]"
+                  className="w-full justify-center  items-center mt-[3rem]"
                 >
                   <div className="mt-[2rem]">
                     일지가 없어요 일지를 작성해주세요
                   </div>
-                  <div className="text-white fixed bottom-[5rem] w-[3rem] h-[3rem] flex justify-center items-center shadow-xl hover:bg-gray-400 bg-gray-300 text-[2rem] rounded-[1rem]">
-                    +
+                  <div className="w-full flex justify-center mt-[3rem]">
+                    <div className="text-white  w-[3rem] h-[3rem] flex justify-center items-center shadow-xl hover:bg-gray-400 bg-gray-300 text-[2rem] rounded-[1rem]">
+                      +
+                    </div>
                   </div>
                 </div>
               </div>

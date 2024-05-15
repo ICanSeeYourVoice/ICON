@@ -1,20 +1,19 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { diaryDelete, diaryDetail } from "../../../apis/Diary";
 import { useState } from "react";
-import toast from "react-hot-toast";
 import Trash from "../../../assets/svgs/record/blackTrash.svg";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import Vector from "../../../assets/svgs/nav/Vector.svg";
 import { PulseLoader } from "react-spinners";
-import Clude1 from "../../../assets/svgs/record/blueClude.png";
-import Clude2 from "../../../assets/svgs/record/blueClude.png";
-import Clude4 from "../../../assets/svgs/record/blueClude.png";
-import Clude3 from "../../../assets/svgs/record/blueClude.png";
-import Clude5 from "../../../assets/svgs/record/blueClude.png";
-import Clude6 from "../../../assets/svgs/record/blueClude.png";
-import Clude7 from "../../../assets/svgs/record/blueClude.png";
-import Clude8 from "../../../assets/svgs/record/blueClude.png";
+import Clude1 from "../../../assets/svgs/record/1.png";
+import Clude2 from "../../../assets/svgs/record/2.png";
+import Clude4 from "../../../assets/svgs/record/3.png";
+import Clude3 from "../../../assets/svgs/record/4.png";
+import Clude5 from "../../../assets/svgs/record/5.png";
+import Clude6 from "../../../assets/svgs/record/6.png";
+import Clude7 from "../../../assets/svgs/record/7.png";
+import Clude8 from "../../../assets/svgs/record/8.png";
 import Clude0 from "../../../assets/svgs/setting/delete.svg";
 import DoughnutChart from "./chart/DoughnutChart";
 import VerticalTimeLine from "./timeline/VerticalTimeLine";
@@ -38,6 +37,7 @@ interface ImageMap {
 const ExistDiary = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const [showModal, setShowModal] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [daily, setDaily] = useState("diary");
   const selectedDate: string | null = sessionStorage.getItem("date");
@@ -85,33 +85,8 @@ const ExistDiary = () => {
     );
   };
 
-  const hanlDeleteClick = (diaryDay: string) => {
-    toast((t) => (
-      <div className="flex flex-col items-center justify-center w-full">
-        <p>일지를 삭제하시겠습니까?</p>
-        <hr />
-        <div className="mt-4 flex w-full justify-end text-white">
-          <button
-            className="bg-gray-1 py-2 px-4 rounded mr-[0.4rem]"
-            onClick={() => {
-              toast.dismiss(t.id);
-            }}
-          >
-            취소
-          </button>
-          <button
-            className="bg-primary py-2 px-4 rounded mr-2"
-            onClick={() => {
-              deleteDiaryEntry(diaryDay);
-              toast.dismiss(t.id);
-              navigate("/record/diary");
-            }}
-          >
-            확인
-          </button>
-        </div>
-      </div>
-    ));
+  const hanlDeleteClick = () => {
+    setShowModal(true);
   };
 
   const handleDailyChange = (clickDaily: string) => {
@@ -138,7 +113,7 @@ const ExistDiary = () => {
                 <img src={Vector} alt="Back" />
               </button>
               <div
-                onClick={() => hanlDeleteClick(DiaryList!.date)}
+                onClick={() => hanlDeleteClick()}
                 className="flex justify-end  items-center w-[80%]"
               >
                 <div className="w-[2rem] h-[2rem] flex justify-center items-center">
@@ -198,7 +173,7 @@ const ExistDiary = () => {
                   </button>
                 )}
               </div>
-              <div className="text-gray-700 text-[1rem] p-5 border-[0.1rem] rounded-[1rem] mt-[0.5rem] max-h-[7rem] overflow-y-auto">
+              <div className="text-gray-700 text-[1rem] p-5 border-[0.1rem] rounded-[1rem] mt-[0.5rem] max-h-[7rem] overflow-y-auto no-scrollbar">
                 {DiaryList!.content}
               </div>
             </div>
@@ -214,6 +189,35 @@ const ExistDiary = () => {
           </div>
         )}
       </div>
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center">
+          <div className="bg-gray-100 rounded-[1rem] shadow-lg p-5 ">
+            <div className="flex justify-center items-center mb-[1rem] text-sm p-2">
+              정말로 일지를 삭제 하시겠습니까?
+            </div>
+            <div className="flex justify-center">
+              <div className="w-[11rem] flex justify-between ">
+                <button
+                  className="bg-primary text-white w-[5rem] py-1 rounded-[1rem] hover:bg-blue-400"
+                  onClick={() => {
+                    setShowModal(false);
+                    deleteDiaryEntry(DiaryList!.date);
+                    navigate("/record/diary");
+                  }}
+                >
+                  확인
+                </button>
+                <button
+                  className=" bg-gray-400 text-white w-[5rem] py-1  rounded-[1rem] hover:bg-gray-500"
+                  onClick={() => setShowModal(false)}
+                >
+                  취소
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
