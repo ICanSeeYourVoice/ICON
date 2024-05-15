@@ -91,7 +91,7 @@ const SettingRoutinePage = () => {
             ) : (
               <div className="grid grid-cols-2 gap-2 w-full justify-center justify-items-center items-center content-start h-[60vh] overflow-y-auto">
                 {checkRoutineData.map((item: RoutineItem) => (
-                  <div
+                  <label
                     key={item.scene_id}
                     className={`p-4 w-full h-full text-center rounded-lg whitespace-pre-line ${
                       selectedSceneId == item.scene_id
@@ -99,18 +99,16 @@ const SettingRoutinePage = () => {
                         : "bg-gray-200"
                     }`}
                   >
-                    <label>
-                      <input
-                        className="hidden"
-                        type="radio"
-                        value={item.scene_id}
-                        checked={selectedSceneId == item.scene_id}
-                        onClick={handleRoutineClick}
-                        onChange={() => {}}
-                      />
-                      {item.name}
-                    </label>
-                  </div>
+                    <input
+                      className="hidden"
+                      type="radio"
+                      value={item.scene_id}
+                      checked={selectedSceneId == item.scene_id}
+                      onClick={handleRoutineClick}
+                      onChange={() => {}}
+                    />
+                    {item.name}
+                  </label>
                 ))}
               </div>
             )}
