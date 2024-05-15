@@ -26,7 +26,6 @@ public class AnalyzeService {
 	private final ColabApiClient colabApiClient;
 	private final KafkaBabyStatusProducer kafkaBabyStatusProducer;
 	private final AnalyzeRepository analyzeRepository;
-	private static final String[] predict = {"HUNGRY", "DISCOMFORT", "PAIN", "TIRED"};
 
 	//울음 분석
 	public String getCryReason(Integer memberId, MultipartFile babyCryingAudio) {
@@ -43,7 +42,6 @@ public class AnalyzeService {
 		try{
 			analyzeResult = colabApiClient.getAnalyze(babyCryingAudio);
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new AnalyzeException(HttpStatus.BAD_REQUEST, "분석에 실패했습니다.");
 		}
 		return analyzeResult;
@@ -51,7 +49,7 @@ public class AnalyzeService {
 
 	//울음 분석 결과에서 이유만 뽑기
 	private static String getKey(AnalyzeResult analyzeResult) {
-		return predict[analyzeResult.prediction()];
+		return analyzeResult.prediction().toUpperCase();
 	}
 
 
