@@ -24,7 +24,7 @@ const DiaryChartToggle = ({
       } rounded-r-lg`}
       onClick={() => handleDailyChange("chart")}
     >
-      통계
+      아이의 하루
     </button>
   </div>
 );

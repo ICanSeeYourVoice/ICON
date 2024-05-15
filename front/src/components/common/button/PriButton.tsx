@@ -31,8 +31,8 @@ const Button: React.FC<ButtonProps> = ({ label, onClick, id, isSelected }) => {
   };
 
   return (
-    <div className="flex justify-center">
-      <div className="w-[20rem] h-[5rem] p-2 border-b border-gray-300 ">
+    <div className="flex justify-center mb-[1rem]">
+      <div className="w-full h-[5rem] border-b border-gray-300">
         <div className=" text-[1rem] w-[17rem]">{label}</div>
         <div className="flex justify-between mt-[0.5rem] ">
           <div

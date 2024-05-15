@@ -123,8 +123,8 @@ const ChatPage: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col gap-[1rem] w-screen p-[2rem]">
-      <div className="flex flex-col-reverse overflow-auto h-[70vh]">
+    <div className="flex flex-col gap-[1rem]  w-full">
+      <div className="flex flex-col-reverse overflow-auto h-[70vh] no-scrollbar">
         {messages.map((message, index, arr) => {
           const isFirstMessageOfDay =
             index === arr.length - 1 ||
@@ -157,7 +157,7 @@ const ChatPage: React.FC = () => {
         </div>
       )}
 
-      <div className="mt-auto">
+      <div className="fixed bottom-0 left-0 flex items-center justify-center w-full">
         <ChatInput onSendMessage={handleSendMessage} />
       </div>
     </div>
