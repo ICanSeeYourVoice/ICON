@@ -64,34 +64,32 @@ const WaveSurferComponent: React.FC<WaveSurferComponentProps> = ({
       .join(":");
 
   return (
-    <div className="waveform-container h-[4rem] mt-[1rem] m-4 rounded-[1rem] flex justify-center items-center">
-      <div className="waveform-container h-[8rem]  w-[18rem] ">
-        <div className="flex justify-between p-3">
-          {formatTime(currentTime)}
+    <div className="w-full flex justify-center items-center">
+      <div className="relative w-full">
+        <div className="flex justify-between items-center h-[3rem]">
+          <span> {formatTime(currentTime)}</span>
 
-          {audioUrl && (
-            <div className="controls flex justify-center items-center w-[3rem] h-[3rem] rounded-[1rem] bg-gray-400">
-              <button
-                onClick={onPlayPause}
-                className="flex justify-center items-center w-full h-full"
-              >
-                {isPlaying ? (
-                  <img
-                    src={StopIcon}
-                    alt="stop"
-                    className="w-[2rem] h-[2rem]"
-                  />
-                ) : (
-                  <img src={MicIcon} alt="play" className="w-[2rem] h-[2rem]" />
-                )}
-              </button>
-            </div>
-          )}
+          <div
+            className={`controls flex justify-center items-center w-[3rem] h-[3rem] rounded-[1rem] ${
+              audioUrl ? "bg-primary" : "bg-gray-300"
+            }`}
+          >
+            <button
+              onClick={onPlayPause}
+              className="flex justify-center items-center w-full h-full"
+            >
+              {isPlaying ? (
+                <img src={StopIcon} alt="stop" className="w-[2rem] h-[2rem]" />
+              ) : (
+                <img src={MicIcon} alt="play" className="w-[2rem] h-[2rem]" />
+              )}
+            </button>
+          </div>
         </div>
 
-        <div className="flex  mt-[1rem]">
-          <div ref={containerRef} className=" w-[18rem]" />
-          <div ref={cursorRef} className="cursor">
+        <div className="flex w-full h-[3rem] items-center">
+          <div ref={containerRef} className="w-full" />
+          <div ref={cursorRef} className="absolute">
             🏄
           </div>
         </div>

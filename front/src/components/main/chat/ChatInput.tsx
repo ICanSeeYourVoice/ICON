@@ -26,10 +26,10 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage }) => {
   };
 
   return (
-    <div className="fixed bottom-0 left-0 flex w-screen items-center border-t px-5 py-1">
+    <div className="flex w-full bottom-0 items-center justify-between border-t px-3 py-1">
       <input
         type="text"
-        className="flex-1 p-3 "
+        className="p-3"
         placeholder="상담 내용을 입력하세요"
         value={message}
         onChange={handleChange}
@@ -38,11 +38,11 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage }) => {
       <button
         onClick={handleSend}
         disabled={!message.trim()}
-        className={`w-[2rem] h-[2rem] flex items-center justify-center rounded-full p-2 ${
+        className={`w-[2rem] h-[2rem] flex items-center justify-center rounded-full ${
           message ? "bg-blue-500" : "bg-blue-300"
         }`}
       >
-        <img src={ChatSend} alt="Send" className="w-4 h-4" />
+        <img src={ChatSend} alt="Send" className="w-[58%] h-[58%]" />
       </button>
     </div>
   );
