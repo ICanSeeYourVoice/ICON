@@ -8,11 +8,12 @@ import { useMutation } from "@tanstack/react-query";
 import { userLogin } from "../../apis/User";
 import toast from "react-hot-toast";
 import { useTokenStore } from "../../stores/notification";
+import useUserStore from "../../stores/user";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const { token } = useTokenStore();
-
+  const { setToken } = useUserStore();
   const handleJoinClick = () => {
     navigate("/join");
   };
@@ -31,9 +32,8 @@ const LoginPage = () => {
     mutationFn: userLogin,
     onSuccess: (res) => {
       if (res.access_token) {
-        sessionStorage.setItem("access_token", res.access_token);
-
-        navigate("/detection");
+        setToken(res.access_token);
+        navigate("/detection", { replace: true });
       } else {
         toast.error("토큰이 존재하지 않습니다. 다시 시도하세요.");
       }
