@@ -23,6 +23,7 @@ import useBleStore from "../../stores/bluetooth";
 import classmap from "../../model/yamnet-class-map.json";
 import * as faceapi from "@vladmandic/face-api";
 import { useDetectionPoseStore } from "../../stores/detectionPose";
+import UnresponsiveButton from "../../components/main/detection/UnresponsiveButton";
 
 // test code
 type Result = {
@@ -136,7 +137,7 @@ const DetectionPage = () => {
       if (!videoRef.current) return;
 
       intervalRef.current = window.setInterval(async () => {
-        console.log("interval: " + intervalRef.current);
+        // console.log("interval: " + intervalRef.current);
 
         if (videoRef.current) {
           const detections = await faceapi
@@ -374,59 +375,80 @@ const DetectionPage = () => {
           />
         </div>
 
-        <p className="text-gray-1 text-sm">
-          {cryingType === "FAILED"
-            ? FAILED_INFO
-            : cryingType === "LOADING"
-            ? LOADING_INFO
-            : DETECTION_INFO}
-        </p>
-        <ReactButton
-          icon={
-            cryingType === "LOADING"
-              ? DETECTION.LOADING.ICON
-              : cryingType === "FAILED"
-              ? DETECTION.FAILED.ICON
-              : DETECTION.NORMAL.ICON
-          }
-          color={
-            cryingType === "LOADING"
-              ? DETECTION.LOADING.COLOR
-              : cryingType === "FAILED"
-              ? DETECTION.FAILED.COLOR
-              : DETECTION.NORMAL.COLOR
-          }
-        />
-        {/* {cryingType ? (
-          <PulseLoader color="#c8c8c8" />
-        ) : (
-          <div className="flex flex-col items-center justify-center text-gray-0 text-xl">
-            <p>아기가</p>
-            <p>
-              <span className="text-white">{DETECTION.NORMAL.MESSAGE}</span>
-              상태에요
+        {!isFaceDetect && !isCryDetect ? (
+          <>
+            <p className="text-gray-1 text-sm animate-pulse">
+              설정 버튼을 눌러 감지를 켜주세요
             </p>
-          </div>
-        )} */}
-        {cryingType ? (
-          <PulseLoader color="#c8c8c8" />
+            <UnresponsiveButton />
+            <div className="h-[4rem]"></div>
+          </>
         ) : (
-          <div className="flex flex-col items-center justify-center text-white text-xs">
-            {results.map((result, i) => (
-              <div
-                key={i}
-                style={{
-                  display: "flex",
-                  width: "18.5rem",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <p>{result.label} </p>
-                <p> : ({result.probability}) </p>
+          <>
+            <p className="text-gray-1 text-sm">
+              {cryingType === "FAILED"
+                ? FAILED_INFO
+                : cryingType === "LOADING"
+                ? LOADING_INFO
+                : DETECTION_INFO}
+            </p>
+            <ReactButton
+              icon={
+                cryingType === "LOADING"
+                  ? DETECTION.LOADING.ICON
+                  : cryingType === "FAILED"
+                  ? DETECTION.FAILED.ICON
+                  : DETECTION.NORMAL.ICON
+              }
+              color={
+                cryingType === "LOADING"
+                  ? DETECTION.LOADING.COLOR
+                  : cryingType === "FAILED"
+                  ? DETECTION.FAILED.COLOR
+                  : DETECTION.NORMAL.COLOR
+              }
+            />
+            {/* {cryingType ? (
+              <div className="h-[4rem]">
+                <PulseLoader
+                  color="#c8c8c8"
+                  cssOverride={{
+                    height: "4rem",
+                  }}
+                />
               </div>
-            ))}
-          </div>
+            ) : (
+              <div className="h-[4rem] flex flex-col items-center justify-center text-gray-0 text-xl">
+                <p>아기가</p>
+                <p>
+                  <span className="text-white">{DETECTION.NORMAL.MESSAGE}</span>
+                  상태에요
+                </p>
+              </div>
+            )} */}
+            {cryingType ? (
+              <div className="h-[4rem]">
+                <PulseLoader color="#c8c8c8" />
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center text-white text-xs">
+                {results.map((result, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      display: "flex",
+                      width: "18.8rem",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <p>{result.label} </p>
+                    <p> : ({result.probability}) </p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </>
         )}
         <div className="flex items-center justify-center w-[80%] h-[6rem] invisible"></div>
       </>
