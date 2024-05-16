@@ -46,7 +46,7 @@ const DetailDiary = () => {
   const [daily, setDaily] = useState("diary");
   const selectedDate: string | null = sessionStorage.getItem("date");
 
-  const { data: DiaryList, isLoading: DiaryLoading } =
+  const { data: DiaryList, isFetching: DiaryLoading } =
     useQuery<DiaryEntryProps>({
       queryKey: ["diaryDetail"],
       queryFn: () => diaryDetail(selectedDate ?? ""),
@@ -96,11 +96,6 @@ const DetailDiary = () => {
           <div className="flex flex-col items-center h-screen w-screen">
             <div className="w-full h-[6rem] fixed flex flex-col items-center z-10 ">
               <div className="m-auto w-[80%]">
-                {DiaryLoading && (
-                  <div className="w-screen h-screen flex justify-center items-center">
-                    <PulseLoader color="#7ec3f0" />
-                  </div>
-                )}
                 <div className="flex justify-between items-center font-bold">
                   <button onClick={handleTopClick}>
                     <img src={Vector} alt="Back" />
@@ -110,9 +105,15 @@ const DetailDiary = () => {
             </div>
 
             {/* 이모지 */}
-            <div className="justify-center items-center flex mt-[4.5rem]">
-              <img src={Clude0} alt="" className=" w-[5rem] h-[5rem]" />
-            </div>
+            {DiaryLoading ? (
+              <div className="justify-center items-center flex mt-[4.5rem] h-[5rem]">
+                <PulseLoader color="#c8c8c8" />
+              </div>
+            ) : (
+              <div className="justify-center items-center flex mt-[4.5rem]">
+                <img src={Clude0} alt="" className=" w-[5rem] h-[5rem]" />
+              </div>
+            )}
 
             <div className="flex flex-col w-full items-center  justify-center gap-[0.3rem]">
               <div className="text-[1.3rem] ">{formattedDate}</div>
@@ -124,32 +125,33 @@ const DetailDiary = () => {
               daily={daily}
               handleDailyChange={handleDailyChange}
             />
-            {daily === "diary" ? (
-              <div>
-                <div
-                  onClick={goToRegister}
-                  className="w-full justify-center  items-center mt-[3rem]"
-                >
-                  <div className="mt-[2rem]">
-                    일지가 없어요 일지를 작성해주세요
-                  </div>
-                  <div className="w-full flex justify-center mt-[3rem]">
-                    <div className="text-white  w-[3rem] h-[3rem] flex justify-center items-center shadow-xl hover:bg-gray-400 bg-gray-300 text-[2rem] rounded-[1rem]">
-                      +
+            {!DiaryLoading &&
+              (daily === "diary" ? (
+                <div>
+                  <div
+                    onClick={goToRegister}
+                    className="w-full justify-center  items-center mt-[3rem]"
+                  >
+                    <div className="mt-[2rem]">
+                      일지가 없어요 일지를 작성해주세요
+                    </div>
+                    <div className="w-full flex justify-center mt-[3rem]">
+                      <div className="text-white  w-[3rem] h-[3rem] flex justify-center items-center shadow-xl hover:bg-gray-400 bg-gray-300 text-[2rem] rounded-[1rem]">
+                        +
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ) : (
-              <div className="flex flex-col w-[90%] h-full gap-[1rem]">
-                <div className="flex flex-col items-center flex-1">
-                  <DoughnutChart date={selectedDate} />
+              ) : (
+                <div className="flex flex-col w-[90%] h-full gap-[1rem]">
+                  <div className="flex flex-col items-center flex-1">
+                    <DoughnutChart date={selectedDate} />
+                  </div>
+                  <div className="flex flex-col items-center flex-1">
+                    <VerticalTimeLine date={selectedDate} />
+                  </div>
                 </div>
-                <div className="flex flex-col items-center flex-1">
-                  <VerticalTimeLine date={selectedDate} />
-                </div>
-              </div>
-            )}
+              ))}
           </div>
           {showModal && (
             <EmojiModal
