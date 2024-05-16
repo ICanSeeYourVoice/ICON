@@ -25,6 +25,7 @@ import ClovaVoicePage from "../pages/tts/ClovaVoicePage";
 import SettingRoutinePage from "../pages/setting/smartThings/SettingRoutinePage";
 import BlePage from "../pages/setting/ble/BlePage";
 import PoseResultPage from "../pages/detection/PoseResultPage";
+import PrivateRoute from "../pages/user/PrivateRoute";
 
 const authRoutes = [
   {
@@ -98,12 +99,17 @@ const voiceRoutes = [
 
 const routes = [
   ...authRoutes,
-  ...detectionRoutes,
-  ...recordRoutes,
-  ...chatRoutes,
-  ...settingRoutes,
-  ...settingNavRoutes,
-  ...voiceRoutes,
+  {
+    element: <PrivateRoute />,
+    children: [
+      ...detectionRoutes,
+      ...recordRoutes,
+      ...chatRoutes,
+      ...settingRoutes,
+      ...settingNavRoutes,
+      ...voiceRoutes,
+    ],
+  },
 ];
 
 const router = createBrowserRouter(routes);
