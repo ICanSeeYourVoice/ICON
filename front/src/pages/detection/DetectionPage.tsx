@@ -377,7 +377,7 @@ const DetectionPage = () => {
 
         {!isFaceDetect && !isCryDetect ? (
           <>
-            <p className="text-gray-1 text-sm animate-pulse">
+            <p className="text-gray-1 text-sm">
               설정 버튼을 눌러 감지를 켜주세요
             </p>
             <UnresponsiveButton />
