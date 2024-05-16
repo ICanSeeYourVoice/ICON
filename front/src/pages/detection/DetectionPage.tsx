@@ -50,7 +50,7 @@ const DetectionPage = () => {
   const { writeCharacteristic } = useBleStore();
   const setLoading = useLoading((state) => state.setLoading);
 
-  const [results, setResults] = useState<Result[]>([]); // test위한 코드
+  const [, setResults] = useState<Result[]>([]); // test위한 코드
 
   const { mutate: poseMutate } = useMutation({
     mutationFn: poseAlarm,
@@ -408,7 +408,7 @@ const DetectionPage = () => {
                   : DETECTION.NORMAL.COLOR
               }
             />
-            {/* {cryingType ? (
+            {cryingType ? (
               <div className="h-[4rem]">
                 <PulseLoader
                   color="#c8c8c8"
@@ -425,8 +425,8 @@ const DetectionPage = () => {
                   상태에요
                 </p>
               </div>
-            )} */}
-            {cryingType ? (
+            )}
+            {/* {cryingType ? (
               <div className="h-[4rem]">
                 <PulseLoader color="#c8c8c8" />
               </div>
@@ -447,7 +447,7 @@ const DetectionPage = () => {
                   </div>
                 ))}
               </div>
-            )}
+            )} */}
           </>
         )}
         <div className="flex items-center justify-center w-[80%] h-[6rem] invisible"></div>
