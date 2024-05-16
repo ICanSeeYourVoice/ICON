@@ -1,3 +1,4 @@
+import 'package:ble_peripheral/ble_peripheral.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wear/wear.dart';
@@ -85,17 +86,25 @@ class HomeView extends GetView<HomeController> {
         child: Column(
       children: [
         const Text(
-          '연결 버튼을\n눌러주세요.\n아이콘>설정>워치연결에서\n연결해주세요.',
+          '연결 버튼을 눌러주세요.\n아이콘>설정>워치연결에서\n연결해주세요.',
           style: TextStyle(color: Colors.white),
           textAlign: TextAlign.center,
         ),
-        Obx(() => Text(
-              "Advertising: ${controller.isAdvertising.value}",
-              style: TextStyle(color: Colors.white),
-            )),
-        ElevatedButton(
-            onPressed: controller.checkStartAdvertising,
-            child: const Text('연결')),
+        Obx(() => controller.isAdvertising.value
+            ? ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                        Color.fromRGBO(123, 183, 247, 1)),
+                    foregroundColor: MaterialStateProperty.all(Colors.white)),
+                onPressed: BlePeripheral.stopAdvertising,
+                child: const Text('연결 해제'))
+            : ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                        Color.fromRGBO(123, 183, 247, 1)),
+                    foregroundColor: MaterialStateProperty.all(Colors.white)),
+                onPressed: controller.checkStartAdvertising,
+                child: const Text('연결'))),
       ],
     ));
   }
@@ -159,7 +168,7 @@ class HomeView extends GetView<HomeController> {
               onPressed: () async {
                 // print("devices list: ${controller.devices[0]}");
                 // print("device id: ${controller.devicesId.value}");
-                controller.updateCharacteristic(controller.devicesId.value);
+                controller.updateCharacteristic(controller.devices[0]);
                 controller.updateStatus('normal');
               },
               style: TextButton.styleFrom(foregroundColor: Colors.white),
@@ -193,7 +202,7 @@ class HomeView extends GetView<HomeController> {
             child: TextButton(
               child: Text('닫기'),
               onPressed: () async {
-                controller.updateCharacteristic(controller.devicesId.value);
+                controller.updateCharacteristic(controller.devices[0]);
                 controller.updateStatus('normal');
               },
             ),
@@ -226,7 +235,7 @@ class HomeView extends GetView<HomeController> {
             child: TextButton(
               child: Text('닫기'),
               onPressed: () async {
-                controller.updateCharacteristic(controller.devicesId.value);
+                controller.updateCharacteristic(controller.devices[0]);
                 controller.updateStatus('normal');
               },
             ),
@@ -259,7 +268,7 @@ class HomeView extends GetView<HomeController> {
             child: TextButton(
               child: Text('닫기'),
               onPressed: () async {
-                controller.updateCharacteristic(controller.devicesId.value);
+                controller.updateCharacteristic(controller.devices[0]);
                 controller.updateStatus('normal');
               },
             ),
@@ -292,7 +301,7 @@ class HomeView extends GetView<HomeController> {
             child: TextButton(
               child: Text('닫기'),
               onPressed: () async {
-                controller.updateCharacteristic(controller.devicesId.value);
+                controller.updateCharacteristic(controller.devices[0]);
                 controller.updateStatus('normal');
               },
             ),
