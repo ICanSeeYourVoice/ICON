@@ -24,6 +24,7 @@ const SettingPage = () => {
 
   const handleConfirmLogout = () => {
     setShowModal(false);
+    useUserStore.setState({ access_token: "" });
     useUserStore.persist.clearStorage();
     navigate("/", { replace: true });
   };
