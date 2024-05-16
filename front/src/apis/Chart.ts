@@ -8,9 +8,6 @@ interface StatisticsDate {
 export const GetChartData = async ({ statisticsDate }: StatisticsDate) => {
   try {
     const response = await baseApi.get("/analyze-service/statistics", {
-      headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("access_token")}`,
-      },
       params: { statisticsDate },
     });
     return response.data;
@@ -26,9 +23,6 @@ export const GetChartDetailData = async ({
 }: StatisticsDate) => {
   try {
     const response = await baseApi.get("/analyze-service/statistics/details", {
-      headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("access_token")}`,
-      },
       params: { statisticsDate },
     });
     return response.data;
