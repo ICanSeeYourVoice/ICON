@@ -15,7 +15,10 @@ const LabelTextInput: React.FC<LabelTextInputProps> = ({
 }) => {
   return (
     <div>
-      <div className="text-black text-sm mb-2">{label || "제목"}</div>
+      <div className="text-black text-sm mb-2 flex">
+        {label || "제목"}
+        <div className="text-red-600 ml-[0.2rem]">*</div>
+      </div>
       <div
         className="w-[18rem] h-[8.3rem] relative flex-col justify-start 
         items-start inline-flex  border rounded-[15px] border-gray-300"

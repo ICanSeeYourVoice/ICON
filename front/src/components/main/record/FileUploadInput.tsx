@@ -58,7 +58,9 @@ const FileUploadInput: React.FC = () => {
         onChange={handleImageChange}
         className="hidden"
       />
-      <div className="text-sm mb-1">사진 등록</div>
+      <div className="flex text-sm mb-1">
+        사진 등록 <div className="text-red-600 ml-[0.2rem]">*</div>
+      </div>
       <button
         onClick={handleClick}
         className="flex justify-center items-center rounded-[1rem] border  w-[3rem] h-[3rem] bg-gray-100  mb-[0.5rem]"
