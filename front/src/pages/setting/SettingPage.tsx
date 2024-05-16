@@ -24,9 +24,8 @@ const SettingPage = () => {
 
   const handleConfirmLogout = () => {
     setShowModal(false);
-    navigate(0);
     useUserStore.persist.clearStorage();
-    navigate("/login", { replace: true });
+    navigate("/", { replace: true });
   };
 
   return (
