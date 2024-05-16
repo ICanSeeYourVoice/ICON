@@ -70,7 +70,7 @@ const ClovaVoice = () => {
       toast.error("텍스트를 입력해주세요");
       return;
     }
-    const speakerId = gender === "male" ? "njonghyeok" : "nara";
+    const speakerId = gender === "male" ? "vdaeseong" : "vhyeri";
     const voiceData = {
       text: text,
       speaker: speakerId,
@@ -79,7 +79,7 @@ const ClovaVoice = () => {
   };
 
   const handleGenderChange = (newGender: string) => {
-    newGender === "male" ? "njonghyeok" : "nara";
+    newGender === "male" ? "vdaeseong" : "vhyeri";
     const speakerId = newGender;
     setGender(speakerId);
     setAudioUrl("");
@@ -101,7 +101,7 @@ const ClovaVoice = () => {
   const handleFirstVoice = (voiceText: string, id: number) => {
     setText(voiceText);
     setSelectedId(id);
-    const speakerId = gender === "male" ? "njonghyeok" : "nara";
+    const speakerId = gender === "male" ? "vdaeseong" : "vhyeri";
     fetchVoice({ text: voiceText, speaker: speakerId });
   };
 

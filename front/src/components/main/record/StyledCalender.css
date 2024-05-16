@@ -19,7 +19,7 @@
   
 
   .react-calendar__navigation button:disabled {
-
+    background-color: #7BB7F7;
     border-radius: 1rem 1rem 0 0;
   }
 
@@ -108,3 +108,5 @@
     background-color: white;
     color:#dedede;
   }
+
+

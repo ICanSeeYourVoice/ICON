@@ -38,6 +38,7 @@ const RegisterPage = () => {
     },
     onError: (error) => {
       console.error("일지 등록 실패: error", error);
+      toast.error("모든 필드를 등록해주세요!");
     },
   });
 
@@ -70,7 +71,7 @@ const RegisterPage = () => {
 
   return (
     <div className="flex flex-col items-center h-screen w-screen gap-[2rem]">
-      <div className="bg-white z-10 flex flex-col items-center w-full h-[6rem] fixed m-auto w-[80%]">
+      <div className="bg-white z-10 flex flex-col items-center w-full h-[6rem] fixed m-auto">
         <div className="m-auto w-[80%]">
           <div className="flex justify-between items-center font-bold">
             <button onClick={handleTopClick}>
@@ -88,7 +89,7 @@ const RegisterPage = () => {
       </div>
       <div className="appearance-none">
         <LabelTextInput
-          label="내용"
+          label="내용 "
           placeholder="내용 입력.."
           value={contentValue}
           onChange={handleContentChange}

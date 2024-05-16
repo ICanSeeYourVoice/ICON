@@ -1,6 +1,7 @@
 import { useState } from "react";
 import SettingNavItem from "../../components/main/setting/SettingNavItem";
 import { useNavigate } from "react-router-dom";
+import useUserStore from "../../stores/user";
 
 interface SettingNavItemProps {
   text: string;
@@ -22,9 +23,10 @@ const SettingPage = () => {
   };
 
   const handleConfirmLogout = () => {
-    sessionStorage.removeItem("access_token");
     setShowModal(false);
-    navigate("/");
+    useUserStore.setState({ access_token: "" });
+    useUserStore.persist.clearStorage();
+    navigate("/", { replace: true });
   };
 
   return (
