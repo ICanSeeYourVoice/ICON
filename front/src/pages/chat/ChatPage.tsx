@@ -153,7 +153,7 @@ const ChatPage: React.FC = () => {
 
       {isSending && (
         <div className="flex justify-center items-center">
-          <PulseLoader color="#7ec3f0" />
+          <PulseLoader color="#c8c8c8" />
         </div>
       )}
 
