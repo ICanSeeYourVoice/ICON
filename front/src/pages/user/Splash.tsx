@@ -3,12 +3,18 @@ import PostButton from "../../components/common/button/PostButton";
 import { useNavigate } from "react-router-dom";
 import { useTokenStore } from "../../stores/notification";
 import { PulseLoader } from "react-spinners";
+import useUserStore from "../../stores/user";
 
 const SplashPage = () => {
   const { token } = useTokenStore();
+  const { access_token } = useUserStore();
   const navigate = useNavigate();
   const handleLoginClick = () => {
-    navigate("/login");
+    if (access_token) {
+      navigate("/detection");
+    } else {
+      navigate("/login");
+    }
   };
   return (
     <div className="flex flex-col items-center  pt-[13rem] gap-[1rem] tracking-wide">
