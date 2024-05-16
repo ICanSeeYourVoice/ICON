@@ -12,6 +12,7 @@ const ChatLayout = () => {
 
   // 채팅 초기화
   const clearMessages = useChatStore((state) => state.clearMessages);
+  const messages = useChatStore((state) => state.messages);
   const { mutate: clearChat } = useMutation({
     mutationFn: ClearChat,
     onSuccess: () => {
@@ -42,7 +43,10 @@ const ChatLayout = () => {
             <div className="w-[2rem] h-[2rem]">
               <button
                 onClick={hanlDeleteClick}
-                className=" bg-primary rounded-full"
+                className={`rounded-full ${
+                  messages.length === 0 ? "bg-gray-300" : "bg-primary"
+                }`}
+                disabled={messages.length === 0}
               >
                 <img src={Refresh} alt="chatClear" />
               </button>

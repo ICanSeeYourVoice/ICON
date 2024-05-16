@@ -173,7 +173,7 @@ const ExistDiary = () => {
                   </button>
                 )}
               </div>
-              <div className="text-gray-700 text-[1rem] p-5 border-[0.1rem] rounded-[1rem] mt-[0.5rem] max-h-[7rem] overflow-y-auto no-scrollbar">
+              <div className="text-gray-700 text-[1rem] p-5 border-[0.1rem] rounded-[1rem] mt-[0.5rem] max-h-[7rem] overflow-y-auto no-scrollbar whitespace-pre-wrap">
                 {DiaryList!.content}
               </div>
             </div>

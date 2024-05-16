@@ -38,6 +38,7 @@ const RegisterPage = () => {
     },
     onError: (error) => {
       console.error("일지 등록 실패: error", error);
+      toast.error("모든 필드를 등록해주세요!");
     },
   });
 
@@ -88,7 +89,7 @@ const RegisterPage = () => {
       </div>
       <div className="appearance-none">
         <LabelTextInput
-          label="내용"
+          label="내용 "
           placeholder="내용 입력.."
           value={contentValue}
           onChange={handleContentChange}
