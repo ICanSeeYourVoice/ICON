@@ -53,7 +53,7 @@ const ExistDiary = () => {
     clude8: { id: "clude2", url: Clude8 },
   };
 
-  const { data: DiaryList, isLoading: DiaryLoading } =
+  const { data: DiaryList, isFetching: DiaryLoading } =
     useQuery<DiaryEntryProps>({
       queryKey: ["diaryDetail"],
       queryFn: () => diaryDetail(selectedDate ?? ""),
@@ -97,17 +97,21 @@ const ExistDiary = () => {
   const handleTopClick = () => {
     navigate("/record/diary");
   };
+
+  // 로딩중 화면
+  if (DiaryLoading) {
+    return (
+      <div className="w-screen h-screen flex items-center justify-center">
+        <PulseLoader color="#c8c8c8" />
+      </div>
+    );
+  }
+
   return (
     <div className="w-full  h-screen ">
       <div className="flex flex-col items-center h-screen w-screen">
         <div className="w-full h-[6rem] fixed flex flex-col items-center z-10 ">
           <div className="m-auto w-[80%]">
-            {DiaryLoading && (
-              <div className="w-screen h-screen flex justify-center items-center">
-                <PulseLoader color="#7ec3f0" />
-              </div>
-            )}
-
             <div className="flex justify-between items-center font-bold">
               <button onClick={handleTopClick}>
                 <img src={Vector} alt="Back" />
