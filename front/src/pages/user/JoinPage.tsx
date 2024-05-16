@@ -37,7 +37,7 @@ const JoinPage = () => {
     mutationFn: userJoin,
     onSuccess: () => {
       toast.success("회원가입이 완료되었습니다.\n로그인해주세요!");
-      navigate("/login");
+      navigate("/login", { replace: true });
     },
     onError: (error: AxiosError<ErrorResponse>) => {
       if (error.response && error.response.data) {

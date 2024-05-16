@@ -14,7 +14,8 @@ import Clude5 from "../../../assets/svgs/record/5.png";
 import Clude6 from "../../../assets/svgs/record/6.png";
 import Clude7 from "../../../assets/svgs/record/7.png";
 import Clude8 from "../../../assets/svgs/record/8.png";
-import Clude0 from "../../../assets/svgs/setting/delete.svg";
+import Clude9 from "../../../assets/svgs/record/9.png";
+import Clude0 from "../../../assets/svgs/record/blueClude.png";
 import DoughnutChart from "./chart/DoughnutChart";
 import VerticalTimeLine from "./timeline/VerticalTimeLine";
 import DiaryChartToggle from "./DiaryChartToggle";
@@ -51,6 +52,7 @@ const ExistDiary = () => {
     clude6: { id: "clude2", url: Clude6 },
     clude7: { id: "clude2", url: Clude7 },
     clude8: { id: "clude2", url: Clude8 },
+    clude9: { id: "clude2", url: Clude9 },
   };
 
   const { data: DiaryList, isFetching: DiaryLoading } =

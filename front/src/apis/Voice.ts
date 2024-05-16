@@ -2,7 +2,7 @@ import { api, baseApi } from "./Base";
 
 interface VoiceProps {
   text: string;
-  speaker : string;
+  speaker: string;
 }
 
 interface VoiceEntry {
@@ -10,20 +10,12 @@ interface VoiceEntry {
   text: string;
 }
 
-
-
-
 export const clovaVoice = async (voiceData: VoiceProps): Promise<Blob> => {
-  const access_token = sessionStorage.getItem("access_token");
-
-  const headers = {
-    "Authorization" : `Bearer ${access_token}`,
-  };
-try {
+  try {
     const response = await baseApi.post<Blob>(
       "/common-service/members/tts",
       voiceData,
-      { headers, responseType: 'blob' } 
+      { responseType: "blob" }
     );
     return response.data;
   } catch (error) {
@@ -31,8 +23,6 @@ try {
     throw error;
   }
 };
-
-
 
 export const AllVoice = async (): Promise<VoiceEntry[]> => {
   try {
@@ -46,7 +36,7 @@ export const AllVoice = async (): Promise<VoiceEntry[]> => {
 
 export const DeleteVoice = async (phraseId: number) => {
   try {
-    const url = `/common-service/phrase/${phraseId}`; 
+    const url = `/common-service/phrase/${phraseId}`;
     const response = await api.delete(url);
     return response.data;
   } catch (error) {
@@ -57,10 +47,7 @@ export const DeleteVoice = async (phraseId: number) => {
 
 export const CreateVoice = async (text: string) => {
   try {
-    const response = await api.post(
-      "/common-service/phrase",
-      {text}
-    );
+    const response = await api.post("/common-service/phrase", { text });
     return response.data;
   } catch (error) {
     console.error("API에러: ", error);

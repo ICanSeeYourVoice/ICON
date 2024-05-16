@@ -71,7 +71,7 @@ const RegisterPage = () => {
 
   return (
     <div className="flex flex-col items-center h-screen w-screen gap-[2rem]">
-      <div className="bg-white z-10 flex flex-col items-center w-full h-[6rem] fixed m-auto w-[80%]">
+      <div className="bg-white z-10 flex flex-col items-center w-full h-[6rem] fixed m-auto">
         <div className="m-auto w-[80%]">
           <div className="flex justify-between items-center font-bold">
             <button onClick={handleTopClick}>
