@@ -65,7 +65,7 @@ const WaveSurferComponent: React.FC<WaveSurferComponentProps> = ({
 
   return (
     <div className="w-full flex justify-center items-center">
-      <div className="relative w-full">
+      <div className="relative w-[90%]">
         <div className="flex justify-between items-center h-[3rem]">
           <span> {formatTime(currentTime)}</span>
 
@@ -87,7 +87,7 @@ const WaveSurferComponent: React.FC<WaveSurferComponentProps> = ({
           </div>
         </div>
 
-        <div className="flex w-full h-[3rem] items-center">
+        <div className="flex h-[3rem] items-center">
           <div ref={containerRef} className="w-full" />
           <div ref={cursorRef} className="absolute">
             🏄
