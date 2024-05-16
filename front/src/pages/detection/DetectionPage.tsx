@@ -173,6 +173,15 @@ const DetectionPage = () => {
   let source: any = null;
   let gainNode: any = null;
 
+  const TIMES = 4;
+  const PERCENTAGE = 0.38;
+  const RANK = 3;
+  const CLASS = {
+    BABY_CRY: 20,
+    CAT: 76,
+    MEOW: 78,
+  };
+
   const detectCryState = async () => {
     setLoading(true);
     try {
@@ -194,7 +203,9 @@ const DetectionPage = () => {
       audioCtx = new AudioContext({ sampleRate: 16000 });
       source = audioCtx.createMediaStreamSource(stream);
       gainNode = audioCtx.createGain();
-      scriptNode = audioCtx.createScriptProcessor(8192, 1, 1);
+      scriptNode = audioCtx.createScriptProcessor(4096 * TIMES, 1, 1);
+      // scriptNode = audioCtx.createScriptProcessor(16384, 1, 1);
+      // scriptNode = audioCtx.createScriptProcessor(8192, 1, 1);
 
       scriptNodeRef.current = scriptNode;
 
@@ -215,8 +226,8 @@ const DetectionPage = () => {
           cnt++;
         } else {
           initRecordCnt++;
-          // console.log("cry: cnt");
-          if (initRecordCnt >= 8) {
+          console.log("cry: cnt");
+          if (initRecordCnt >= 16 / TIMES) {
             initRecordCnt = 0;
             audioBuffer = [];
           }
@@ -242,15 +253,22 @@ const DetectionPage = () => {
             });
 
             // test 코드
-            if (classes[i] === 20) console.log("cry: " + probabilities[i]);
-            if (classes[i] === 76) console.log("cat: " + probabilities[i]);
-            if (classes[i] === 78) console.log("meow: " + probabilities[i]);
-            if (classes[i] === 76 && probabilities[i] >= 0.7 && i < 3) {
+            if (classes[i] === CLASS.BABY_CRY)
+              console.log("cry: " + probabilities[i]);
+            if (classes[i] === CLASS.CAT)
+              console.log("cat: " + probabilities[i]);
+            if (classes[i] === CLASS.MEOW)
+              console.log("meow: " + probabilities[i]);
+            if (classes[i] === CLASS.CAT && probabilities[i] >= 0.7 && i < 3) {
               console.log("고양이");
               return;
             }
 
-            if (classes[i] === 20 && probabilities[i] >= 0.35 && i < 3) {
+            if (
+              classes[i] === CLASS.BABY_CRY &&
+              probabilities[i] >= PERCENTAGE &&
+              i < RANK
+            ) {
               // if (classes[i] === 20) {
               isCry = true;
               setIsBabyCry(true);
@@ -262,7 +280,7 @@ const DetectionPage = () => {
 
           setResults(updatedResults); // test를 위한 코드
         } else {
-          if (cnt >= 4) {
+          if (cnt >= 8 / TIMES) {
             const worker = new Worker("recordingWorker.js");
 
             streamRef.current!.getTracks().forEach((track) => track.stop());
