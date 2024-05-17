@@ -50,13 +50,17 @@ const DetectionPage = () => {
   const { writeCharacteristic } = useBleStore();
   const setLoading = useLoading((state) => state.setLoading);
 
-  const [, setResults] = useState<Result[]>([]); // test위한 코드
+  const [results, setResults] = useState<Result[]>([]); // test위한 코드
 
   const { mutate: poseMutate } = useMutation({
     mutationFn: poseAlarm,
     onSuccess: () => {},
     onError: (error) => {
       toast.error(error.message);
+
+      setTimeout(() => {
+        toast.dismiss();
+      }, 1500);
     },
   });
 
@@ -65,6 +69,10 @@ const DetectionPage = () => {
     onSuccess: () => {},
     onError: (error) => {
       toast.error(error.message);
+
+      setTimeout(() => {
+        toast.dismiss();
+      }, 1500);
     },
   });
 
@@ -103,24 +111,11 @@ const DetectionPage = () => {
         faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
       ]);
 
-      navigator.mediaDevices
-        .getUserMedia({
-          video: {
-            facingMode: "user",
-          },
-        })
-        .then((stream) => {
-          camMediaStream.current = stream;
-          if (videoRef.current) {
-            videoRef.current.srcObject = stream;
-            videoRef.current.play();
-          }
-        });
-
-      // test로 인한 코드
       // navigator.mediaDevices
       //   .getUserMedia({
-      //     video: true,
+      //     video: {
+      //       facingMode: "user",
+      //     },
       //   })
       //   .then((stream) => {
       //     camMediaStream.current = stream;
@@ -129,6 +124,19 @@ const DetectionPage = () => {
       //       videoRef.current.play();
       //     }
       //   });
+
+      // test로 인한 코드
+      navigator.mediaDevices
+        .getUserMedia({
+          video: true,
+        })
+        .then((stream) => {
+          camMediaStream.current = stream;
+          if (videoRef.current) {
+            videoRef.current.srcObject = stream;
+            videoRef.current.play();
+          }
+        });
 
       const optionsSSDMobileNet = new faceapi.SsdMobilenetv1Options({
         minConfidence: 0.2,
@@ -174,8 +182,8 @@ const DetectionPage = () => {
   let source: any = null;
   let gainNode: any = null;
 
-  const TIMES = 4;
-  const PERCENTAGE = 0.38;
+  const TIMES = 1;
+  const PERCENTAGE = 0.35;
   const RANK = 3;
   const CLASS = {
     BABY_CRY: 20,
@@ -408,7 +416,7 @@ const DetectionPage = () => {
                   : DETECTION.NORMAL.COLOR
               }
             />
-            {cryingType ? (
+            {/* {cryingType ? (
               <div className="h-[4rem]">
                 <PulseLoader
                   color="#c8c8c8"
@@ -425,8 +433,8 @@ const DetectionPage = () => {
                   상태에요
                 </p>
               </div>
-            )}
-            {/* {cryingType ? (
+            )} */}
+            {cryingType ? (
               <div className="h-[4rem]">
                 <PulseLoader color="#c8c8c8" />
               </div>
@@ -447,7 +455,7 @@ const DetectionPage = () => {
                   </div>
                 ))}
               </div>
-            )} */}
+            )}
           </>
         )}
         <div className="flex items-center justify-center w-[80%] h-[6rem] invisible"></div>
