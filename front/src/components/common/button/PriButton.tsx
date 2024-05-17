@@ -31,10 +31,10 @@ const Button: React.FC<ButtonProps> = ({ label, onClick, id, isSelected }) => {
   };
 
   return (
-    <div className="flex justify-center mb-[1rem]">
-      <div className="w-full h-[5rem] border-b border-gray-300">
-        <div className=" text-[1rem] w-[17rem]">{label}</div>
-        <div className="flex justify-between mt-[0.5rem] ">
+    <div className="flex justify-center">
+      <div className="flex flex-col w-full border-b border-gray-300 gap-[0.5rem] py-[1rem]">
+        <div className=" text-[1rem] w-full">{label}</div>
+        <div className="flex justify-between">
           <div
             onClick={() => handleDelete(id)}
             className="flex justify-center items-center  rounded-[1rem] w-[1.5rem] h-[1.5rem] bg-gray-400 "
