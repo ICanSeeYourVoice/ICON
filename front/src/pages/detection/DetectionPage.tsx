@@ -1,11 +1,11 @@
-import { PulseLoader } from "react-spinners";
-import ReactButton from "../../components/main/detection/ReactButton";
-import {
-  DETECTION,
-  DETECTION_INFO,
-  FAILED_INFO,
-  LOADING_INFO,
-} from "../../constants/detection";
+// import { PulseLoader } from "react-spinners";
+// import ReactButton from "../../components/main/detection/ReactButton";
+// import {
+//   DETECTION,
+//   DETECTION_INFO,
+//   FAILED_INFO,
+//   LOADING_INFO,
+// } from "../../constants/detection";
 import { useEffect, useRef, useState } from "react";
 import {
   useDetectionStore,
@@ -15,7 +15,8 @@ import {
 } from "../../stores/detection";
 import { useNavigate } from "react-router";
 import { useMutation } from "@tanstack/react-query";
-import { analyzeAlarm, cryAlarm, poseAlarm } from "../../apis/Notification";
+// import { analyzeAlarm, cryAlarm, poseAlarm } from "../../apis/Notification";
+import { analyzeAlarm, poseAlarm } from "../../apis/Notification";
 import toast from "react-hot-toast";
 import * as tf from "@tensorflow/tfjs";
 import { loadYamnetModel } from "../../utils/loadModel";
@@ -51,6 +52,7 @@ const DetectionPage = () => {
   const setLoading = useLoading((state) => state.setLoading);
 
   const [results, setResults] = useState<Result[]>([]); // test위한 코드
+  const [logs, setLogs] = useState<Result[]>([]);
 
   const { mutate: poseMutate } = useMutation({
     mutationFn: poseAlarm,
@@ -64,17 +66,17 @@ const DetectionPage = () => {
     },
   });
 
-  const { mutate: cryMutate } = useMutation({
-    mutationFn: cryAlarm,
-    onSuccess: () => {},
-    onError: (error) => {
-      toast.error(error.message);
+  // const { mutate: cryMutate } = useMutation({
+  //   mutationFn: cryAlarm,
+  //   onSuccess: () => {},
+  //   onError: (error) => {
+  //     toast.error(error.message);
 
-      setTimeout(() => {
-        toast.dismiss();
-      }, 1500);
-    },
-  });
+  //     setTimeout(() => {
+  //       toast.dismiss();
+  //     }, 1500);
+  //   },
+  // });
 
   const { mutate: analyzeMutate } = useMutation({
     mutationFn: analyzeAlarm,
@@ -182,7 +184,7 @@ const DetectionPage = () => {
   let scriptNode: ScriptProcessorNode | null = null;
   let scriptNodeRef = useRef<ScriptProcessorNode | null>();
   let source: any = null;
-  let gainNode: any = null;
+  // let gainNode: any = null;
 
   const TIMES = 2;
   const PERCENTAGE = 0.2;
@@ -194,6 +196,8 @@ const DetectionPage = () => {
   };
 
   const detectCryState = async () => {
+    const updatedLogs: any[] = []; // test code
+
     setLoading(true);
     try {
       let yamnet: any;
@@ -213,16 +217,16 @@ const DetectionPage = () => {
 
       audioCtx = new AudioContext({ sampleRate: 16000 });
       source = audioCtx.createMediaStreamSource(stream);
-      gainNode = audioCtx.createGain();
+      // gainNode = audioCtx.createGain();
       scriptNode = audioCtx.createScriptProcessor(4096 * TIMES, 1, 1);
       // scriptNode = audioCtx.createScriptProcessor(16384, 1, 1);
       // scriptNode = audioCtx.createScriptProcessor(8192, 1, 1);
 
       scriptNodeRef.current = scriptNode;
 
-      gainNode.gain.value = 4;
-      source.connect(gainNode);
-      gainNode.connect(scriptNode);
+      // gainNode.gain.value = 4;
+      source.connect(scriptNode);
+      // gainNode.connect(scriptNode);
       scriptNode.connect(audioCtx.destination);
 
       let audioBuffer: number[] = [];
@@ -264,12 +268,24 @@ const DetectionPage = () => {
             });
 
             // test 코드
-            if (classes[i] === CLASS.BABY_CRY)
-              console.log("cry: " + probabilities[i]);
-            if (classes[i] === CLASS.CAT)
-              console.log("cat: " + probabilities[i]);
-            if (classes[i] === CLASS.MEOW)
-              console.log("meow: " + probabilities[i]);
+            if (classes[i] === CLASS.BABY_CRY) {
+              updatedLogs.push({
+                label: (classmap as any)[classes[i]].display_name,
+                probability: probabilities[i].toFixed(3),
+              });
+            }
+            if (classes[i] === CLASS.CAT) {
+              updatedLogs.push({
+                label: (classmap as any)[classes[i]].display_name,
+                probability: probabilities[i].toFixed(3),
+              });
+            }
+            if (classes[i] === CLASS.MEOW) {
+              updatedLogs.push({
+                label: (classmap as any)[classes[i]].display_name,
+                probability: probabilities[i].toFixed(3),
+              });
+            }
             // if (classes[i] === CLASS.CAT && probabilities[i] >= 0.7 && i < 3) {
             //   console.log("고양이");
             //   return;
@@ -280,15 +296,18 @@ const DetectionPage = () => {
               probabilities[i] >= PERCENTAGE
             ) {
               // if (classes[i] === 20) {
-              isCry = true;
-              setIsBabyCry(true);
-              setCryingType("LOADING");
-              cryMutate();
+
+              // 원본 코드
+              // isCry = true;
+              // setIsBabyCry(true);
+              // setCryingType("LOADING");
+              // cryMutate();
               return;
             }
           }
 
           setResults(updatedResults); // test를 위한 코드
+          setLogs(updatedLogs); // test를 위한 코드
         } else {
           if (cnt >= 8 / TIMES) {
             const worker = new Worker("recordingWorker.js");
@@ -394,7 +413,7 @@ const DetectionPage = () => {
           </>
         ) : (
           <>
-            <p className="text-gray-1 text-sm">
+            {/* <p className="text-gray-1 text-sm">
               {cryingType === "FAILED"
                 ? FAILED_INFO
                 : cryingType === "LOADING"
@@ -416,7 +435,7 @@ const DetectionPage = () => {
                   ? DETECTION.FAILED.COLOR
                   : DETECTION.NORMAL.COLOR
               }
-            />
+            /> */}
             {/* {cryingType ? (
               <div className="h-[4rem]">
                 <PulseLoader
@@ -435,7 +454,7 @@ const DetectionPage = () => {
                 </p>
               </div>
             )} */}
-            {cryingType ? (
+            {/* {cryingType ? (
               <div className="h-[4rem]">
                 <PulseLoader color="#c8c8c8" />
               </div>
@@ -456,7 +475,47 @@ const DetectionPage = () => {
                   </div>
                 ))}
               </div>
-            )}
+            )} */}
+            <p className="text-white text-xs">Logs</p>
+            <div
+              className="flex flex-col items-start justify-start text-white text-xs h-[20rem]"
+              style={{
+                overflowY: "auto",
+              }}
+            >
+              {logs.map((result, i) => (
+                <div
+                  key={i}
+                  style={{
+                    display: "flex",
+                    width: "18.8rem",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <p>{result.label} </p>
+                  <p> : ({result.probability}) </p>
+                </div>
+              ))}
+            </div>
+            <br />
+            <p className="text-white text-xs">Results</p>
+            <div className="flex flex-col items-center justify-center text-white text-xs">
+              {results.map((result, i) => (
+                <div
+                  key={i}
+                  style={{
+                    display: "flex",
+                    width: "18.8rem",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <p>{result.label} </p>
+                  <p> : ({result.probability}) </p>
+                </div>
+              ))}
+            </div>
           </>
         )}
         <div className="flex items-center justify-center w-[80%] h-[6rem] invisible"></div>
