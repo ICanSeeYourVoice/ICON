@@ -128,7 +128,9 @@ const DetectionPage = () => {
       // test로 인한 코드
       navigator.mediaDevices
         .getUserMedia({
-          video: true,
+          video: {
+            facingMode: "environment",
+          },
         })
         .then((stream) => {
           camMediaStream.current = stream;
