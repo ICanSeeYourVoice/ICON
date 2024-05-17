@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
 import ssafy.icon.commonservice.domain.member.dto.AddGuardianReq;
+import ssafy.icon.commonservice.domain.member.dto.AddTokenReq;
 import ssafy.icon.commonservice.domain.member.dto.GetGuardiansDto;
 import ssafy.icon.commonservice.domain.member.dto.GetGuardiansWithTokenDto;
 import ssafy.icon.commonservice.domain.member.dto.PostTTSReq;
@@ -99,4 +100,18 @@ public class MemberController {
 		List<GetGuardiansWithTokenDto> guardians = memberService.getGuardianWithToken(memberId);
 		return ResponseEntity.ok(guardians);
 	}
+
+	@PatchMapping("/fcmtoken")
+	public ResponseEntity<Void> addToken(@RequestHeader("X-Authorization-Id") Integer memberId,
+		@RequestBody @Valid AddTokenReq token) {
+		log.info("Received token: {}, isApp: {}", token.getToken(), token.getIsApp());
+		memberService.addToken(memberId, token);
+		return ResponseEntity.ok().build();
+	}
+
+	@GetMapping("/fcmtoken")
+	public ResponseEntity<String> getAppToken(@RequestHeader("X-Authorization-Id") Integer memberId) {
+		return ResponseEntity.ok(memberService.getAppToken(memberId));
+	}
+
 }

@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
 import ssafy.icon.commonservice.domain.member.dto.AddGuardianReq;
+import ssafy.icon.commonservice.domain.member.dto.AddTokenReq;
 import ssafy.icon.commonservice.domain.member.dto.GetGuardiansDto;
 import ssafy.icon.commonservice.domain.member.dto.GetGuardiansWithTokenDto;
 import ssafy.icon.commonservice.domain.member.dto.PostTTSReq;
@@ -178,5 +179,28 @@ public class MemberService {
 			log.info("guardian token : {}", dto.toString() );
 		}
 		return gDtoList;
+	}
+
+	public void addToken(Integer memberId, AddTokenReq token) {
+		// token의 id로 유저 정보 가져오기
+		Member member = memberRepository.findById(memberId)
+			.orElseThrow(() -> new MemberException(BAD_REQUEST, "존재하지 않은 회원 ID입니다."));
+
+		log.info("guardian token : {}, {}", token.getToken(), token.getIsApp() );
+		// new token 저장
+		member.updateToken(token.getToken(), token.getIsApp());
+		memberRepository.save(member);
+	}
+
+	public String getAppToken(Integer memberId) {	// token의 id로 유저 정보 가져오기
+		Member member = memberRepository.findById(memberId)
+			.orElseThrow(() -> new MemberException(BAD_REQUEST, "존재하지 않은 회원 ID입니다."));
+
+		log.info("member app token : {}", member.getAppToken());
+		// app token 조회
+		if(member.getAppToken() == null){
+			return "null";
+		}
+		return member.getAppToken();
 	}
 }
