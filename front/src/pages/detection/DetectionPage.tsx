@@ -85,9 +85,9 @@ const DetectionPage = () => {
       setCryingType(res.cryReason);
     },
     onError: (error: any) => {
-      toast.error(error.message);
-
       if (error.response.status === 500) {
+        toast.error("울음 분석에 실패하였습니다");
+
         setIsBabyCry(false);
         setCryingType(0);
         writeCharacteristic("normal");
@@ -95,6 +95,12 @@ const DetectionPage = () => {
         setTimeout(() => {
           window.location.reload();
         }, 2000);
+      } else {
+        toast.error(error.message);
+
+        setTimeout(() => {
+          toast.dismiss();
+        }, 1500);
       }
     },
   });
@@ -186,7 +192,7 @@ const DetectionPage = () => {
   let source: any = null;
   // let gainNode: any = null;
 
-  const TIMES = 2;
+  const TIMES = 1;
   const PERCENTAGE = 0.2;
   // const RANK = 3;
   const CLASS = {
