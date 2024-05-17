@@ -184,8 +184,8 @@ const DetectionPage = () => {
   let source: any = null;
   let gainNode: any = null;
 
-  const TIMES = 1;
-  const PERCENTAGE = 0.3;
+  const TIMES = 2;
+  const PERCENTAGE = 0.2;
   // const RANK = 3;
   const CLASS = {
     BABY_CRY: 20,
