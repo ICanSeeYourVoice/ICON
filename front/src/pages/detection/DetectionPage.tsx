@@ -185,8 +185,8 @@ const DetectionPage = () => {
   let gainNode: any = null;
 
   const TIMES = 1;
-  const PERCENTAGE = 0.35;
-  const RANK = 3;
+  const PERCENTAGE = 0.3;
+  // const RANK = 3;
   const CLASS = {
     BABY_CRY: 20,
     CAT: 76,
@@ -270,15 +270,14 @@ const DetectionPage = () => {
               console.log("cat: " + probabilities[i]);
             if (classes[i] === CLASS.MEOW)
               console.log("meow: " + probabilities[i]);
-            if (classes[i] === CLASS.CAT && probabilities[i] >= 0.7 && i < 3) {
-              console.log("고양이");
-              return;
-            }
+            // if (classes[i] === CLASS.CAT && probabilities[i] >= 0.7 && i < 3) {
+            //   console.log("고양이");
+            //   return;
+            // }
 
             if (
               classes[i] === CLASS.BABY_CRY &&
-              probabilities[i] >= PERCENTAGE &&
-              i < RANK
+              probabilities[i] >= PERCENTAGE
             ) {
               // if (classes[i] === 20) {
               isCry = true;
