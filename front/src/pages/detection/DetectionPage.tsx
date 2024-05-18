@@ -50,13 +50,17 @@ const DetectionPage = () => {
   // const { writeCharacteristic } = useBleStore();
   const setLoading = useLoading((state) => state.setLoading);
 
-  const [results, setResults] = useState<Result[]>([]); // test위한 코드
+  const [, setResults] = useState<Result[]>([]); // test위한 코드
 
   const { mutate: poseMutate } = useMutation({
     mutationFn: poseAlarm,
     onSuccess: () => {},
     onError: (error) => {
       toast.error(error.message);
+
+      setTimeout(() => {
+        toast.dismiss();
+      }, 1500);
     },
   });
 
@@ -65,6 +69,10 @@ const DetectionPage = () => {
     onSuccess: () => {},
     onError: (error) => {
       toast.error(error.message);
+
+      setTimeout(() => {
+        toast.dismiss();
+      }, 1500);
     },
   });
 
@@ -75,9 +83,9 @@ const DetectionPage = () => {
       setCryingType(res.cryReason);
     },
     onError: (error: any) => {
-      toast.error(error.message);
-
       if (error.response.status === 500) {
+        toast.error("울음 분석에 실패하였습니다");
+
         setIsBabyCry(false);
         setCryingType(0);
         // writeCharacteristic("normal");
@@ -85,6 +93,12 @@ const DetectionPage = () => {
         setTimeout(() => {
           window.location.reload();
         }, 2000);
+      } else {
+        toast.error(error.message);
+
+        setTimeout(() => {
+          toast.dismiss();
+        }, 1500);
       }
     },
   });
@@ -120,7 +134,9 @@ const DetectionPage = () => {
       // test로 인한 코드
       // navigator.mediaDevices
       //   .getUserMedia({
-      //     video: true,
+      //     video: {
+      //       facingMode: "environment",
+      //     },
       //   })
       //   .then((stream) => {
       //     camMediaStream.current = stream;
@@ -174,9 +190,9 @@ const DetectionPage = () => {
   let source: any = null;
   let gainNode: any = null;
 
-  const TIMES = 4;
-  const PERCENTAGE = 0.38;
-  const RANK = 3;
+  const TIMES = 2;
+  const PERCENTAGE = 0.2;
+  // const RANK = 3;
   const CLASS = {
     BABY_CRY: 20,
     CAT: 76,
@@ -260,15 +276,14 @@ const DetectionPage = () => {
               console.log("cat: " + probabilities[i]);
             if (classes[i] === CLASS.MEOW)
               console.log("meow: " + probabilities[i]);
-            if (classes[i] === CLASS.CAT && probabilities[i] >= 0.7 && i < 3) {
-              console.log("고양이");
-              return;
-            }
+            // if (classes[i] === CLASS.CAT && probabilities[i] >= 0.7 && i < 3) {
+            //   console.log("고양이");
+            //   return;
+            // }
 
             if (
               classes[i] === CLASS.BABY_CRY &&
-              probabilities[i] >= PERCENTAGE &&
-              i < RANK
+              probabilities[i] >= PERCENTAGE
             ) {
               // if (classes[i] === 20) {
               isCry = true;
@@ -408,7 +423,7 @@ const DetectionPage = () => {
                   : DETECTION.NORMAL.COLOR
               }
             />
-            {/* {cryingType ? (
+            {cryingType ? (
               <div className="h-[4rem]">
                 <PulseLoader
                   color="#c8c8c8"
@@ -425,8 +440,8 @@ const DetectionPage = () => {
                   상태에요
                 </p>
               </div>
-            )} */}
-            {cryingType ? (
+            )}
+            {/* {cryingType ? (
               <div className="h-[4rem]">
                 <PulseLoader color="#c8c8c8" />
               </div>
@@ -447,7 +462,7 @@ const DetectionPage = () => {
                   </div>
                 ))}
               </div>
-            )}
+            )} */}
           </>
         )}
         <div className="flex items-center justify-center w-[80%] h-[6rem] invisible"></div>

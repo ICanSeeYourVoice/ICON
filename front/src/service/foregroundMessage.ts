@@ -1,5 +1,6 @@
 import { getMessaging, onMessage } from "firebase/messaging";
 import { app } from "./initFirebase";
+import icon from "../../public/icon-logo.png";
 
 const messaging = getMessaging(app);
 
@@ -12,6 +13,7 @@ export const messageHandler = (
     const notificationTitle = payload.notification.title;
     const notificationOptions = {
       body: payload.notification.body,
+      icon: icon,
     };
 
     setNotification({

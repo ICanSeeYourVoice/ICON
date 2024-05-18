@@ -169,10 +169,8 @@ const ClovaVoice = () => {
       </div>
 
       {/* 즐겨찾기 문구 */}
-      <div className="flex flex-col justify-center w-[80%] p-3 bg-white rounded-[1rem] ">
-        <div className="text-gray-500 mb-[1rem] text-[1.1rem]">
-          즐겨찾기 문구
-        </div>
+      <div className="flex flex-col justify-center w-[80%] bg-white rounded-[1rem]">
+        <div className="text-gray-500 text-[1.1rem]">즐겨찾기 문구</div>
         {voices.length >= 0 && voices.length < 3 ? (
           <>
             {voices.map((voice, index) => (

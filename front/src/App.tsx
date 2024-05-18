@@ -19,7 +19,14 @@ function App() {
   const { token, setToken } = useTokenStore();
 
   /* Notification setting */
-  const notify = () => toast(<ToastDisplay />);
+  const notify = () => {
+    const toastId = toast(<ToastDisplay />);
+
+    setTimeout(() => {
+      toast.dismiss(toastId);
+    }, 1500);
+  };
+
   const ToastDisplay = () => {
     const currentTime = new Date().toLocaleTimeString();
 
