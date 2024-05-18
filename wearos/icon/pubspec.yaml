@@ -38,6 +38,7 @@ dependencies:
   flutter_local_notifications: ^17.1.0
   vibration: ^1.8.4
   device_info_plus: ^10.1.0
+  restart_app: ^1.2.1
 
   flutter:
     sdk: flutter

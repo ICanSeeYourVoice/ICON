@@ -2,25 +2,25 @@ import ReactButton from "../../components/main/detection/ReactButton";
 import { DETECTION, RESTART_INFO } from "../../constants/detection";
 import InfoMessage from "../../components/main/detection/InfoMessage";
 import { useDetectionStore } from "../../stores/detection";
-import useBleStore from "../../stores/bluetooth";
+// import useBleStore from "../../stores/bluetooth";
 
 const ResultPage = () => {
-  const { writeCharacteristic } = useBleStore();
+  // const { writeCharacteristic } = useBleStore();
   const cryingType = useDetectionStore((state: any) => state.cryingType);
 
   const getCryInfo = (cryReason: string) => {
     switch (cryReason) {
       case "DISCOMFORT":
-        writeCharacteristic("discomfort");
+        // writeCharacteristic("discomfort");
         return DETECTION.DISCOMFORT;
       case "HUNGRY":
-        writeCharacteristic("hungry");
+        // writeCharacteristic("hungry");
         return DETECTION.HUNGRY;
       case "PAIN":
-        writeCharacteristic("pain");
+        // writeCharacteristic("pain");
         return DETECTION.PAIN;
       case "TIRED":
-        writeCharacteristic("hungry");
+        // writeCharacteristic("tired");
         return DETECTION.TIRED;
       case "BURPING":
         return DETECTION.BURPING;

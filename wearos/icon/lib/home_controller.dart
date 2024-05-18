@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:vibration/vibration.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:restart_app/restart_app.dart';
 
 class HomeController extends GetxController {
   RxBool isAdvertising = false.obs; // 블루투스 광고 상태
@@ -13,6 +14,7 @@ class HomeController extends GetxController {
   RxString devicesId = ''.obs; // 캐릭터리스틱 업데이트를 위한 장치 id
   RxString status = ''.obs; // 현재 상태
   RxString getDeviceName = ''.obs; // 장치 모델 이름
+  RxString fcm_token = ''.obs;
   // 현재 상태 업데이트
   void updateStatus(String newStatus) {
     status.value = newStatus; // 상태 업데이트
@@ -87,13 +89,15 @@ class HomeController extends GetxController {
         }
       } else {
         devices.removeWhere((element) => element == deviceId);
+        // updateStatus("init");
+        updateStatus('normal'); // fcm token
       }
     });
 
     BlePeripheral.setReadRequestCallback(
         (deviceId, characteristicId, offset, value) {
       Get.log("ReadRequest: $deviceId $characteristicId : $offset : $value");
-      return ReadRequestResult(value: utf8.encode("connect device"));
+      return ReadRequestResult(value: utf8.encode("$fcm_token"));
     });
 
     BlePeripheral.setWriteRequestCallback(
@@ -132,10 +136,15 @@ class HomeController extends GetxController {
     bool permissionGranted = await BlePeripheral.askBlePermission();
     if (!permissionGranted) {
       Get.log("Bluetooth permission not granted, retrying...");
-      await checkPermission();
+      bool check = await BlePeripheral.askBlePermission();
+      if (check)
+        Restart.restartApp();
+      else
+        await checkPermission();
     } else {
       isBleOn.value = true;
-      updateStatus('init');
+      // updateStatus('init');
+      updateStatus('normal'); // fcm token
     }
   }
 
