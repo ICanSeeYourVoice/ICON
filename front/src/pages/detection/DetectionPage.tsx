@@ -19,7 +19,7 @@ import { analyzeAlarm, cryAlarm, poseAlarm } from "../../apis/Notification";
 import toast from "react-hot-toast";
 import * as tf from "@tensorflow/tfjs";
 import { loadYamnetModel } from "../../utils/loadModel";
-import useBleStore from "../../stores/bluetooth";
+// import useBleStore from "../../stores/bluetooth";
 import classmap from "../../model/yamnet-class-map.json";
 import * as faceapi from "@vladmandic/face-api";
 import { useDetectionPoseStore } from "../../stores/detectionPose";
@@ -47,7 +47,7 @@ const DetectionPage = () => {
   const streamRef = useRef<MediaStream | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const camMediaStream = useRef<MediaStream | null>(null);
-  const { writeCharacteristic } = useBleStore();
+  // const { writeCharacteristic } = useBleStore();
   const setLoading = useLoading((state) => state.setLoading);
 
   const [results, setResults] = useState<Result[]>([]); // test위한 코드
@@ -80,7 +80,7 @@ const DetectionPage = () => {
       if (error.response.status === 500) {
         setIsBabyCry(false);
         setCryingType(0);
-        writeCharacteristic("normal");
+        // writeCharacteristic("normal");
 
         setTimeout(() => {
           window.location.reload();
@@ -153,7 +153,7 @@ const DetectionPage = () => {
             clearInterval(intervalRef.current!);
 
             poseMutate();
-            writeCharacteristic("danger");
+            // writeCharacteristic("danger");
             navigate("/detection/result/pose");
           }
         }

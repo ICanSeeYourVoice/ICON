@@ -58,13 +58,11 @@ const SettingRoutinePage = () => {
 
   const { mutate } = useMutation({
     mutationFn: RegisterRoutine,
-    onSuccess: (res) => {
-      console.log("루틴 등록 성공", res);
+    onSuccess: () => {
       toast.success("자동화 등록에 성공했어요.", { duration: 800 });
       navigate("/setting/things");
     },
-    onError: (error) => {
-      console.log("루틴 등록 실패", error);
+    onError: () => {
       toast.error("자동화 등록에 실패했어요.", { duration: 800 });
     },
   });

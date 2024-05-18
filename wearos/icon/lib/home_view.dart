@@ -47,8 +47,8 @@ class HomeView extends GetView<HomeController> {
                         return _buildHungryScreen();
                       case 'pain':
                         return _buildPainScreen();
-                      case 'sleep':
-                        return _buildSleepScreen();
+                      case 'tired':
+                        return _buildTiredScreen();
                       default:
                         return _buildConnectionScreen();
                     }
@@ -73,6 +73,10 @@ class HomeView extends GetView<HomeController> {
         ),
         ElevatedButton(
           onPressed: controller.checkPermission,
+          style: ButtonStyle(
+              backgroundColor:
+                  MaterialStateProperty.all(Color.fromRGBO(123, 183, 247, 1)),
+              foregroundColor: MaterialStateProperty.all(Colors.white)),
           child: Text('권한 요청'),
         ),
       ],
@@ -84,6 +88,9 @@ class HomeView extends GetView<HomeController> {
     // 초기 화면 UI 구성
     return Center(
         child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: [
         const Text(
           '연결 버튼을 눌러주세요.\n아이콘>설정>워치연결에서\n연결해주세요.',
@@ -93,18 +100,33 @@ class HomeView extends GetView<HomeController> {
         Obx(() => controller.isAdvertising.value
             ? ElevatedButton(
                 style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(
-                        Color.fromRGBO(123, 183, 247, 1)),
-                    foregroundColor: MaterialStateProperty.all(Colors.white)),
+                  backgroundColor: MaterialStateProperty.all(
+                      Color.fromRGBO(123, 183, 247, 1)),
+                  foregroundColor: MaterialStateProperty.all(Colors.white),
+                ),
                 onPressed: BlePeripheral.stopAdvertising,
                 child: const Text('연결 해제'))
             : ElevatedButton(
                 style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(
-                        Color.fromRGBO(123, 183, 247, 1)),
-                    foregroundColor: MaterialStateProperty.all(Colors.white)),
+                  backgroundColor: MaterialStateProperty.all(
+                      Color.fromRGBO(123, 183, 247, 1)),
+                  foregroundColor: MaterialStateProperty.all(Colors.white),
+                ),
                 onPressed: controller.checkStartAdvertising,
-                child: const Text('연결'))),
+                child: const Text('연결 하기'))),
+        SizedBox(
+          height: 40,
+          width: 100,
+          child: TextButton(
+            child: Text('닫기'),
+            onPressed: () async {
+              controller.updateStatus('normal');
+            },
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.white,
+            ),
+          ),
+        ),
       ],
     ));
   }
@@ -116,22 +138,22 @@ class HomeView extends GetView<HomeController> {
         alignment: Alignment.center,
         children: [
           SizedBox(
-            width: 150,
-            height: 150,
+            width: 200,
+            height: 200,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(32.5),
               child: const Image(
                 fit: BoxFit.cover,
-                image: AssetImage('assets/nomal.png'),
+                image: AssetImage('assets/nomal-large.png'),
               ),
             ),
           ),
           Positioned(
-            bottom: 0,
+            bottom: 10,
             left: 0,
             right: 0,
             child: TextButton(
-              child: Text('재연결'),
+              child: Text('연결 설정'),
               style: TextButton.styleFrom(foregroundColor: Colors.white),
               onPressed: () {
                 controller.updateStatus('init');
@@ -149,26 +171,24 @@ class HomeView extends GetView<HomeController> {
         alignment: Alignment.center,
         children: [
           SizedBox(
-            width: 150,
-            height: 150,
+            width: 200,
+            height: 200,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(32.5),
               child: const Image(
                 fit: BoxFit.cover,
-                image: AssetImage('assets/hungry.png'),
+                image: AssetImage('assets/hungry-large.png'),
               ),
             ),
           ),
           Positioned(
-            bottom: 0,
+            bottom: 10,
             left: 0,
             right: 0,
             child: TextButton(
               child: Text('닫기'),
               onPressed: () async {
-                // print("devices list: ${controller.devices[0]}");
-                // print("device id: ${controller.devicesId.value}");
-                controller.updateCharacteristic(controller.devices[0]);
+                // controller.updateCharacteristic(controller.devices[0]);
                 controller.updateStatus('normal');
               },
               style: TextButton.styleFrom(foregroundColor: Colors.white),
@@ -185,24 +205,25 @@ class HomeView extends GetView<HomeController> {
         alignment: Alignment.center,
         children: [
           SizedBox(
-            width: 150,
-            height: 150,
+            width: 200,
+            height: 200,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(32.5),
               child: const Image(
                 fit: BoxFit.cover,
-                image: AssetImage('assets/danger.png'),
+                image: AssetImage('assets/danger-large.png'),
               ),
             ),
           ),
           Positioned(
-            bottom: 0,
+            bottom: 10,
             left: 0,
             right: 0,
             child: TextButton(
               child: Text('닫기'),
+              style: TextButton.styleFrom(foregroundColor: Colors.black),
               onPressed: () async {
-                controller.updateCharacteristic(controller.devices[0]);
+                // controller.updateCharacteristic(controller.devices[0]);
                 controller.updateStatus('normal');
               },
             ),
@@ -218,24 +239,25 @@ class HomeView extends GetView<HomeController> {
         alignment: Alignment.center,
         children: [
           SizedBox(
-            width: 150,
-            height: 150,
+            width: 200,
+            height: 200,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(32.5),
               child: const Image(
                 fit: BoxFit.cover,
-                image: AssetImage('assets/discomfort.png'),
+                image: AssetImage('assets/discomfort-large.png'),
               ),
             ),
           ),
           Positioned(
-            bottom: 0,
+            bottom: 10,
             left: 0,
             right: 0,
             child: TextButton(
               child: Text('닫기'),
+              style: TextButton.styleFrom(foregroundColor: Colors.white),
               onPressed: () async {
-                controller.updateCharacteristic(controller.devices[0]);
+                // controller.updateCharacteristic(controller.devices[0]);
                 controller.updateStatus('normal');
               },
             ),
@@ -251,24 +273,25 @@ class HomeView extends GetView<HomeController> {
         alignment: Alignment.center,
         children: [
           SizedBox(
-            width: 150,
-            height: 150,
+            width: 200,
+            height: 200,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(32.5),
               child: const Image(
                 fit: BoxFit.cover,
-                image: AssetImage('assets/pain.png'),
+                image: AssetImage('assets/pain-large.png'),
               ),
             ),
           ),
           Positioned(
-            bottom: 0,
+            bottom: 10,
             left: 0,
             right: 0,
             child: TextButton(
               child: Text('닫기'),
+              style: TextButton.styleFrom(foregroundColor: Colors.white),
               onPressed: () async {
-                controller.updateCharacteristic(controller.devices[0]);
+                // controller.updateCharacteristic(controller.devices[0]);
                 controller.updateStatus('normal');
               },
             ),
@@ -278,30 +301,31 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
-  Widget _buildSleepScreen() {
+  Widget _buildTiredScreen() {
     return Center(
       child: Stack(
         alignment: Alignment.center,
         children: [
           SizedBox(
-            width: 150,
-            height: 150,
+            width: 200,
+            height: 200,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(32.5),
               child: const Image(
                 fit: BoxFit.cover,
-                image: AssetImage('assets/sleep.png'),
+                image: AssetImage('assets/tired-large.png'),
               ),
             ),
           ),
           Positioned(
-            bottom: 0,
+            bottom: 10,
             left: 0,
             right: 0,
             child: TextButton(
               child: Text('닫기'),
+              style: TextButton.styleFrom(foregroundColor: Colors.white),
               onPressed: () async {
-                controller.updateCharacteristic(controller.devices[0]);
+                // controller.updateCharacteristic(controller.devices[0]);
                 controller.updateStatus('normal');
               },
             ),
