@@ -12,7 +12,6 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.MulticastMessage;
 import com.google.firebase.messaging.Notification;
-import com.google.firebase.messaging.SendResponse;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +31,7 @@ public class AlarmService {
 	private final KafkaBabyCryProducer kafkaBabyCryProducer;
 
 	// 울음 종류 : CRY, TIRED, HUNGRY, DISCOMFORT, DANGER, PAIN
-	public void sendCryMessage(Integer memberId, String type) {
+	public boolean sendCryMessage(Integer memberId, String type) {
 		GetMemberApiRes member = alarmApiClient.getMember(memberId);
 		log.info("GetMemberApiRes : {}", member.toString());
 		if (member.getWebToken().isEmpty()) {
@@ -43,14 +42,19 @@ public class AlarmService {
 		List<GetGuardianApiRes> guardians = alarmApiClient.getGuardian(memberId);
 		List<String> tokens = new ArrayList<>();
 		tokens.add(member.getWebToken());
-		if(member.getAppToken() != null && !type.equals("CRY")){
-			tokens.add(member.getAppToken());
-		}
+
 		for (GetGuardianApiRes guardian : guardians) {
 			log.info("guardian : {}, {}", guardian.getGuestId(), guardian.getToken());
 			if (guardian.getToken() != null)
 				tokens.add(guardian.getToken());
 		}
+
+		boolean isAppToken = false;
+		if(member.getAppToken() != null && !type.equals("CRY")){
+			tokens.add(member.getAppToken());
+			isAppToken = true;
+		}
+
 		log.info("tokens : {}", tokens.size());
 
 		String titleMsg = "울음 분석 완료!";
@@ -91,15 +95,14 @@ public class AlarmService {
 		try {
 			BatchResponse response = FirebaseMessaging.getInstance().sendMulticast(msg);
 			log.info("Notification sent successfully: {}", response.getSuccessCount());
-			for (SendResponse r : response.getResponses()) {
-				log.info("response : {}, {} , {}", r.isSuccessful() , r.getMessageId(), r.getException());
+			if(isAppToken){
+				return response.getResponses().getLast().isSuccessful();
 			}
-
 		} catch (FirebaseMessagingException e) {
 			log.error("Failed to send notification", e);
 			throw new RuntimeException(e);
 		}
-		log.info("sendCryMessage completed for memberId: {}", memberId);
+		return true;
 	}
 
 	public void addKafkaBabyCry(Integer memberId, String type) {
