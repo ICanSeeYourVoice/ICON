@@ -20,11 +20,13 @@ public class AlarmController {
 	private final AlarmService alarmService;
 
 	@PostMapping()
-	public ResponseEntity<Void> sendCry(@RequestHeader("X-Authorization-Id") Integer memberId,
+	public ResponseEntity<String> sendCry(@RequestHeader("X-Authorization-Id") Integer memberId,
 		@RequestBody PostAlarmDto req) {
-		alarmService.sendCryMessage(memberId,req.getType());
 		alarmService.addKafkaBabyCry(memberId, req.getType());
-		return ResponseEntity.ok().build();
+		if(alarmService.sendCryMessage(memberId,req.getType()))
+			return ResponseEntity.ok().build();
+		else
+			return ResponseEntity.ok("App 토큰이 만료되었습니다.");
 	}
 
 }
