@@ -12,6 +12,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.MulticastMessage;
 import com.google.firebase.messaging.Notification;
+import com.google.firebase.messaging.SendResponse;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +43,9 @@ public class AlarmService {
 		List<GetGuardianApiRes> guardians = alarmApiClient.getGuardian(memberId);
 		List<String> tokens = new ArrayList<>();
 		tokens.add(member.getWebToken());
+		if(member.getAppToken() != null && !type.equals("CRY")){
+			tokens.add(member.getAppToken());
+		}
 		for (GetGuardianApiRes guardian : guardians) {
 			log.info("guardian : {}, {}", guardian.getGuestId(), guardian.getToken());
 			if (guardian.getToken() != null)
@@ -87,6 +91,10 @@ public class AlarmService {
 		try {
 			BatchResponse response = FirebaseMessaging.getInstance().sendMulticast(msg);
 			log.info("Notification sent successfully: {}", response.getSuccessCount());
+			for (SendResponse r : response.getResponses()) {
+				log.info("response : {}, {} , {}", r.isSuccessful() , r.getMessageId(), r.getException());
+			}
+
 		} catch (FirebaseMessagingException e) {
 			log.error("Failed to send notification", e);
 			throw new RuntimeException(e);
