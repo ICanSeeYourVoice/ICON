@@ -2,7 +2,7 @@ import { useNavigate } from "react-router";
 import "./ReactButton.css";
 import { useDetectionStore } from "../../../stores/detection";
 import { useDetectionPoseStore } from "../../../stores/detectionPose";
-import useBleStore from "../../../stores/bluetooth";
+// import useBleStore from "../../../stores/bluetooth";
 
 const ReactButton = ({ icon, color }: { icon: string; color: string }) => {
   const navigate = useNavigate();
@@ -17,13 +17,13 @@ const ReactButton = ({ icon, color }: { icon: string; color: string }) => {
   );
   const isBabyFace = useDetectionPoseStore((state: any) => state.isBabyFace);
 
-  const { isChange, writeCharacteristic } = useBleStore();
+  // const { isChange, writeCharacteristic } = useBleStore();
 
-  if (isChange) {
-    useBleStore.setState({ isChange: false });
-    writeCharacteristic("normal");
-    navigate("/detection");
-  }
+  // if (isChange) {
+  // useBleStore.setState({ isChange: false });
+  // writeCharacteristic("normal");
+  // navigate("/detection");
+  // }
   return (
     <div className="circle-container">
       <div
@@ -52,7 +52,7 @@ const ReactButton = ({ icon, color }: { icon: string; color: string }) => {
             if (cryingType !== "FAILED" && cryingType !== "LOADING") {
               setCryingType(0);
               setIsBabyCry(false);
-              writeCharacteristic("normal");
+              // writeCharacteristic("normal");
               navigate("/detection");
             }
           }

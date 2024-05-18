@@ -35,7 +35,7 @@ const useBleStore = create<BleStore>((set, get) => ({
     set({ device });
     if (device) {
       device.addEventListener("gattserverdisconnected", () => {
-        alert("디바이스 연결이 끊어졌습니다.");
+        // alert("디바이스 연결이 끊어졌습니다.");
         useBleStore.setState({
           isConnected: false,
           device: null,
@@ -54,6 +54,7 @@ const useBleStore = create<BleStore>((set, get) => ({
   ) => {
     set({ characteristic });
     if (characteristic) {
+      characteristic.stopNotifications();
       characteristic.startNotifications().then(
         () => {
           console.log("Notifications started");
@@ -78,6 +79,9 @@ const useBleStore = create<BleStore>((set, get) => ({
           console.error("Failed to start notifications", error);
         }
       );
+      // set({
+      //   deviceValue: new TextDecoder().decode(characteristic.value),
+      // });
     }
   },
   setIsConnected: (isConnected: boolean) => set({ isConnected }),
