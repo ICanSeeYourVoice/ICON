@@ -35,7 +35,7 @@ const Nav = () => {
       index: 0,
     },
     {
-      text: "보이스",
+      text: "음성변환",
       icon: voice,
       clickedIcon: voiceClicked,
       path: "/voice",
