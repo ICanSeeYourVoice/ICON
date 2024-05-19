@@ -1,7 +1,6 @@
  <div style="text-align: center;">
-  <img src="https://hackmd.io/_uploads/SyHoZsDXC.png" alt="Image">
+  <img src="/uploads/37c34dc06b65dc259a313b3707581f79/메인.png" alt="Image">
 </div>
-
 
 <br/>
 
@@ -16,8 +15,7 @@
   - [⭐ 알림](#⭐-알림)
     - [워치 화면](#워치-화면)
   - [⭐ 성장 일지](#⭐-성장-일지)
-  - [⭐ 보이스](#⭐-보이스)
-  - [⭐ 챗봇](#⭐-챗봇)
+  - [⭐ 보이스 / 챗봇](#⭐-보이스-/-챗봇)
   - [⭐ 회원](#⭐-회원)
 
 - [💾 시스템 아키텍처](#💾-시스템-아키텍처)
@@ -149,24 +147,10 @@
 |울음 감지 및 분석|행동 감지|on/off|
 
 #### 상태 유형
-
-<div style="width:50%">
     
-|![평온함](https://hackmd.io/_uploads/BkOPMOw7A.png)|![아픔](https://hackmd.io/_uploads/Skeam_PQC.png)|![불편함](https://hackmd.io/_uploads/HkH6Q_DmA.png)|
-|:-:|:-:|:-:|
-|평온|아픔|불편|
-
-
-|![배고픔](https://hackmd.io/_uploads/S1jaQ_w70.png)|![졸림](https://hackmd.io/_uploads/HyGCQOv7A.png)|![위험함](https://hackmd.io/_uploads/BJnbLuwmC.png)|
-|:-:|:-:|:-:|
-|배고픔|졸림|위험|
-
-
-|![로딩](https://hackmd.io/_uploads/rJxkNuDmA.png)|![새로고침](https://hackmd.io/_uploads/SJVyNdPXA.png)|![꺼짐](https://hackmd.io/_uploads/BJ_1Edw7C.png)| 
-|:-:|:-:|:-:|
-|로딩|오류|꺼짐|
-    
-</div>
+|![평온함](https://hackmd.io/_uploads/BkOPMOw7A.png)|![아픔](https://hackmd.io/_uploads/Skeam_PQC.png)|![불편함](https://hackmd.io/_uploads/HkH6Q_DmA.png)|![배고픔](https://hackmd.io/_uploads/S1jaQ_w70.png)|![졸림](https://hackmd.io/_uploads/HyGCQOv7A.png)|![위험함](https://hackmd.io/_uploads/BJnbLuwmC.png)|![로딩](https://hackmd.io/_uploads/rJxkNuDmA.png)|![새로고침](https://hackmd.io/_uploads/SJVyNdPXA.png)|![꺼짐](https://hackmd.io/_uploads/BJ_1Edw7C.png)| 
+|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+|평온|아픔|불편|배고픔|졸림|위험|로딩|오류|꺼짐|
 
 <br/>
 
@@ -178,22 +162,12 @@
 
 #### 워치 화면
 
-<div style="width:60%">
-    
-|![rn_image_picker_lib_temp_35a5ea7b-b091-4b8b-943b-f502506e145b](https://hackmd.io/_uploads/HyXD9uvX0.png)|![rn_image_picker_lib_temp_290cbbc6-75d1-485d-b732-a6ebc3966e55](https://hackmd.io/_uploads/BkB_9uwmR.png)|![rn_image_picker_lib_temp_b2cd4e3a-28e4-4856-afcc-2adfe58cbfa7](https://hackmd.io/_uploads/HksOqODm0.png)|![rn_image_picker_lib_temp_0a550ec2-9f8e-47da-ab20-926bd292090b](https://hackmd.io/_uploads/H1-F5dwmR.png)|
-|:-:|:-:|:-:|:-:|
-|평온|아픔|불편|배고픔|
-    
-</div>
 
-<div style="width:45%">
     
-|![rn_image_picker_lib_temp_68c6c486-c50c-4968-bd6f-59dc8b6d13cf](https://hackmd.io/_uploads/Hk859dPmR.png)|![rn_image_picker_lib_temp_f48f5e07-5987-4852-8943-3d9486ae6370](https://hackmd.io/_uploads/HyUscODX0.png)|![rn_image_picker_lib_temp_f5adca03-80e8-4437-9439-3a5be975c119](https://hackmd.io/_uploads/Skni5_vQC.png)|
-|:-:|:-:|:-:|
-|졸림|위험|연결|
+|![rn_image_picker_lib_temp_35a5ea7b-b091-4b8b-943b-f502506e145b](https://hackmd.io/_uploads/HyXD9uvX0.png)|![rn_image_picker_lib_temp_290cbbc6-75d1-485d-b732-a6ebc3966e55](https://hackmd.io/_uploads/BkB_9uwmR.png)|![rn_image_picker_lib_temp_b2cd4e3a-28e4-4856-afcc-2adfe58cbfa7](https://hackmd.io/_uploads/HksOqODm0.png)|![rn_image_picker_lib_temp_0a550ec2-9f8e-47da-ab20-926bd292090b](https://hackmd.io/_uploads/H1-F5dwmR.png)|![rn_image_picker_lib_temp_68c6c486-c50c-4968-bd6f-59dc8b6d13cf](https://hackmd.io/_uploads/Hk859dPmR.png)|![rn_image_picker_lib_temp_f48f5e07-5987-4852-8943-3d9486ae6370](https://hackmd.io/_uploads/HyUscODX0.png)|![rn_image_picker_lib_temp_f5adca03-80e8-4437-9439-3a5be975c119](https://hackmd.io/_uploads/Skni5_vQC.png)|
+|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+|평온|아픔|불편|배고픔|졸림|위험|연결|
     
-</div>
-
 <br/>
 
 ### ⭐ 성장 일지
@@ -204,19 +178,13 @@
 
 <br/>
 
-### ⭐ 보이스
+### ⭐ 보이스 / 챗봇
 
-|![음성_변환](/uploads/d3ec394f4b80a99ed30714c3b8a6d7a0/음성_변환.gif)|![즐겨찾기](/uploads/627008d067ba65a11dbfbc8286a3dc49/즐겨찾기.gif)|
-|:-:|:-:|
-|음성 변환|즐겨찾기|
+|![음성_변환](/uploads/d3ec394f4b80a99ed30714c3b8a6d7a0/음성_변환.gif)|![즐겨찾기](/uploads/627008d067ba65a11dbfbc8286a3dc49/즐겨찾기.gif)|![챗봇](/uploads/eaf875bfca53b95b197c4a927319a43c/챗봇.gif)|
+|:-:|:-:|:-:|
+|음성 변환|즐겨찾기|챗봇|
 
 <br/>
-
-### ⭐ 챗봇
-
-|![챗봇](/uploads/eaf875bfca53b95b197c4a927319a43c/챗봇.gif)||
-|:-:|:-:|
-|챗봇|||
 
 ### ⭐ 회원
 
