@@ -30,7 +30,6 @@ interface BleStore {
 
 const BleConnect = () => {
   const {
-    // device,
     setDeviceValue,
     setDevice,
     setServer,
@@ -94,6 +93,7 @@ const BleConnect = () => {
       const fcmToken = new TextDecoder().decode(tokenDataView);
       console.log(fcmToken);
       if (fcmToken.length < 1) {
+        alert("FCM 토큰을 가져올 수 없습니다.");
         throw new Error("FCM 토큰을 가져올 수 없습니다.");
       }
       useBleStore.setState({ isConnected: true });
