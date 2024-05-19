@@ -71,7 +71,6 @@
 <img src="https://img.shields.io/badge/React Query-FF4154?style=for-the-badge&amp;logo=reactquery&amp;logoColor=white">
 <img src="https://img.shields.io/badge/Zustand-443E38?style=for-the-badge&amp;logo=&amp;logoColor=white">
 <img src="https://img.shields.io/badge/React Router-CA4245?style=for-the-badge&amp;logo=reactrouter&amp;logoColor=white">
-<img src="https://img.shields.io/badge/Zustand-FF4154?style=for-the-badge&amp;logo=reactquery&amp;logoColor=white">
 <img src="https://img.shields.io/badge/vite-646CFF?style=for-the-badge&logo=vite&logoColor=white">
 <img src="https://img.shields.io/badge/PWA-5A0FC8?style=for-the-badge&amp;logo=pwa&amp;logoColor=white">
 <img src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&amp;logo=firebase&amp;logoColor=white">
