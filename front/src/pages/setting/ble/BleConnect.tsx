@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import toast from "react-hot-toast";
 import SmallButton from "../../../components/common/button/GradientButton";
 import useBleStore from "../../../stores/bluetooth";
@@ -37,7 +37,7 @@ const BleConnect = () => {
     writeCharacteristic,
   } = useBleStore() as BleStore;
   const queryClient = useQueryClient();
-  const [getToken, setToken] = useState("");
+  // const [getToken, setToken] = useState("");
   useEffect(() => {
     if (!("bluetooth" in navigator)) {
       toast.error(
@@ -94,7 +94,7 @@ const BleConnect = () => {
         alert("FCM 토큰을 가져올 수 없습니다.");
         throw new Error("FCM 토큰을 가져올 수 없습니다.");
       }
-      setToken(fcmToken);
+      // setToken(fcmToken);
       setCharacteristic(characteristic);
       useBleStore.setState({ isConnected: true });
       mutate({ token: fcmToken, isApp: true });
@@ -152,7 +152,6 @@ const BleConnect = () => {
               <SmallButton label="연결해제" onClick={handleDisconnectClick} />
             </div>
           )}
-          <div>{getToken}</div>
         </>
       )}
     </div>
