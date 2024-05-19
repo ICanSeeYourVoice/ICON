@@ -1,0 +1,198 @@
+pipeline {
+    environment {
+        repository = "hggew/icon"
+        DOCKERHUB_CREDENTIALS = credentials('docker_credentials')
+        dockerImage = ''
+
+        DISCOVERY_SERVER="${env.DISCOVERY_SERVER}" 
+
+        DB_URL="${env.RDB_COMMON_URL}"
+        DB_USER="${env.RDB_USER}"
+        DB_PASSWORD="${env.RDB_PASSWORD}"
+
+    }
+
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                script {
+                    // common 디렉토리에서 변화가 있을 때만 빌드
+                    def changes = sh(script: "git diff --name-only HEAD HEAD~1", returnStdout: true).trim()
+                    if (changes.contains("back/common-service/")) {
+                        echo 'Changes in common directory, proceeding with build.'
+                    } else {
+                        echo 'No changes in common directory, skipping build.'
+                        currentBuild.result = 'NOT_BUILT'
+                        error('No changes in common directory. Halting pipeline.')
+                    }
+                    // 코드 체크아웃
+                    checkout scm
+                }
+            }
+        }
+
+        // application.yml
+        stage('secret.yml delete') {
+            steps {
+                script{
+                    sh 'rm -rf /var/jenkins_home/workspace/back-common/back/common-service/src/main/resources'
+
+                    echo "delete resources directory" 
+                    // resources 폴더 새로 생성
+                    sh 'mkdir -p /var/jenkins_home/workspace/back-common/back/common-service/src/main/resources/config'
+                    echo "Recreated resources directory"
+
+                    // 현재 상태 확인
+                    sh 'ls -al /var/jenkins_home/workspace/back-common/back/common-service/src/main/resources'
+                }
+            }
+        }
+
+        stage('secret.yml download') {
+        	steps {
+            	withCredentials([file(credentialsId: 'back-common-application', variable: 'applicationFile')]) {
+                	script {
+                        echo "download application.yml"
+                    	sh 'cp -f $applicationFile /var/jenkins_home/workspace/back-common/back/common-service/src/main/resources/application.yml'
+                    }
+        		}
+            }
+        }
+        
+        // resources/config
+        stage('config download') {
+        	steps {
+            	withCredentials([file(credentialsId: 'back-common-config', variable: 'configFile')]) {
+                	script {
+                        echo "download config"
+                    	sh 'cp -f $configFile /var/jenkins_home/workspace/back-common/back/common-service/src/main/resources/config/config'
+                    }
+        		}
+            }
+        }
+        
+        stage('icon-bucket download') {
+        	steps {
+            	withCredentials([file(credentialsId: 'back-common-bucket', variable: 'bucketFile')]) {
+                	script {
+                        echo "download bucketFile"
+                    	sh 'cp -f $bucketFile /var/jenkins_home/workspace/back-common/back/common-service/src/main/resources/config/icon-bucket.pem'
+                    }
+        		}
+            }
+        }
+
+        stage('icon-bucket-public download') {
+        	steps {
+            	withCredentials([file(credentialsId: 'back-common-bucket-public', variable: 'bucketpublicFile')]) {
+                	script {
+                        echo "download bucket-publicFile"
+                    	sh 'cp -f $bucketpublicFile /var/jenkins_home/workspace/back-common/back/common-service/src/main/resources/config/icon-bucket-public.pem'
+                    }
+        		}
+            }
+        }
+
+        stage('Build Common-Server .JAR') {
+            steps {
+                script {
+                    // 변경된 브랜치와 머지 대상 브랜치 출력
+                    // 현재 빌드 중인 브랜치명 확인
+                    def currentBranch = env.BRANCH_NAME
+                    echo "Merge Target Branch: \${CHANGE_TARGET}"
+                    echo "Current Branch: \${currentBranch}"
+
+                    echo "common server 입니다."
+                    sh 'pwd'
+                    sh 'ls -al'
+
+                    // gradlew 빌드
+                    sh 'java --version'
+                    sh 'chmod -R u+w+x /var/jenkins_home/workspace/back-common/back/common-service/gradlew'
+
+                    sh '''cd /var/jenkins_home/workspace/back-common/back/common-service
+                    ls -al
+                    '''
+
+                    dir('/var/jenkins_home/workspace/back-common/back/common-service') {
+                        sh './gradlew clean build'
+                    }
+                }
+            }
+        }
+
+        stage('Build Common Image') {
+            steps {
+                script {
+                    sh 'ls -l /var/jenkins_home/workspace/back-common/back/common-service/build/libs/' // JAR 파일 위치 확인
+                    dockerImage = docker.build("${repository}:icon-common_${BUILD_NUMBER}", "--platform linux/amd64 -f back/common-service/Dockerfile ./back/common-service")
+                }
+            }
+        }
+
+        stage('DockerHub Login'){
+            steps{
+                script{
+                    sh "echo \${DOCKERHUB_CREDENTIALS_PSW} | docker login -u \${DOCKERHUB_CREDENTIALS_USR} --password-stdin"
+                }
+            }
+        }
+
+        stage('Push Common-Server Image to DockerHub'){
+            steps {
+                script {
+                    sh "docker push \${repository}:icon-common_\${BUILD_NUMBER}"
+                }
+            }
+        }
+
+        stage('Clean Common Image') {
+            steps {
+                script {
+                    sh "docker rmi \${repository}:icon-common_\${BUILD_NUMBER}"
+                }
+            }
+        }
+
+        stage("Garbage Collect TESTS ERV") {
+            steps {
+                sshPublisher(
+                    continueOnError: true, failOnError: false,
+                    publishers: [
+                        sshPublisherDesc(
+                            configName: "icon-ssh",
+                            verbose: true,
+                            transfers: [
+                                sshTransfer(execCommand: "sudo docker kill \$(docker ps | grep icon-common | tr ' ' '\t' | cut -f1)"),
+                                sshTransfer(execCommand: "sudo docker image prune -af"),
+                                sshTransfer(execCommand: "sudo docker container prune -f"),
+                                sshTransfer(execCommand: "sudo docker ps -a")
+                            ]
+                        )
+                    ]
+                )
+            }
+        }
+
+        stage("Deploy") {
+            steps {
+                sshPublisher(
+                    continueOnError: false, failOnError: true,
+                    publishers: [
+                        sshPublisherDesc(
+                            configName: "icon-ssh",
+                            verbose: true,
+                            transfers: [
+                                sshTransfer(execCommand: "sudo docker rm -f icon-common"),
+                                sshTransfer(execCommand: "sudo docker pull " + repository +":icon-common_${BUILD_NUMBER}"),
+                                sshTransfer(execCommand: "sudo docker run -d -p 8081:8081 --name icon-common --network host -e DISCOVERY_SERVER=\"${DISCOVERY_SERVER}\" " + repository + ":icon-common_${BUILD_NUMBER}")
+                            ]
+                        )
+                    ]
+                )
+            }
+        }
+    } 
+}
