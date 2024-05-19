@@ -63,7 +63,7 @@ const BleConnect = () => {
       });
     },
     onError: () => {
-      toast.error("블루투스 연결에 실패했어요.", { duration: 800 });
+      toast.error("앱 토큰 등록에 실패했어요.", { duration: 800 });
     },
   });
 
