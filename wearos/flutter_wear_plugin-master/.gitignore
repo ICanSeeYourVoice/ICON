@@ -1,0 +1,14 @@
+.DS_Store
+.dart_tool/
+.idea/
+.pub/
+.vscode/
+build/
+.packages
+pubspec.lock
+*.iml
+
+# iOS not required for this plugin
+ios/**
+windows/**
+macos/**
