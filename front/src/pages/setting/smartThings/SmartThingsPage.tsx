@@ -11,10 +11,15 @@ interface RoutineItem {
   trigger?: string;
 }
 const SmartThingsPage = () => {
-  const { data: getRoutineData, isLoading: isLoadingGetRoutine } = useQuery<
-    RoutineItem[]
-  >({ queryFn: GetStatusRoutine, queryKey: ["getRoutineData"], retry: 1 });
-
+  const {
+    data: getRoutineData,
+    isLoading: isLoadingGetRoutine,
+    isError: isErrorGet,
+  } = useQuery<RoutineItem[]>({
+    queryFn: GetStatusRoutine,
+    queryKey: ["getRoutineData"],
+    retry: 0,
+  });
   return (
     <div className="flex flex-col items-center h-screen w-screen">
       <TopBar text="SmartThings" path="setting" />
@@ -23,7 +28,7 @@ const SmartThingsPage = () => {
           <div className="flex items-center justify-center w-full h-full">
             <PulseLoader color="#c8c8c8" />
           </div>
-        ) : !getRoutineData ? (
+        ) : !isLoadingGetRoutine && (isErrorGet || !getRoutineData) ? (
           <RegisterSmartThingsPage />
         ) : (
           <div className="flex h-full w-full">
