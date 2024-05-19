@@ -69,8 +69,8 @@ flutter {
 
 dependencies {
     implementation 'com.android.support:wear:27.1.1'
-    implementation 'com.google.android.support:wearable:2.3.0'
-    compileOnly 'com.google.android.wearable:wearable:2.3.0'
+    implementation 'com.google.android.support:wearable:2.8.1'
+    compileOnly 'com.google.android.wearable:wearable:2.8.1'
 
     // 디슈가링 충돌 보완
     implementation 'androidx.window:window:1.0.0'

@@ -137,6 +137,7 @@ class HomeController extends GetxController {
     if (!permissionGranted) {
       Get.log("Bluetooth permission not granted, retrying...");
       bool check = await BlePeripheral.askBlePermission();
+      Restart.restartApp();
       if (check)
         Restart.restartApp();
       else
