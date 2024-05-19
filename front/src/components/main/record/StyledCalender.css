@@ -1,0 +1,112 @@
+.react-calendar__navigation {
+    height: 5.5rem;
+    border-radius: 1rem 1rem 0 0;
+    background:#7BB7F7;
+    span {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color:rgb(255, 255, 255);
+    }
+  }
+
+  .react-calendar {
+    width: 20rem;
+    max-width: 100%;
+    border-radius: 1rem ;
+    border : none;
+    font-family: "NPSfont";
+  }
+  
+
+  .react-calendar__navigation button:disabled {
+    background-color: #7BB7F7;
+    border-radius: 1rem 1rem 0 0;
+  }
+
+  .react-calendar__navigation button{
+    color:white;
+  }
+
+  .react-calendar__navigation button:enabled:hover,
+  .react-calendar__navigation button:enabled:focus {
+    background-color: #7BB7F7;
+    border-radius: 2rem 2rem 0 0;
+    color:white;
+  }
+
+
+  .react-calendar__month-view {
+    padding: 0 1rem;
+  }
+
+  .react-calendar__month-view__weekdays {
+    abbr {
+      color: rgb(155, 161, 248);
+      font-weight: 900;
+    }
+  }
+
+  
+.react-calendar__month-view__weekdays {
+  text-align: center;
+  text-transform: uppercase;
+  font: inherit;
+  font-size: 0.2em;
+  font-weight: bold;
+}
+
+.react-calendar__month-view__weekdays__weekday {
+  padding: 3.5em;
+}
+
+.react-calendar__month-view__weekNumbers .react-calendar__tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: inherit;
+  font-size: 0.5em;
+  font-weight: bold;
+}
+
+.react-calendar__month-view__days__day--weekend {
+  color: #d10000;
+  font-size: 1rem;
+}
+
+
+.react-calendar__tile {
+  text-align: center;
+  height: 3.7rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: 0.8rem;
+
+}
+.react-calendar__tile:enabled:hover,
+  .react-calendar__tile:enabled:focus,
+  .react-calendar__tile--active {
+    background: #cccccc;
+    border-radius: 1rem;
+    font-size: 1rem;
+  }
+
+  .react-calendar__tile--now {
+    background: #aad2fd;
+    border-radius: 1rem;
+    color:white;
+  }
+
+  .react-calendar__navigation button {
+    background: none;
+    font-size: 2rem;
+  }
+  
+
+  .react-calendar__tile:disabled {
+    background-color: white;
+    color:#dedede;
+  }
+
+
