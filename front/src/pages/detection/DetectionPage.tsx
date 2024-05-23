@@ -117,25 +117,11 @@ const DetectionPage = () => {
         faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
       ]);
 
-      navigator.mediaDevices
-        .getUserMedia({
-          video: {
-            facingMode: "user",
-          },
-        })
-        .then((stream) => {
-          camMediaStream.current = stream;
-          if (videoRef.current) {
-            videoRef.current.srcObject = stream;
-            videoRef.current.play();
-          }
-        });
-
-      // test로 인한 코드
+      // 전면 카메라
       // navigator.mediaDevices
       //   .getUserMedia({
       //     video: {
-      //       facingMode: "environment",
+      //       facingMode: "user",
       //     },
       //   })
       //   .then((stream) => {
@@ -145,6 +131,21 @@ const DetectionPage = () => {
       //       videoRef.current.play();
       //     }
       //   });
+
+      // 후면 카메라
+      navigator.mediaDevices
+        .getUserMedia({
+          video: {
+            facingMode: "environment",
+          },
+        })
+        .then((stream) => {
+          camMediaStream.current = stream;
+          if (videoRef.current) {
+            videoRef.current.srcObject = stream;
+            videoRef.current.play();
+          }
+        });
 
       const optionsSSDMobileNet = new faceapi.SsdMobilenetv1Options({
         minConfidence: 0.2,
@@ -243,7 +244,6 @@ const DetectionPage = () => {
           cnt++;
         } else {
           initRecordCnt++;
-          console.log("cry: cnt");
           if (initRecordCnt >= 16 / TIMES) {
             initRecordCnt = 0;
             audioBuffer = [];
@@ -270,12 +270,6 @@ const DetectionPage = () => {
             });
 
             // test 코드
-            if (classes[i] === CLASS.BABY_CRY)
-              console.log("cry: " + probabilities[i]);
-            if (classes[i] === CLASS.CAT)
-              console.log("cat: " + probabilities[i]);
-            if (classes[i] === CLASS.MEOW)
-              console.log("meow: " + probabilities[i]);
             // if (classes[i] === CLASS.CAT && probabilities[i] >= 0.7 && i < 3) {
             //   console.log("고양이");
             //   return;
