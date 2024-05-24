@@ -28,8 +28,8 @@ public class StatisticsService {
 
 	// 통계보기(기본)
 	public StatisticsResponse getCryReasonStatistics(Integer memberId, LocalDate date) {
-		LocalDateTime startDateTime = LocalDateTime.of(date, LocalTime.MIN);
-		LocalDateTime endDateTime = LocalDateTime.of(date.plusDays(1), LocalTime.MIN);
+		LocalDateTime startDateTime = LocalDateTime.of(date, LocalTime.MIN).minusHours(9);
+		LocalDateTime endDateTime = LocalDateTime.of(date.plusDays(1), LocalTime.MIN).minusHours(9);
 
 		log.info("조회 시작 : " + startDateTime);
 		log.info("조회 끝: " + endDateTime);
@@ -61,8 +61,8 @@ public class StatisticsService {
 
 	//통계보기(타임라인 포함)
 	public StatisticsDetailResponse getCryReasonStatisticsWithTimeline(Integer memberId, LocalDate date) {
-		LocalDateTime startDateTime = LocalDateTime.of(date, LocalTime.MIN);
-		LocalDateTime endDateTime = LocalDateTime.of(date.plusDays(1), LocalTime.MIN);
+		LocalDateTime startDateTime = LocalDateTime.of(date, LocalTime.MIN).minusHours(9);
+		LocalDateTime endDateTime = LocalDateTime.of(date.plusDays(1), LocalTime.MIN).minusHours(9);
 
 		log.info("조회 시작 : " + startDateTime);
 		log.info("조회 끝: " + endDateTime);
