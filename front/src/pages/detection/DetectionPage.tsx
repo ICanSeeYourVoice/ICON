@@ -379,7 +379,7 @@ const DetectionPage = () => {
         >
           <video
             className="rounded-[1.2rem]"
-            style={{ transform: "scaleX(-1)" }}
+            // style={{ transform: "scaleX(-1)" }} // 전면 카메라
             ref={videoRef}
           />
         </div>
