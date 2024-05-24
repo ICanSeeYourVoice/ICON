@@ -1,5 +1,5 @@
  <div style="text-align: center;">
-  <img src="/uploads/37c34dc06b65dc259a313b3707581f79/메인.png" alt="Image">
+  <img src="/readme/image/메인.png" alt="Image">
 </div>
 
 <br/>
@@ -141,7 +141,7 @@
 
 ### ⭐ 상태 감지
 
-|![울음_감지_및_분석](/uploads/416b7ea3f4478b945bdcdc87da130791/울음_감지_및_분석.gif)|![행동_감지](/uploads/cd9dc6cfd7512ac7c859c09e7c2ddb53/행동_감지.gif)|![on_off](/uploads/8191ae7b7ea23c6affc3dfc3568f0b59/on_off.gif)|
+|![울음_감지_및_분석](/readme/gif/울음_감지_및_분석.gif)|![행동_감지](/readme/gif/행동_감지.gif)|![on_off](/readme/gif/on_off.gif)|
 |:-:|:-:|:-:|
 |울음 감지 및 분석|행동 감지|on/off|
 
@@ -155,7 +155,7 @@
 
 ### ⭐ 알림
 
-|![스마트_싱스](/uploads/e060503e89c56a091b6caf0e2bc5d5f6/스마트_싱스.gif)|![워치_연결](/uploads/d4af79503dde0a7cbabb1d18523711de/워치_연결.gif)|![qr](/uploads/8704cfc2f33e4cc4085dfd157e902afa/qr.gif)|![토큰](/uploads/7f1a6a6eb09f63f4ba4ad7ec86cb50c1/토큰.jpg)|
+|![스마트_싱스](/readme/gif/스마트_싱스.gif)|![워치_연결](/readme/gif/워치_연결.gif)|![qr](/readme/gif/qr.gif)|![토큰](/readme/image/토큰.jpg)|
 |:-:|:-:|:-:|:-:|
 |스마트 싱스|워치 연결|보호자 등록|토큰 발급|
 
@@ -171,7 +171,7 @@
 
 ### ⭐ 성장 일지
 
-|![캘린더](/uploads/3328d4ad38a2307f38f801d66329aa58/캘린더.jpg)|![다이어리](/uploads/124e92241a712e4d68feaff24f8a1bab/다이어리.gif)|![통계](/uploads/fa6c5e95635f26bdf4418042af522617/통계.gif)|
+|![캘린더](/readme/image/캘린더.jpg)|![다이어리](/readme/gif/다이어리.gif)|![통계](/readme/gif/통계.gif)|
 |:-:|:-:|:-:|
 |캘린더|다이어리|통계|
 
@@ -179,7 +179,7 @@
 
 ### ⭐ 보이스 / 챗봇
 
-|![음성_변환](/uploads/d3ec394f4b80a99ed30714c3b8a6d7a0/음성_변환.gif)|![즐겨찾기](/uploads/627008d067ba65a11dbfbc8286a3dc49/즐겨찾기.gif)|![챗봇](/uploads/eaf875bfca53b95b197c4a927319a43c/챗봇.gif)|
+|![음성_변환](/readme/gif/음성_변환.gif)|![즐겨찾기](/readme/gif/즐겨찾기.gif)|![챗봇](/readme/gif/챗봇.gif)|
 |:-:|:-:|:-:|
 |음성 변환|즐겨찾기|챗봇|
 
@@ -187,7 +187,7 @@
 
 ### ⭐ 회원
 
-|![권한_설정](/uploads/ba347b01df296695b4a9fd5907e0e091/권한_설정.gif)|![회원가입](/uploads/4444da5f58ce9b9b5964edc71226c492/회원가입.gif)|![로그인](/uploads/c4a92cbebcf378c9f403b51e6b9d0617/로그인.gif)|![로그아웃](/uploads/c1742ac321557e1b1c1b729529d744bc/로그아웃.jpg)|
+|![권한_설정](/readme/gif/권한_설정.gif)|![회원가입](/readme/gif/회원가입.gif)|![로그인](/readme/gif/로그인.gif)|![로그아웃](/readme/image/로그아웃.jpg)|
 |:-:|:-:|:-:|:-:|
 |권한 설정|회원가입|로그인|로그아웃|
 
