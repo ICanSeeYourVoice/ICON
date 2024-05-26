@@ -163,4 +163,42 @@
 
 
     
-|![rn_image_picker_lib_temp_35a5ea7b-b091-4b8b-943b-f502506e145b](https://hackmd.io/_uploads/HyXD9uvX0.png)|![rn_image_picker_lib_temp_290cbbc6-75d1-485d-b732-a6ebc3966e55](https://hackmd.io/_uploads/BkB_9uwmR.png)|![rn_image_picker_lib_temp_b2cd4e3a-28e4-4856-afcc-2adfe58cbfa7](https://hackmd.io/_uploads/HksOqODm0.png)|![rn_image_picker_lib_te얼](https://dokuny.notion.site/3ba2d82a36d3477687950d75ca1fe751)
+|![rn_image_picker_lib_temp_35a5ea7b-b091-4b8b-943b-f502506e145b](https://hackmd.io/_uploads/HyXD9uvX0.png)|![rn_image_picker_lib_temp_290cbbc6-75d1-485d-b732-a6ebc3966e55](https://hackmd.io/_uploads/BkB_9uwmR.png)|![rn_image_picker_lib_temp_b2cd4e3a-28e4-4856-afcc-2adfe58cbfa7](https://hackmd.io/_uploads/HksOqODm0.png)|![rn_image_picker_lib_temp_0a550ec2-9f8e-47da-ab20-926bd292090b](https://hackmd.io/_uploads/H1-F5dwmR.png)|![rn_image_picker_lib_temp_68c6c486-c50c-4968-bd6f-59dc8b6d13cf](https://hackmd.io/_uploads/Hk859dPmR.png)|![rn_image_picker_lib_temp_f48f5e07-5987-4852-8943-3d9486ae6370](https://hackmd.io/_uploads/HyUscODX0.png)|![rn_image_picker_lib_temp_f5adca03-80e8-4437-9439-3a5be975c119](https://hackmd.io/_uploads/Skni5_vQC.png)|
+|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+|평온|아픔|불편|배고픔|졸림|위험|연결|
+
+<br/>
+
+### ⭐ 성장 일지
+
+|![캘린더](/readme/image/캘린더.jpg)|![다이어리](/readme/gif/다이어리.gif)|![통계](/readme/gif/통계.gif)|
+|:-:|:-:|:-:|
+|캘린더|다이어리|통계|
+
+<br/>
+
+### ⭐ 보이스 / 챗봇
+
+|![음성_변환](/readme/gif/음성_변환.gif)|![즐겨찾기](/readme/gif/즐겨찾기.gif)|![챗봇](/readme/gif/챗봇.gif)|
+|:-:|:-:|:-:|
+|음성 변환|즐겨찾기|챗봇|
+
+<br/>
+
+### ⭐ 회원
+
+|![권한_설정](/readme/gif/권한_설정.gif)|![회원가입](/readme/gif/회원가입.gif)|![로그인](/readme/gif/로그인.gif)|![로그아웃](/readme/image/로그아웃.jpg)|
+|:-:|:-:|:-:|:-:|
+|권한 설정|회원가입|로그인|로그아웃|
+
+<br/>
+
+## 💾 시스템 아키텍처
+
+![image](https://hackmd.io/_uploads/SkYCLwPmC.png)
+
+<br/>
+
+##[포팅 메뉴얼](https://dokuny.notion.site/3ba2d82a36d3477687950d75ca1fe751)
+##[API 명세서](https://dokuny.notion.site/API-2a3ab2d7b4734b99ae7e8b3655bfcb62)
+##[가능 명세서](https://dokuny.notion.site/b1814ac525ea47ffb377e179a7040c0a)
