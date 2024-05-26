@@ -1,4 +1,8 @@
- <div style="text-align: center;">
+# :tada: SSAFY 10기 자율프로젝트 광주 2반 결선 진출 :tada:
+
+# 아이와 만나는 새로운 방법! 아이콘 #
+ 
+<div style="text-align: center;">
   <img src="/readme/image/메인.png" alt="Image">
 </div>
 
