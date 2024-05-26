@@ -199,8 +199,10 @@
 
 <br/>
 
-## ⭐ [포팅 메뉴얼](https://dokuny.notion.site/3ba2d82a36d3477687950d75ca1fe751)
+## 📖 산출물
 
-## ⭐ [API 명세서](https://dokuny.notion.site/API-2a3ab2d7b4734b99ae7e8b3655bfcb62)
+### ⭐ [포팅 메뉴얼](https://dokuny.notion.site/3ba2d82a36d3477687950d75ca1fe751)
 
-## ⭐ [가능 명세서](https://dokuny.notion.site/b1814ac525ea47ffb377e179a7040c0a)
+### ⭐ [API 명세서](https://dokuny.notion.site/API-2a3ab2d7b4734b99ae7e8b3655bfcb62)
+
+### ⭐ [가능 명세서](https://dokuny.notion.site/b1814ac525ea47ffb377e179a7040c0a)
