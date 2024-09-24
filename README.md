@@ -4,9 +4,11 @@
 
 # 아이와 만나는 새로운 방법! 아이콘 #
  
-<div style="text-align: center;">
+<a style="text-align: center;" href="https://youtu.be/IBJTU-4265I">
   <img src="/readme/image/메인.png" alt="Image">
-</div>
+</a>
+
+> _위의 이미지를 누르면 시연 영상으로 이동됩니다._
 
 <br/>
 
